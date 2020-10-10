@@ -40,7 +40,7 @@ dependencies {
 
     //Design
     //You should not use the com.android.support and com.google.android.material dependencies in your app at the same time
-    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'com.google.android.material:material:1.2.1'
 
     //Kotlin
     implementation 'androidx.core:core-ktx:1.0.2'

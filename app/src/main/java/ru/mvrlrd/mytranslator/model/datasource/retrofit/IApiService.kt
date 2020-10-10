@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.model.retrofit
+package ru.mvrlrd.mytranslator.model.datasource.retrofit
 
 import io.reactivex.Observable
 import retrofit2.http.GET

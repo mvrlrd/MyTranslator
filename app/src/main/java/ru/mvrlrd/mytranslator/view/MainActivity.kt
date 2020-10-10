@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.model.Translation
 import ru.mvrlrd.mytranslator.presenter.ISearchWord
 import ru.mvrlrd.mytranslator.presenter.MainPresenter
 
@@ -27,5 +28,6 @@ class MainActivity : AppCompatActivity(), ISearchWord {
 
     override fun showResult(s: String) {
         searchWord.setText(s)
+        println(s)
     }
 }

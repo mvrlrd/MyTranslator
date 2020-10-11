@@ -7,12 +7,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import ru.mvrlrd.mytranslator.model.SearchResult
 import ru.mvrlrd.mytranslator.model.datasource.retrofit.ApiHelper
+import javax.inject.Inject
 
 
-class MainViewModel {
-    private val apiHelper: ApiHelper = ApiHelper()
+class MainViewModel(val apiHelper: ApiHelper) {
     var liveTranslations: MutableLiveData<String> = MutableLiveData()
-
 
     fun getTranslation(word: String) {
         val d: Observable<List<SearchResult>> = apiHelper

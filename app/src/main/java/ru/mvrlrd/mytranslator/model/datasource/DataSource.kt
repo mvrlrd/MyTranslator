@@ -1,8 +1,8 @@
 package ru.mvrlrd.mytranslator.model.datasource
 
-import io.reactivex.Observable
+import retrofit2.Response
 
 interface DataSource<T> {
 
-    fun getData(word: String): Observable<T>
+    suspend fun getData(word: String): Response<T>
 }

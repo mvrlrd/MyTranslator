@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.view
 
-import android.app.Application
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -28,7 +27,7 @@ class MainActivity : AppCompatActivity(), ISearchWord {
     }
 
     fun onClick(view: View){
-        viewModel.getTranslation(searchWord())
+        viewModel.loadData(searchWord())
     }
 
     override fun searchWord() : String {

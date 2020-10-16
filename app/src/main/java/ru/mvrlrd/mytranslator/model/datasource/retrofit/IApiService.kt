@@ -1,6 +1,6 @@
 package ru.mvrlrd.mytranslator.model.datasource.retrofit
 
-import io.reactivex.Observable
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.mvrlrd.mytranslator.model.SearchResult
@@ -8,5 +8,5 @@ import ru.mvrlrd.mytranslator.model.SearchResult
 interface IApiService {
 
     @GET("words/search")
-    fun search(@Query("search") wordToSearch: String): Observable<List<SearchResult>>
+    suspend fun search(@Query("search") wordToSearch: String): Response<List<SearchResult>>
 }

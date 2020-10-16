@@ -1,19 +1,21 @@
 package ru.mvrlrd.mytranslator.presenter
 
 import android.app.Application
-import ru.mvrlrd.mytranslator.presenter.modules.AppModule
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
+import ru.mvrlrd.mytranslator.presenter.modules.appModule
 
 class App : Application() {
-    lateinit var appComponent: AppComponent
 
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = initDagger(this)
+        startKoin {
+            // declare used Android context
+            androidContext(this@App)
+            // declare modules
+            modules(appModule)
+        }
     }
-
-    private fun initDagger(app: App): AppComponent =
-        DaggerAppComponent.builder()
-            .appModule(AppModule(app))
-            .build()
 }
+

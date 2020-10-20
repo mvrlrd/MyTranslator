@@ -5,5 +5,5 @@ import com.google.gson.annotations.SerializedName
 
 class Meanings(
     @Expose@field:SerializedName("translation") val translation: Translation?,
-    @field:SerializedName("imageUrl") val imageUrl: String?
+    @Expose@field:SerializedName("imageUrl") val imageUrl: String?
 )

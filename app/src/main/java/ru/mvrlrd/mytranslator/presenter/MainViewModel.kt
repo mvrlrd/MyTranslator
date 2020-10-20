@@ -4,11 +4,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.mvrlrd.mytranslator.model.SearchResult
 import ru.mvrlrd.mytranslator.model.datasource.retrofit.ApiHelper
 
 
 class MainViewModel(val apiHelper: ApiHelper): ViewModel() {
-    var liveTranslations: MutableLiveData<String> = MutableLiveData()
+    var liveTranslations: MutableLiveData<List<SearchResult>> = MutableLiveData()
 
      fun loadData(word: String) {
         viewModelScope.launch {
@@ -18,7 +19,7 @@ class MainViewModel(val apiHelper: ApiHelper): ViewModel() {
             ) {
                 val data = response.body()
                 data.let { tr ->
-                    liveTranslations.value = tr?.get(0)?.meanings?.get(0)?.translation?.translation
+                    liveTranslations.value = tr
                 }
             }
         }

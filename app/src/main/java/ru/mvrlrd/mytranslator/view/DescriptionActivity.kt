@@ -34,11 +34,8 @@ class DescriptionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_description)
 
-
         wordTextView.text = intent.getStringExtra("word")
         translationTextView.text = intent.getStringExtra("translation")
-
-
         descriptionImageView.load("https:${intent.getStringExtra("url")}")
 
 

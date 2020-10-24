@@ -43,15 +43,7 @@ class MainActivity : AppCompatActivity(), ISearchWord {
             }
         })
 
-        viewModel.liveHistory.observe(this, Observer { translation ->
-            if (translation.isNotEmpty()) {
-                translation.let {
-                    intentToHistory.putExtra("word", it)
-                    println("$it ttttttttttttttttttttttt")
-                    startActivity(intentToHistory)
-                }
-            }
-        })
+
 
     }
 
@@ -59,8 +51,7 @@ class MainActivity : AppCompatActivity(), ISearchWord {
         viewModel.loadData(searchWord())
     }
      fun onClick2(view: View){
-         viewModel.loadHistory()
-
+         startActivity(intentToHistory)
     }
 
     override fun searchWord() : String {

@@ -11,11 +11,11 @@ import ru.mvrlrd.mytranslator.room.HistoryDao
 import ru.mvrlrd.mytranslator.room.HistoryEntity
 
 
-class MainViewModel(
+class MainViewModel (
     val apiHelper: ApiHelper,
     val historyDao: HistoryDao): ViewModel() {
     var liveTranslations: MutableLiveData<List<SearchResult>> = MutableLiveData()
-    var liveHistory : MutableLiveData<String> = MutableLiveData()
+    var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
 
     fun loadData(word: String) {
         viewModelScope.launch {
@@ -26,10 +26,10 @@ class MainViewModel(
                 val data = response.body()
                 data.let { tr ->
                     liveTranslations.value = tr
+
                     println(
                     historyDao.insert(HistoryEntity( tr?.get(0)?.text,
-                        tr?.get(0)?.meanings?.get(0)?.translation?.translation)).toString()+"     this is id")
-
+                        tr?.get(0)?.meanings?.get(0)?.translation?.translation)).toString()+"     id has been added")
                 }
             }
         }
@@ -37,8 +37,7 @@ class MainViewModel(
 
      fun loadHistory(){
         viewModelScope.launch {
-            liveHistory.value = historyDao.getAll()[0].text
-             println(historyDao.getAll()[0].text+" 99999999988888877777777777")
+            liveHistory.value = historyDao.getAll()
         }
 
     }

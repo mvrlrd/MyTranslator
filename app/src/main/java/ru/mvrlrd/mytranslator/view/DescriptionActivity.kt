@@ -27,7 +27,7 @@ import org.koin.android.ext.android.inject
 
 
 class DescriptionActivity : AppCompatActivity() {
-    private val viewModel : MainViewModel by inject()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

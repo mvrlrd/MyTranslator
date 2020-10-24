@@ -8,8 +8,13 @@ import io.reactivex.Single
 @Dao
 interface HistoryDao {
     @Insert
-    fun insert(historyEntity: HistoryEntity?): Single<Long?>?
+   suspend fun insert(historyEntity: HistoryEntity?): Long
     @Query("DELETE FROM searching_history")
-    fun clear()
+    suspend fun clear()
+    @Query("SELECT * FROM searching_history")
+    suspend  fun getAll(): List<HistoryEntity>
+
+
+
 
 }

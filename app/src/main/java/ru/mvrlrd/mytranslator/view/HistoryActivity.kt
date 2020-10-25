@@ -2,6 +2,7 @@ package ru.mvrlrd.mytranslator.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_history.*
@@ -17,16 +18,22 @@ class HistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_history)
 
         viewModel.loadHistory()
+
         viewModel.liveHistory.observe(this, Observer { translation ->
-            if (translation.isNotEmpty()) {
+
                 translation.let {
                     recycler_view.apply {
                         layoutManager = LinearLayoutManager(this@HistoryActivity)
                         adapter = MyAdapter(translation)
                     }
                 }
-            }
+
         })
 
+    }
+
+    fun clearHistory(view : View){
+        viewModel.clearHistory()
+        viewModel.loadHistory()
     }
 }

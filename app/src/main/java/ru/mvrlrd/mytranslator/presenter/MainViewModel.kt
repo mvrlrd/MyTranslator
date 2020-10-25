@@ -14,8 +14,10 @@ import ru.mvrlrd.mytranslator.room.HistoryEntity
 class MainViewModel (
     val apiHelper: ApiHelper,
     val historyDao: HistoryDao): ViewModel() {
+
     var liveTranslations: MutableLiveData<List<SearchResult>> = MutableLiveData()
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
+
 
     fun loadData(word: String) {
         viewModelScope.launch {
@@ -26,10 +28,9 @@ class MainViewModel (
                 val data = response.body()
                 data.let { tr ->
                     liveTranslations.value = tr
-
                     println(
                     historyDao.insert(HistoryEntity( tr?.get(0)?.text,
-                        tr?.get(0)?.meanings?.get(0)?.translation?.translation)).toString()+"     id has been added")
+                        tr?.get(0)?.meanings?.get(0)?.translation?.translation)).toString()+"     id has been added to db")
                 }
             }
         }
@@ -39,6 +40,13 @@ class MainViewModel (
         viewModelScope.launch {
             liveHistory.value = historyDao.getAll()
         }
+
+    }
+     fun clearHistory(){
+         viewModelScope.launch {
+             historyDao.clear()
+             liveHistory.value = emptyList()
+         }
 
     }
 

@@ -14,9 +14,10 @@ interface HistoryDao {
     suspend fun clear()
 
     @Query("SELECT * FROM searching_history")
-    suspend  fun getAll(): List<HistoryEntity>
+    suspend fun getAll(): List<HistoryEntity>
 
-
+    @Query("SELECT * FROM searching_history WHERE text=:word")
+    suspend fun getCertainWord(word: String): HistoryEntity
 
 
 }

@@ -17,6 +17,7 @@ class MainViewModel (
 
     var liveTranslations: MutableLiveData<List<SearchResult>> = MutableLiveData()
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
+    var liveSearchedInHistory : MutableLiveData<HistoryEntity> = MutableLiveData()
 
 
     fun loadData(word: String) {
@@ -39,6 +40,14 @@ class MainViewModel (
      fun loadHistory(){
         viewModelScope.launch {
             liveHistory.value = historyDao.getAll()
+        }
+
+
+    }
+
+    fun findWordInHistory(word:String){
+        viewModelScope.launch {
+            liveSearchedInHistory.value = historyDao.getCertainWord(word)
         }
 
     }

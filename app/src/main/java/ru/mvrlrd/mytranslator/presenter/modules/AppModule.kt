@@ -8,6 +8,7 @@ import ru.mvrlrd.mytranslator.model.datasource.retrofit.ApiHelper
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
 import ru.mvrlrd.mytranslator.room.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.room.HistoryDao
+import ru.mvrlrd.mytranslator.view.SearchingDialogFragment
 
 //import ru.mvrlrd.mytranslator.room.AppSearchingHistoryDataBase
 //import ru.mvrlrd.mytranslator.room.HistoryDao
@@ -18,4 +19,5 @@ val appModule = module{
     single { Room.databaseBuilder(androidContext(), AppSearchingHistoryDataBase::class.java, "history_database").fallbackToDestructiveMigration().build() }
     single <HistoryDao> { get<AppSearchingHistoryDataBase>().historyDao() }
     viewModel { MainViewModel(get(),get())}
+    single{SearchingDialogFragment()}
 }

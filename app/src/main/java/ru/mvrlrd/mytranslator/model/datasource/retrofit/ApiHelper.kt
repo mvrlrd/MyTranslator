@@ -1,15 +1,17 @@
-package ru.mvrlrd.mytranslator.model.retrofit
+package ru.mvrlrd.mytranslator.model.datasource.retrofit
 
 import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
-import io.reactivex.Observable
-import io.reactivex.schedulers.Schedulers
+import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.mvrlrd.mytranslator.model.SearchResult
+import ru.mvrlrd.mytranslator.model.datasource.DataSource
 
-class ApiHelper {
-    fun requestServer(word : String): Observable<List<SearchResult>> {
+class ApiHelper : DataSource<List<SearchResult>>{
+
+
+    override suspend fun getData(word : String): Response<List<SearchResult>> {
 
         val gson = GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
@@ -21,7 +23,7 @@ class ApiHelper {
             .addConverterFactory(gsonConverterFactory)
             .build()
             .create(IApiService::class.java)
-        return api.search(word).subscribeOn(Schedulers.io())
+        return api.search(word)
     }
 
     companion object {

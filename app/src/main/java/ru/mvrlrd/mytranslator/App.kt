@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.presenter
+package ru.mvrlrd.mytranslator
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
@@ -12,9 +12,7 @@ class App : Application() {
 
 
         startKoin {
-            // declare used Android context
             androidContext(this@App)
-            // declare modules
             modules(listOf(appModule, retrofitModule))
 
         }

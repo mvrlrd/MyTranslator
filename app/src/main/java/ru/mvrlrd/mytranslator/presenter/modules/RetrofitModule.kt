@@ -7,8 +7,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.mvrlrd.mytranslator.BuildConfig
-import ru.mvrlrd.mytranslator.model.datasource.retrofit.ApiHelper
-import ru.mvrlrd.mytranslator.model.datasource.retrofit.ISkyengApiService
+import ru.mvrlrd.mytranslator.data.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.data.data.network.ISkyengApiService
 import java.util.concurrent.TimeUnit
 
 internal const val BASE_URL = "https://dictionary.skyeng.ru/api/public/v1/"

@@ -15,7 +15,6 @@ import ru.mvrlrd.mytranslator.view.SearchingDialogFragment
 
 
 val appModule = module{
-    single { ApiHelper() }
     single { Room.databaseBuilder(androidContext(), AppSearchingHistoryDataBase::class.java, "history_database").fallbackToDestructiveMigration().build() }
     single <HistoryDao> { get<AppSearchingHistoryDataBase>().historyDao() }
     viewModel { MainViewModel(get(),get())}

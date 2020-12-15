@@ -5,7 +5,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import ru.mvrlrd.mytranslator.model.SearchResult
 
-interface IApiService {
+interface ISkyengApiService {
 
     @GET("words/search")
     suspend fun search(@Query("search") wordToSearch: String): Response<List<SearchResult>>

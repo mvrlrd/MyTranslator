@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.mvrlrd.mytranslator.model.ListSearchResult
 import ru.mvrlrd.mytranslator.model.SearchResult
 import ru.mvrlrd.mytranslator.model.datasource.retrofit.ApiHelper
 
@@ -15,7 +16,7 @@ class MainViewModel (
     val apiHelper: ApiHelper,
     val historyDao: HistoryDao): ViewModel() {
 
-    var liveTranslations: MutableLiveData<List<SearchResult>> = MutableLiveData()
+    var liveTranslations: MutableLiveData<ListSearchResult> = MutableLiveData()
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
     var liveSearchedInHistory : MutableLiveData<HistoryEntity> = MutableLiveData()
 

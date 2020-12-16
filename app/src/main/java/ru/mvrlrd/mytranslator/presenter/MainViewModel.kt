@@ -8,6 +8,7 @@ import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.SearchResultRepository
 import ru.mvrlrd.mytranslator.data.response.SearchResultResponse
 import ru.mvrlrd.mytranslator.data.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.data.response.ListSearchResult
 import ru.mvrlrd.mytranslator.data.response.MeaningsResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 
@@ -34,7 +35,7 @@ init {
 
         viewModelScope.launch {
 
-            println("${getSearch("hello") { it.fold(::handleFailure, ::handleRandomRecipes)}.toString()}    dc  dccdcddcdcc") }
+            getSearch("hello") { it.fold(::handleFailure, ::handleRandomRecipes)}}
 
 //            val response = apiHelper.getData(word)
 //            if (response.isSuccessful
@@ -50,10 +51,10 @@ init {
 //
     }
 
-    private fun handleRandomRecipes(randomRecipes: SearchResultResponse?) {
-println("randomRecipes.toString()")
+    private fun handleRandomRecipes(randomRecipes: ListSearchResult?) {
+//println(randomRecipes?.get(0)?.meanings?.get(0)?.translationResponse?.translation)
 
-
+randomRecipes?.printAllMeanings()
 
 
     }

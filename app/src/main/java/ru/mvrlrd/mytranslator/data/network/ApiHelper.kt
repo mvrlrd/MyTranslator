@@ -3,13 +3,14 @@ package ru.mvrlrd.mytranslator.data.data.network
 import retrofit2.Response
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
+import ru.mvrlrd.mytranslator.data.response.ListSearchResult
 import ru.mvrlrd.mytranslator.data.response.SearchResultResponse
 import ru.mvrlrd.mytranslator.functional.Either
 
 class ApiHelper(private val apiService: ISkyengApiService,private val networkHandler: NetworkAvailabilityHandler) :
     DataSource {
 
-    override suspend fun getData(wordForTranslation : String): Either<Failure, SearchResultResponse?> =
+    override suspend fun getData(wordForTranslation : String): Either<Failure, ListSearchResult?> =
         requestData { apiService.search(wordForTranslation)}
 
 

@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity()
             if (translation.isNotEmpty()) {
                 translation[0].let {
                     intentToDescription.putExtra("word", it.text)
-                    intentToDescription.putExtra("translation", it.meanings?.get(0)?.translation?.translation)
+                    intentToDescription.putExtra("translation", it.meanings?.get(0)?.translationResponse?.translation)
                     intentToDescription.putExtra("url", it.meanings?.get(0)?.imageUrl)
                     startActivity(intentToDescription)
                 }

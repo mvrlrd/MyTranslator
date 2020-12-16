@@ -4,6 +4,7 @@ import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import ru.mvrlrd.mytranslator.presenter.modules.appModule
+import ru.mvrlrd.mytranslator.presenter.modules.appModule2
 import ru.mvrlrd.mytranslator.presenter.modules.retrofitModule
 
 class App : Application() {
@@ -13,7 +14,7 @@ class App : Application() {
 
         startKoin {
             androidContext(this@App)
-            modules(listOf(appModule, retrofitModule))
+            modules(listOf(appModule, appModule2, retrofitModule))
 
         }
     }

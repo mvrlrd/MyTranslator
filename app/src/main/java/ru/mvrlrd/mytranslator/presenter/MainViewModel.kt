@@ -11,6 +11,7 @@ import ru.mvrlrd.mytranslator.data.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.response.ListSearchResult
 import ru.mvrlrd.mytranslator.data.response.MeaningsResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 
 import ru.mvrlrd.mytranslator.room.HistoryDao
 import ru.mvrlrd.mytranslator.room.HistoryEntity
@@ -23,7 +24,9 @@ lateinit var s:String
     val searchResultRepository = SearchResultRepository(apiHelper)
     val getSearch : GetSearchResult = GetSearchResult(searchResultRepository)
 
-    var liveTranslations: MutableLiveData<List<SearchResultResponse>> = MutableLiveData()
+    var liveTranslations: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
+
+
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
     var liveSearchedInHistory : MutableLiveData<HistoryEntity> = MutableLiveData()
 
@@ -34,8 +37,7 @@ init {
 
 
         viewModelScope.launch {
-
-            getSearch("hello") { it.fold(::handleFailure, ::handleRandomRecipes)}}
+            getSearch(word) { it.fold(::handleFailure, ::handleRandomRecipes)}}
 
 //            val response = apiHelper.getData(word)
 //            if (response.isSuccessful
@@ -51,13 +53,31 @@ init {
 //
     }
 
-    private fun handleRandomRecipes(randomRecipes: ListSearchResult?) {
-//println(randomRecipes?.get(0)?.meanings?.get(0)?.translationResponse?.translation)
+//////////////////
 
-randomRecipes?.printAllMeanings()
-
-
+    private fun handleRandomRecipes(response: ListSearchResult?) {
+        response?.printAllMeanings()
+        liveTranslations.value = response?.map { data ->
+            data.meanings?.let { handle2(data.text, it  )}
+            MeaningModelForRecycler(
+                data.text,
+                data.meanings?.get(0)?.translationResponse?.translation,
+                data.meanings?.get(0)?.imageUrl
+            )
+        }
     }
+    private fun handle2(text:String?, resp: List<MeaningsResponse?>) {
+        liveTranslations.value = resp.map { meaning ->
+            MeaningModelForRecycler(
+                text,
+                meaning?.translationResponse?.translation,
+                meaning?.imageUrl
+            )
+        }
+    }
+
+
+
 
 
      fun loadHistory(){

@@ -1,23 +1,24 @@
 package ru.mvrlrd.mytranslator.view
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
-import org.koin.android.ext.android.get
+import kotlinx.android.synthetic.main.activity_main.view.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
+import ru.mvrlrd.mytranslator.service.extensions.observeData
+import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 
-class MainActivity : AppCompatActivity()
-{
+class MainActivity : AppCompatActivity(){
+
+    lateinit var translationAdapter :  TranslationAdapter
     private val viewModel: MainViewModel by inject()
-    private lateinit var intentToDescription: Intent
-    private lateinit var intentToHistory: Intent
-    private lateinit var dialogFragment: SearchingDialogFragment
 
 
 
@@ -25,56 +26,29 @@ class MainActivity : AppCompatActivity()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        intentToDescription = Intent(this, DescriptionActivity::class.java)
-        intentToHistory = Intent(this, HistoryActivity::class.java)
+        translationAdapter = TranslationAdapter()
 
-        viewModel.liveTranslations.observe(this, Observer { translation ->
-            if (translation.isNotEmpty()) {
-                translation[0].let {
-                    intentToDescription.putExtra("word", it.text)
-                    intentToDescription.putExtra("translation", it.meanings?.get(0)?.translation?.translation)
-                    intentToDescription.putExtra("url", it.meanings?.get(0)?.imageUrl)
-                    startActivity(intentToDescription)
-                }
-            }
+        initializeView()
+        viewModel.liveTranslations.observe(this, Observer { meanings ->
+            handleTranslationList(meanings)
+
         })
-        viewModel.liveSearchedInHistory.observe(this, Observer { tr ->
-            if (tr != null) {
-                intentToDescription.putExtra("word", tr.text)
-                intentToDescription.putExtra("translation", tr.translation)
-                intentToDescription.putExtra("url", "")
-                dialogFragment.dismiss()
-                startActivity(intentToDescription)
-            } else if ((true)) {
-                Toast.makeText(
-                    this,
-                    "${dialogFragment.getTextInEditText()} нет в истории",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
-        })
-    }
 
-    fun onClickToTranslate(view: View) {
-        viewModel.loadData(searchWord())
 
     }
 
-    fun onClickToHistory(view: View) {
-        startActivity(intentToHistory)
+
+    fun onClickGo(view: View){
+        viewModel.loadData(searchedWord_TextView.text.toString())
+
+    }
+    private fun handleTranslationList(list: List<MeaningModelForRecycler>) {
+        translationAdapter.collection = list
     }
 
-    fun searchWord(): String {
-        return searchWord.text.toString()
-    }
-
-    fun onShowMyDialog(view: View) {
-        dialogFragment = get()
-        dialogFragment.show(supportFragmentManager, "MyCustomFragment")
-    }
-
-    fun onClickSearchInHistory(view: View) {
-        viewModel.findWordInHistory(dialogFragment.getTextInEditText())
+    private fun initializeView() {
+      translation_recyclerview.layoutManager = LinearLayoutManager(this)
+       translation_recyclerview.adapter = translationAdapter
     }
 
 }

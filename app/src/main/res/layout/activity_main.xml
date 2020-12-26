@@ -1,55 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".view.MainActivity">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    tools:ignore="MissingConstraints">
+
     <EditText
-        android:id="@+id/searchWord"
-        android:hint="write your word"
+        android:id="@+id/searchedWord_TextView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="64dp"
-        app:layout_constraintBottom_toTopOf="@+id/translateBtn"
+        android:layout_height="60dp"
+        android:layout_weight="1"
+        android:ems="10"
+        android:hint="type here"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintVertical_bias="0.438" />
 
     <Button
-        android:id="@+id/translateBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="onClickToTranslate"
-        android:text="translate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
+        android:id="@+id/button_go"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_weight="5"
+        android:background="#2196F3"
+        android:onClick="onClickGo"
+        android:text="GO"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/searchedWordInHistory"
+        app:layout_constraintStart_toEndOf="@+id/searchedWordInHistory"
+        app:layout_constraintTop_toTopOf="@+id/searchedWordInHistory"
+         />
+
+
+</LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/translation_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/historyBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="176dp"
-        android:onClick="onClickToHistory"
-        android:text="history"
-        app:layout_constraintBottom_toTopOf="@+id/translateBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/showDialogBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="64dp"
-        android:onClick="onShowMyDialog"
-        android:layout_marginBottom="40dp"
-        android:text="search word in history"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

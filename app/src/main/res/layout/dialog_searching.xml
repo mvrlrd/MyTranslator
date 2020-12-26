@@ -2,47 +2,34 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <TextView
-        android:id="@+id/tv_login"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Search in history"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    android:layout_height="match_parent
+">
 
     <EditText
         android:id="@+id/searchedWordInHistory"
-        android:layout_width="199dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="326dp"
+        android:layout_height="60dp"
         android:ems="10"
         android:hint="type here"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.082"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_login" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.438" />
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="114dp"
-        android:layout_height="38dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="67dp"
+        android:layout_height="60dp"
         android:background="#2196F3"
-        android:text="search"
         android:onClick="onClickSearchInHistory"
+        android:text="GO"
         android:textColor="#FFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.943"
-        app:layout_constraintStart_toStartOf="parent"
 
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintBottom_toBottomOf="@+id/searchedWordInHistory"
+        app:layout_constraintStart_toEndOf="@+id/searchedWordInHistory"
+        app:layout_constraintTop_toTopOf="@+id/searchedWordInHistory" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

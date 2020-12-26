@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.room
+package ru.mvrlrd.mytranslator.data.local.entity
 
 
 import android.os.Parcelable

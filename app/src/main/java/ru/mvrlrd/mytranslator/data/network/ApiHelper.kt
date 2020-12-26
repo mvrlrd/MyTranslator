@@ -3,7 +3,7 @@ package ru.mvrlrd.mytranslator.data.network
 import retrofit2.Response
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
-import ru.mvrlrd.mytranslator.data.response.ListSearchResult
+import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.functional.Either
 
 
@@ -25,10 +25,10 @@ class ApiHelper(private val apiService: ISkyengApiService,private val networkHan
         when (networkHandler.isConnected()) {
             true -> {
                 try {
-                    println("YES")
+                                                        println("YES")
                     responseHandle(request())
                 } catch (exception: Throwable) {
-                    println("NOPE")
+                                                        println("NOPE")
                     Either.Left(Failure.ServerError)
                 }
             }

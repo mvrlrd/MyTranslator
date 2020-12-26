@@ -1,28 +1,27 @@
 package ru.mvrlrd.mytranslator.presenter
 
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.SearchResultRepository
-import ru.mvrlrd.mytranslator.data.response.SearchResultResponse
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.data.response.ListSearchResult
-import ru.mvrlrd.mytranslator.data.response.MeaningsResponse
+import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
+import ru.mvrlrd.mytranslator.data.network.response.MeaningsResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 
-import ru.mvrlrd.mytranslator.room.HistoryDao
-import ru.mvrlrd.mytranslator.room.HistoryEntity
+import ru.mvrlrd.mytranslator.data.local.HistoryDao
+import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 
 
-class MainViewModel (
-    val apiHelper: ApiHelper ,
-    val historyDao: HistoryDao): BaseViewModel() {
-lateinit var s:String
+class MainViewModel
+    (
+    val apiHelper: ApiHelper,
+    val historyDao: HistoryDao
+) : BaseViewModel() {
+    lateinit var s: String
     val searchResultRepository = SearchResultRepository(apiHelper)
-    val getSearch : GetSearchResult = GetSearchResult(searchResultRepository)
+    val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
 
     var liveTranslations: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
 

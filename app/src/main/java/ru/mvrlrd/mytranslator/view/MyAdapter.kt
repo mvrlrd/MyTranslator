@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.room.HistoryEntity
+import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 
 class MyAdapter(var list: List<HistoryEntity>) : RecyclerView.Adapter<MyAdapter.MyViewHolder>() {
     private val TAG = "MainAdapter"

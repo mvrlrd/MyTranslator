@@ -1,9 +1,9 @@
-package ru.mvrlrd.mytranslator.room
+package ru.mvrlrd.mytranslator.data.local
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import io.reactivex.Single
+import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 
 @Dao
 interface HistoryDao {

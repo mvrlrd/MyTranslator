@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.data.response
+package ru.mvrlrd.mytranslator.data.network.response
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName

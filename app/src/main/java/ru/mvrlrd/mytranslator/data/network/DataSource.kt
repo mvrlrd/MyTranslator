@@ -2,7 +2,7 @@ package ru.mvrlrd.mytranslator.data.network
 
 
 import ru.mvrlrd.mytranslator.Failure
-import ru.mvrlrd.mytranslator.data.response.ListSearchResult
+import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.functional.Either
 
 interface DataSource  {

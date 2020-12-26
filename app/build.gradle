@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
@@ -5,19 +7,20 @@ apply plugin: 'kotlin-kapt'
 
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion Config.compile_sdk
     buildToolsVersion "29.0.3"
 
     defaultConfig {
-        applicationId "ru.mvrlrd.mytranslator"
-        minSdkVersion 22
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
+        applicationId Config.application_id
+        minSdkVersion Config.min_sdk
+        targetSdkVersion Config.target_sdk
+        versionCode Releases.version_code
+        versionName Releases.version_name
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    tasks.withType(KotlinCompile).all {
         kotlinOptions {
             jvmTarget = "1.8"
         }
@@ -51,78 +54,88 @@ android {
 
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    testImplementation 'junit:junit:4.13'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    //AndroidX
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    //Tools
+    implementation Tools.support
 
     //Design
-    //You should not use the com.android.support and com.google.android.material dependencies in your app at the same time
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation Design.appcompat
+    implementation Design.material    //You should not use the com.android.support and com.google.android.material dependencies in your app at the same time
+    implementation Design.cardView
+    implementation Design.constraintlayout
+    implementation Design.recyclerView
 
     //Kotlin
-    implementation 'androidx.core:core-ktx:1.3.2'
-    implementation 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.0'
+    implementation Kotlin.stdlib
+    implementation Kotlin.core
+    implementation Kotlin.coroutinesCore
+    implementation Kotlin.coroutinesAndroid
 
-    //Rx-Java
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.9'
-
-    //Retrofit 2
-    implementation libs.retrofit
-    implementation libs.retrofit_converter_gson
-    implementation libs.retrofit_rxjava_adapter
-
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.1'
-
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    //noinspection LifecycleAnnotationProcessorWithJava8
-    annotationProcessor 'androidx.lifecycle:lifecycle-compiler:2.2.0'
-
-    //coroutines
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.9'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
-
-    // For ViewModel
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-    implementation "androidx.constraintlayout:constraintlayout:2.0.1"
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-
-    implementation 'io.coil-kt:coil:0.9.5'
-    implementation "io.coil-kt:coil-base:0.9.5"
+    //Retrofit
+    implementation Retrofit.retrofit
+    implementation Retrofit.converterGson
+    implementation Retrofit.adapterRxJava2
+    implementation Retrofit.okHttpLoggingInterceptor
 
     // Koin
-    implementation "org.koin:koin-android:2.0.1"
-    implementation 'org.koin:koin-androidx-viewmodel:2.0.1'
-    implementation 'org.koin:koin-androidx-scope:2.0.1'
+    implementation Koin.android
+    implementation Koin.viewModel
+    implementation Koin.scope
 
-
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation 'androidx.cardview:cardview:1.0.0'
-
-    implementation 'androidx.recyclerview:recyclerview:1.1.0'
-
-    implementation "androidx.constraintlayout:constraintlayout:2.0.2"
+    //Coil
+    implementation Coil.coil
+    implementation Coil.coilBase
 
     // Room
-    implementation "androidx.room:room-runtime:2.2.5"
-    kapt "androidx.room:room-compiler:2.2.5"
-    implementation "androidx.room:room-ktx:2.2.5"
-    androidTestImplementation "androidx.room:room-testing:2.2.5"
+    implementation Room.roomRuntime
+    kapt Room.roomCompiler
+    implementation Room.roomKtx
+    androidTestImplementation Room.roomTesting
+
+    //LifeCircle
+    //noinspection LifecycleAnnotationProcessorWithJava8
+    annotationProcessor LifeCircle.compiler
+    implementation LifeCircle.extension
+    implementation LifeCircle.viewModelKtx
+
+    //Testing
+    testImplementation Testing.junit
+    androidTestImplementation Testing.ext_junit
+    androidTestImplementation Testing.espresso_core
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

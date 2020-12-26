@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.SearchResultRepository
 import ru.mvrlrd.mytranslator.data.response.SearchResultResponse
-import ru.mvrlrd.mytranslator.data.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.response.ListSearchResult
 import ru.mvrlrd.mytranslator.data.response.MeaningsResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
@@ -56,7 +56,7 @@ init {
 //////////////////
 
     private fun handleRandomRecipes(response: ListSearchResult?) {
-        response?.printAllMeanings()
+//        response?.printAllMeanings()
         liveTranslations.value = response?.map { data ->
             data.meanings?.let { handle2(data.text, it  )}
             MeaningModelForRecycler(

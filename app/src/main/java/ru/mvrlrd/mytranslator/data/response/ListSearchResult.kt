@@ -1,3 +1,3 @@
-package ru.mvrlrd.mytranslator.model
+package ru.mvrlrd.mytranslator.data.response
 
-class ListSearchResult : ArrayList<SearchResult>()
+class ListSearchResult : ArrayList<SearchResultResponse>()

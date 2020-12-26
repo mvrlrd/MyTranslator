@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.data.data.network
+package ru.mvrlrd.mytranslator.data.network
 
 import retrofit2.Response
 import retrofit2.http.GET

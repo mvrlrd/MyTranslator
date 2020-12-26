@@ -7,8 +7,8 @@ import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.mvrlrd.mytranslator.BuildConfig
-import ru.mvrlrd.mytranslator.data.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.data.data.network.ISkyengApiService
+import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.data.network.ISkyengApiService
 import java.util.concurrent.TimeUnit
 
 internal const val BASE_URL = "https://dictionary.skyeng.ru/api/public/v1/"
@@ -18,7 +18,7 @@ private const val TIMEOUT_IN_SECONDS = 1L
 internal fun provideOkHTTPClient(): OkHttpClient {
     val requestInterceptor = Interceptor { chain ->
         val httpUrl = chain.request()
-            .url()
+            .url
             .newBuilder()
             .build()
         val request = chain.request()

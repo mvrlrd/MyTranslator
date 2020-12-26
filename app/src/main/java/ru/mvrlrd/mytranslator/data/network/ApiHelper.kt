@@ -1,10 +1,11 @@
-package ru.mvrlrd.mytranslator.data.data.network
+package ru.mvrlrd.mytranslator.data.network
 
 import retrofit2.Response
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
 import ru.mvrlrd.mytranslator.data.response.ListSearchResult
 import ru.mvrlrd.mytranslator.functional.Either
+
 
 class ApiHelper(private val apiService: ISkyengApiService,private val networkHandler: NetworkAvailabilityHandler) :
     DataSource {

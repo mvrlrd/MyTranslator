@@ -41,7 +41,6 @@ object Versions {
     //Retrofit
     const val retrofit = "2.9.0"
     const val converterGson = "2.9.0"
-    const val interceptor = ""
     const val adapterRxJava2 = "1.0.0" //jakewharton_retrofit_rxjava_adapter:
     const val okHttpLoggingInterceptor = "4.9.0"
 
@@ -63,7 +62,7 @@ object Versions {
     //Tools
     const val legacy_support_v4 = "1.0.0"
 
-//lifeCircle
+    //lifeCircle
     const val lifecircleCompiler = "2.2.0"
     const val lifecircleExtension = "2.2.0"
     const val lifecircleViewModelKtx = "2.2.0"
@@ -94,7 +93,7 @@ object Kotlin{
 
 object Retrofit{
     const val retrofit = "com.squareup.retrofit2:retrofit:${Versions.retrofit}"
-    const val converterGson = "com.squareup.retrofit2:converter-gson:${Versions.retrofit}"
+    const val converterGson = "com.squareup.retrofit2:converter-gson:${Versions.converterGson}"
     const val adapterRxJava2 = "com.jakewharton.retrofit:retrofit2-rxjava2-adapter:${Versions.adapterRxJava2}" //jakewharton_retrofit_rxjava_adapter:
     const val okHttpLoggingInterceptor = "com.squareup.okhttp3:logging-interceptor:${Versions.okHttpLoggingInterceptor}"
 }

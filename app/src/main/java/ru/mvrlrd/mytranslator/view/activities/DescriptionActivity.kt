@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.view
+package ru.mvrlrd.mytranslator.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

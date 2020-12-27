@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.view
+package ru.mvrlrd.mytranslator.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_history.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
+import ru.mvrlrd.mytranslator.view.MyAdapter
 
 class HistoryActivity : AppCompatActivity() {
     private val viewModel: MainViewModel by inject()
@@ -24,7 +25,8 @@ class HistoryActivity : AppCompatActivity() {
                 translation.let {
                     recycler_view.apply {
                         layoutManager = LinearLayoutManager(this@HistoryActivity)
-                        adapter = MyAdapter(translation)
+                        adapter =
+                            MyAdapter(translation)
                     }
                 }
 

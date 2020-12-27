@@ -1,9 +1,10 @@
-package ru.mvrlrd.mytranslator.view
+package ru.mvrlrd.mytranslator.view.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.doOnPreDraw
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -14,11 +15,13 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
 import ru.mvrlrd.mytranslator.service.extensions.observeData
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
+import ru.mvrlrd.mytranslator.view.fragments.TranslationFragment
 
 class MainActivity : AppCompatActivity(){
 
-    lateinit var translationAdapter :  TranslationAdapter
-    private val viewModel: MainViewModel by inject()
+    private val mainViewModel: MainViewModel by inject()
+     var trFragment : Fragment = TranslationFragment()
+
 
 
 
@@ -26,29 +29,24 @@ class MainActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        translationAdapter = TranslationAdapter()
 
-        initializeView()
-        viewModel.liveTranslations.observe(this, Observer { meanings ->
-            handleTranslationList(meanings)
 
-        })
+        supportFragmentManager.beginTransaction()
+            .add(R.id.trFragmentContainerView, trFragment )
+            .commit()
+
+
 
 
     }
 
 
     fun onClickGo(view: View){
-        viewModel.loadData(searchedWord_TextView.text.toString())
+        mainViewModel.loadData(searchedWord_TextView.text.toString())
 
     }
-    private fun handleTranslationList(list: List<MeaningModelForRecycler>) {
-        translationAdapter.collection = list
-    }
 
-    private fun initializeView() {
-      translation_recyclerview.layoutManager = LinearLayoutManager(this)
-       translation_recyclerview.adapter = translationAdapter
-    }
+
+
 
 }

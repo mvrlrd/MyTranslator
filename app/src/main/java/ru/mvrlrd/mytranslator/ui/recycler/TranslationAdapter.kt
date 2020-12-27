@@ -38,18 +38,21 @@ class TranslationAdapter :
             for (i in fromPosition until toPosition) {
                 Collections.swap(collection, i, i + 1)
             }
+            println("swiped on the right")
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(collection, i, i - 1)
             }
+            println("swiped on the left")
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
     override fun onItemDismiss(position: Int) {
-//        collection.remove(position);
-//        notifyItemRemoved(position);
+//        collection.remove(position)
+        println("${collection[position].translation}    swiped")
+        notifyItemRemoved(position)
     }
 
 
@@ -58,7 +61,8 @@ class TranslationAdapter :
 
 
     class TranslationHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView), ItemTouchHelperViewHolder {
+        RecyclerView.ViewHolder(itemView){
+//        , ItemTouchHelperViewHolder {
         fun bind(translationView: MeaningModelForRecycler) {
             itemView.image_translation.load("https:${translationView.image_url}")
             itemView.recycler_text.text = translationView.text
@@ -66,13 +70,13 @@ class TranslationAdapter :
 
         }
 
-        override fun onItemSelected() {
-            itemView.setBackgroundColor(Color.BLUE)
-        }
+//        override fun onItemSelected() {
+//            itemView.setBackgroundColor(Color.BLACK)
+//        }
 
-        override fun onItemClear() {
-            itemView.setBackgroundColor(0)
-        }
+//        override fun onItemClear() {
+//            itemView.setBackgroundColor(0)
+//        }
     }
 
 
@@ -80,3 +84,4 @@ class TranslationAdapter :
 
 
 }
+

@@ -49,8 +49,9 @@ class MainActivity : AppCompatActivity() {
         translation_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)
             adapter = _adapter.apply { collection = list  }
+
         }
-        callback = SimpleItemTouchHelperCallback(_adapter)
+        callback = SimpleItemTouchHelperCallback(translation_recyclerview.adapter as TranslationAdapter)
         ItemTouchHelper(callback).attachToRecyclerView(translation_recyclerview)
 
     }

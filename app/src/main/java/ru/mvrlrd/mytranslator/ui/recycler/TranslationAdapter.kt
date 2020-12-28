@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.recycler
 
-//import ru.mvrlrd.mytranslator.service.inflate
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,8 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.recycler_item.view.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import java.util.*
@@ -50,12 +47,10 @@ class TranslationAdapter :
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
-
+/////////////
     override fun onItemDismiss(position: Int) {
         Log.e("onItemDismiss", "run ")
         println("${collection[position].translation}    swiped")
-
-
 
         collection.removeAt(position)
         notifyItemRemoved(position)

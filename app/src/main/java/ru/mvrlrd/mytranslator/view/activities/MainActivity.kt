@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         mainViewModel.liveTranslations.observe(this, Observer { meanings ->
-            handleTranslationList(meanings)
+            handleTranslationList(meanings as MutableList<MeaningModelForRecycler>)
         })
     }
 
@@ -44,11 +44,11 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.loadData(searchedWord_TextView.text.toString())
     }
 
-    private fun handleTranslationList(list: List<MeaningModelForRecycler>) {
+    private fun handleTranslationList(list: MutableList<MeaningModelForRecycler>) {
 
         translation_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)
-            adapter = _adapter.apply { collection = list }
+            adapter = _adapter.apply { collection = list  }
         }
         callback = SimpleItemTouchHelperCallback(_adapter)
         ItemTouchHelper(callback).attachToRecyclerView(translation_recyclerview)

@@ -1,13 +1,16 @@
 package ru.mvrlrd.mytranslator.ui.recycler
 
 //import ru.mvrlrd.mytranslator.service.inflate
-import android.graphics.Color
+
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.recycler_item.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import java.util.*
@@ -16,8 +19,8 @@ import kotlin.properties.Delegates
 class TranslationAdapter :
     RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter {
 
-    internal var collection: List<MeaningModelForRecycler> by
-    Delegates.observable(emptyList()) { _, _, _ -> notifyDataSetChanged() }
+    internal var collection: MutableList<MeaningModelForRecycler> by
+    Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):TranslationHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -34,31 +37,31 @@ class TranslationAdapter :
 
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
+        Log.e("onItemMove", "run ")
         if (fromPosition < toPosition) {
             for (i in fromPosition until toPosition) {
                 Collections.swap(collection, i, i + 1)
             }
-            println("swiped on the right")
         } else {
             for (i in fromPosition downTo toPosition + 1) {
                 Collections.swap(collection, i, i - 1)
             }
-            println("swiped on the left")
         }
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
 
     override fun onItemDismiss(position: Int) {
-//        collection.remove(position)
+        Log.e("onItemDismiss", "run ")
         println("${collection[position].translation}    swiped")
+
+
+
+        collection.removeAt(position)
         notifyItemRemoved(position)
+
+
     }
-
-
-
-
-
 
     class TranslationHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView){
@@ -67,7 +70,6 @@ class TranslationAdapter :
             itemView.image_translation.load("https:${translationView.image_url}")
             itemView.recycler_text.text = translationView.text
             itemView.recycler_translation.text = translationView.translation
-
         }
 
 //        override fun onItemSelected() {

@@ -61,6 +61,11 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_standard_header"
                     android:textColor="?android:attr/textColorSecondary"
+                    android:autoSizeTextType="uniform"
+                    app:autoSizeTextType="uniform"
+                    app:autoSizeMinTextSize="16sp"
+                    app:autoSizeMaxTextSize="100sp"
+                    app:autoSizeStepGranularity="1sp"
                     />
             </LinearLayout>
 

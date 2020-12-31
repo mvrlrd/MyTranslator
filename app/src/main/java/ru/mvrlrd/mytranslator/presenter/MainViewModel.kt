@@ -11,6 +11,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
+import ru.mvrlrd.mytranslator.presentation.FullInfoForRecycler
 import ru.mvrlrd.mytranslator.presentation.ResponsesForRecycler
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 
@@ -56,9 +57,11 @@ class MainViewModel
 
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
+                    resp.text,
                     meaningsResponse.translationResponse?.translation,
                     meaningsResponse.imageUrl,
-                    meaningsResponse.transcription
+                    meaningsResponse.transcription,
+                    meaningsResponse.partOfSpeech
                 )
 
             }?.let {
@@ -67,6 +70,11 @@ class MainViewModel
                     it
                 )
             }
+//                ?.let{
+//                FullInfoForRecycler(
+//
+//                )
+//            }
 
 //            resp.meanings?.let { handle2(resp.text, it) }
 //            WordModelForRecycler(

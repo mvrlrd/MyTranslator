@@ -25,7 +25,7 @@ class MainViewModel
     val searchResultRepository = SearchResultRepository(apiHelper)
     val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
 
-    var liveTranslations: MutableLiveData<List<WordModelForRecycler?>> = MutableLiveData()
+    var liveTranslations: MutableLiveData<List<MeaningModelForRecycler?>> = MutableLiveData()
 
 
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
@@ -54,7 +54,6 @@ class MainViewModel
     private fun handleRandomRecipes(response: ListSearchResult?) {
         response?.printAllSearchResultResponse()
         liveTranslations.value = response?.map { resp ->
-
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
                     resp.text,
@@ -66,37 +65,11 @@ class MainViewModel
 
             }?.let {
                 WordModelForRecycler(
-                    resp.text,
                     it
                 )
             }
-//                ?.let{
-//                FullInfoForRecycler(
-//
-//                )
-//            }
-
-//            resp.meanings?.let { handle2(resp.text, it) }
-//            WordModelForRecycler(
-//                resp
-//                resp.text,
-//                resp.meanings?.get(0)?.translationResponse?.translation,
-//                resp.meanings?.get(0)?.imageUrl,
-//                resp.meanings?.get(0)?.transcription
-//            )
-        }
+        }?.flatMap { it!!.meanings }
     }
-
-//    private fun handle2(text: String?, resp: List<MeaningsResponse?>) {
-//        liveTranslations.value = resp.map { meaning ->
-//            MeaningModelForRecycler(
-//                text,
-//                meaning?.translationResponse?.translation,
-//                meaning?.imageUrl,
-//                meaning?.transcription
-//            )
-//        }
-//    }
 
     fun loadHistory() {
         viewModelScope.launch {

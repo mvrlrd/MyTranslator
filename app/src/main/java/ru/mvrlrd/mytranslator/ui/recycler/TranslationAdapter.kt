@@ -17,7 +17,7 @@ import kotlin.properties.Delegates
 class TranslationAdapter :
     RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter {
 
-    internal var collection: MutableList<WordModelForRecycler> by
+    internal var collection: MutableList<MeaningModelForRecycler> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):TranslationHolder {
@@ -51,7 +51,7 @@ class TranslationAdapter :
 /////////////
     override fun onItemDismiss(position: Int) {
         Log.e("onItemDismiss", "run ")
-        println("${collection[position].text}    swiped")
+        println("${collection[position].translation}    swiped")
 
         collection.removeAt(position)
         notifyItemRemoved(position)
@@ -62,10 +62,10 @@ class TranslationAdapter :
     class TranslationHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
-        fun bind(wordModelForRecycler: WordModelForRecycler) {
-            itemView.recycler_text.text = wordModelForRecycler.text
-            itemView.recycler_translation.text = wordModelForRecycler.meanings?.get(0)?.translation
-            itemView.image_translation.load("https:${wordModelForRecycler.meanings?.get(0)?.image_url}")
+        fun bind(meaningModelForRecycler: MeaningModelForRecycler) {
+            itemView.recycler_text.text = meaningModelForRecycler.text
+            itemView.recycler_translation.text = meaningModelForRecycler.translation
+            itemView.image_translation.load("https:${meaningModelForRecycler.image_url}")
 
 
         }

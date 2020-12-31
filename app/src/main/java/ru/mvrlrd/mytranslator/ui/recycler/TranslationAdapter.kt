@@ -10,13 +10,14 @@ import coil.api.load
 import kotlinx.android.synthetic.main.recycler_item.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import java.util.*
 import kotlin.properties.Delegates
 
 class TranslationAdapter :
     RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter {
 
-    internal var collection: MutableList<MeaningModelForRecycler> by
+    internal var collection: MutableList<WordModelForRecycler> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):TranslationHolder {
@@ -50,7 +51,7 @@ class TranslationAdapter :
 /////////////
     override fun onItemDismiss(position: Int) {
         Log.e("onItemDismiss", "run ")
-        println("${collection[position].translation}    swiped")
+        println("${collection[position].text}    swiped")
 
         collection.removeAt(position)
         notifyItemRemoved(position)
@@ -59,12 +60,14 @@ class TranslationAdapter :
     }
 
     class TranslationHolder(itemView: View) :
-        RecyclerView.ViewHolder(itemView){
-//        , ItemTouchHelperViewHolder {
-        fun bind(translationView: MeaningModelForRecycler) {
-            itemView.image_translation.load("https:${translationView.image_url}")
-            itemView.recycler_text.text = translationView.text
-            itemView.recycler_translation.text = translationView.translation
+        RecyclerView.ViewHolder(itemView) {
+        //        , ItemTouchHelperViewHolder {
+        fun bind(wordModelForRecycler: WordModelForRecycler) {
+            itemView.recycler_text.text = wordModelForRecycler.text
+            itemView.recycler_translation.text = wordModelForRecycler.meanings?.get(0)?.translation
+            itemView.image_translation.load("https:${wordModelForRecycler.meanings?.get(0)?.image_url}")
+
+
         }
 
 //        override fun onItemSelected() {

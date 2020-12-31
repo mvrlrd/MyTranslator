@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
@@ -36,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         mainViewModel.liveTranslations.observe(this, Observer { meanings ->
-            handleTranslationList(meanings as MutableList<MeaningModelForRecycler>)
+            handleTranslationList(meanings as MutableList<WordModelForRecycler>)
         })
     }
 
@@ -44,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         mainViewModel.loadData(searchedWord_TextView.text.toString())
     }
 
-    private fun handleTranslationList(list: MutableList<MeaningModelForRecycler>) {
+    private fun handleTranslationList(list: MutableList<WordModelForRecycler>) {
 
         translation_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)

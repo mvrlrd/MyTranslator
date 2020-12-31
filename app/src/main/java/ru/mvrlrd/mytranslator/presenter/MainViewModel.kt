@@ -11,6 +11,8 @@ import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
+import ru.mvrlrd.mytranslator.presentation.ResponsesForRecycler
+import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 
 
 class MainViewModel
@@ -22,7 +24,7 @@ class MainViewModel
     val searchResultRepository = SearchResultRepository(apiHelper)
     val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
 
-    var liveTranslations: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
+    var liveTranslations: MutableLiveData<List<WordModelForRecycler?>> = MutableLiveData()
 
 
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
@@ -49,25 +51,44 @@ class MainViewModel
 
 
     private fun handleRandomRecipes(response: ListSearchResult?) {
-        liveTranslations.value = response?.map { data ->
-            data.meanings?.let { handle2(data.text, it) }
-            MeaningModelForRecycler(
-                data.text,
-                data.meanings?.get(0)?.translationResponse?.translation,
-                data.meanings?.get(0)?.imageUrl
-            )
+        response?.printAllSearchResultResponse()
+        liveTranslations.value = response?.map { resp ->
+
+            resp.meanings?.map { meaningsResponse ->
+                MeaningModelForRecycler(
+                    meaningsResponse.translationResponse?.translation,
+                    meaningsResponse.imageUrl,
+                    meaningsResponse.transcription
+                )
+
+            }?.let {
+                WordModelForRecycler(
+                    resp.text,
+                    it
+                )
+            }
+
+//            resp.meanings?.let { handle2(resp.text, it) }
+//            WordModelForRecycler(
+//                resp
+//                resp.text,
+//                resp.meanings?.get(0)?.translationResponse?.translation,
+//                resp.meanings?.get(0)?.imageUrl,
+//                resp.meanings?.get(0)?.transcription
+//            )
         }
     }
 
-    private fun handle2(text: String?, resp: List<MeaningsResponse?>) {
-        liveTranslations.value = resp.map { meaning ->
-            MeaningModelForRecycler(
-                text,
-                meaning?.translationResponse?.translation,
-                meaning?.imageUrl
-            )
-        }
-    }
+//    private fun handle2(text: String?, resp: List<MeaningsResponse?>) {
+//        liveTranslations.value = resp.map { meaning ->
+//            MeaningModelForRecycler(
+//                text,
+//                meaning?.translationResponse?.translation,
+//                meaning?.imageUrl,
+//                meaning?.transcription
+//            )
+//        }
+//    }
 
     fun loadHistory() {
         viewModelScope.launch {

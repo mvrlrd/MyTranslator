@@ -57,7 +57,8 @@ class MainViewModel
                     meaningsResponse.translationResponse?.translation,
                     meaningsResponse.imageUrl,
                     meaningsResponse.transcription,
-                    meaningsResponse.partOfSpeech
+                    meaningsResponse.partOfSpeech,
+                    meaningsResponse.prefix
                 )
 
             }?.let {

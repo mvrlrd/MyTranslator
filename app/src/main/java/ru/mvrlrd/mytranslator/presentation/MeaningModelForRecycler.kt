@@ -7,5 +7,6 @@ data class MeaningModelForRecycler (
     val translation : String?,
     val image_url: String?,
     val transcription: String?,
-    val partOfSpeech: String?
+    val partOfSpeech: String?,
+    val prefix: String?
 ) : Serializable

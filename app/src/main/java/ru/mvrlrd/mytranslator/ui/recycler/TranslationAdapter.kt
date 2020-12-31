@@ -67,9 +67,8 @@ class TranslationAdapter :
             itemView.recycler_translation.text = meaningModelForRecycler.translation
             itemView.image_translation.load("https:${meaningModelForRecycler.image_url}")
             itemView.partOfSpeechTextView.text = meaningModelForRecycler.partOfSpeech
-
-
-
+            itemView.prefixTextView.text = meaningModelForRecycler.prefix ?: ""
+            itemView.transcriptionTextView.text = "[${meaningModelForRecycler.transcription}]"
         }
 
 //        override fun onItemSelected() {

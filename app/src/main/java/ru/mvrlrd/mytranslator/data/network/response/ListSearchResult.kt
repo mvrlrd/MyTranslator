@@ -11,7 +11,7 @@ class ListSearchResult : ArrayList<SearchResultResponse>()
         for (i in this){
             i.text?.let {
                 for (j in i.meanings!!) {
-                    println("text = ${i.text}   transl = ${j.translationResponse?.translation}  part = ${j.partOfSpeech}  transcrp = ${j.transcription}")
+                    println("text = ${i.text}   transl = ${j.translationResponse?.translation}  part = ${j.partOfSpeech}  transcrp = ${j.prefix}")
                 }
             }
 

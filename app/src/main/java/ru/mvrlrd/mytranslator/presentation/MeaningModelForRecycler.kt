@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.presentation
 
-import ru.mvrlrd.mytranslator.data.network.response.Definition
 import java.io.Serializable
 
 data class MeaningModelForRecycler (

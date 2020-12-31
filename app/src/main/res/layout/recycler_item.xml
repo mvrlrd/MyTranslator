@@ -6,9 +6,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="12dp"
     android:theme="@style/Theme.MaterialComponents.Light"
-    app:cardElevation="8dp"
+    app:cardElevation="12dp"
     android:scaleType="fitXY">
 
     <LinearLayout
@@ -29,13 +29,29 @@
             android:padding="@dimen/margin_xxx_small">
 
             <!-- заголовок -->
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/recycler_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?attr/textAppearanceHeadline6"
-                android:textSize="@dimen/text_size_standard_header" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/recycler_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    android:textSize="@dimen/text_size_standard_header"
+                    android:paddingEnd="10dp"/>
+
+                <TextView
+                    android:id="@+id/partOfSpeechTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                     />
+            </LinearLayout>
+
             <!-- основной текст -->
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/recycler_translation"
                 android:layout_width="wrap_content"

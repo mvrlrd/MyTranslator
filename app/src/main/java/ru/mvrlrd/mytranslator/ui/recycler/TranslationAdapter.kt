@@ -66,6 +66,8 @@ class TranslationAdapter :
             itemView.recycler_text.text = meaningModelForRecycler.text
             itemView.recycler_translation.text = meaningModelForRecycler.translation
             itemView.image_translation.load("https:${meaningModelForRecycler.image_url}")
+            itemView.partOfSpeechTextView.text = meaningModelForRecycler.partOfSpeech
+
 
 
         }

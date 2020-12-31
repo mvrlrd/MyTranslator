@@ -6,13 +6,10 @@ import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultRepository
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
-import ru.mvrlrd.mytranslator.data.network.response.MeaningsResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
-import ru.mvrlrd.mytranslator.presentation.FullInfoForRecycler
-import ru.mvrlrd.mytranslator.presentation.ResponsesForRecycler
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 
 

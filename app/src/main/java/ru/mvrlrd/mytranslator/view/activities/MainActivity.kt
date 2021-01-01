@@ -1,13 +1,10 @@
 package ru.mvrlrd.mytranslator.view.activities
 
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.MenuItem
 import android.view.View
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -35,7 +32,6 @@ class MainActivity : AppCompatActivity() {
     var translationFragment: Fragment = TranslationFragment()
     lateinit var callback : ItemTouchHelper.Callback
     lateinit var _adapter : TranslationAdapter
-//    lateinit var recyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         initNavController()
         getSupportActionBar()?.hide();
 
-        _adapter = TranslationAdapter()
+        _adapter = TranslationAdapter(getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)
 
 //        supportFragmentManager.beginTransaction()
 //            .add(R.id.trFragmentContainerView, translationFragment)
@@ -65,26 +61,10 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onClickGo(view: View) {
         mainViewModel.loadData(searchedWord_TextView.text.toString())
-        createOneShotVibrationUsingVibrationEffect()
-
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    private fun createOneShotVibrationUsingVibrationEffect() {
-        // 1000 : Vibrate for 1 sec
-        // VibrationEffect.DEFAULT_AMPLITUDE - would perform vibration at full strength
-        val effect =
-            VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
-        val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(effect)
-        }
-
-
-    }
 
     private fun handleTranslationList(list: MutableList<MeaningModelForRecycler>) {
 

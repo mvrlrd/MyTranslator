@@ -10,18 +10,16 @@ import com.google.android.material.color.MaterialColors.ALPHA_FULL
 
 class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter) : ItemTouchHelper.Callback() {
 
-    ////////
     override fun isLongPressDragEnabled(): Boolean {
 //        Log.e("isLongPressDragEnabled", "run ")
         return false
     }
 
-    ////////
     override fun isItemViewSwipeEnabled(): Boolean {
 //        Log.e("isItemViewSwipeEnabled", "run ")
         return true
     }
-    ////////
+
     override fun getMovementFlags(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
@@ -61,13 +59,13 @@ class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter)
         adapter.onItemMove(source.adapterPosition, target.adapterPosition)
         return true
     }
-    ////////
+
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, i: Int) {
         Log.e("onSwiped", "run ")
         // Notify the adapter of the dismissal
         adapter.onItemDismiss(viewHolder.adapterPosition)
     }
-    ////////
+
     override fun onChildDraw(
         c: Canvas,
         recyclerView: RecyclerView,
@@ -92,7 +90,6 @@ class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter)
         }
     }
 
-    ////////
     override fun onSelectedChanged(
         viewHolder: RecyclerView.ViewHolder?,
         actionState: Int
@@ -109,7 +106,7 @@ class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter)
         }
         super.onSelectedChanged(viewHolder, actionState)
     }
-    ////////
+
     override fun clearView(
         recyclerView: RecyclerView,
         viewHolder: RecyclerView.ViewHolder
@@ -123,5 +120,4 @@ class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter)
             itemViewHolder.onItemClear()
         }
     }
-
 }

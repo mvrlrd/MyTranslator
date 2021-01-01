@@ -1,21 +1,24 @@
 package ru.mvrlrd.mytranslator.ui.recycler
 
 
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.recycler_item.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import java.util.*
 import kotlin.properties.Delegates
 
-class TranslationAdapter :
-    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter {
+class TranslationAdapter(val vibrator: Vibrator) :
+    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter{
 
     internal var collection: MutableList<MeaningModelForRecycler> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
@@ -48,15 +51,24 @@ class TranslationAdapter :
         notifyItemMoved(fromPosition, toPosition)
         return true
     }
-/////////////
+
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemDismiss(position: Int) {
         Log.e("onItemDismiss", "run ")
+        onSwiped(vibrator)
         println("${collection[position].translation}    swiped")
-
         collection.removeAt(position)
         notifyItemRemoved(position)
 
+    }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    override fun onSwiped(vibrator: Vibrator) {
+        val effect =
+            VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
+        if (vibrator.hasVibrator()) {
+            vibrator.vibrate(effect)
+        }
     }
 
     class TranslationHolder(itemView: View) :

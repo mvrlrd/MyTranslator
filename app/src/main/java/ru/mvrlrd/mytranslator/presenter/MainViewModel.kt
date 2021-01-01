@@ -16,10 +16,10 @@ import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 class MainViewModel
     (
     apiHelper: ApiHelper,
-    val historyDao: HistoryDao
+    private val historyDao: HistoryDao
 ) : BaseViewModel() {
 
-    val searchResultRepository = SearchResultRepository(apiHelper)
+    private val searchResultRepository = SearchResultRepository(apiHelper)
     val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
 
     var liveTranslations: MutableLiveData<List<MeaningModelForRecycler?>> = MutableLiveData()

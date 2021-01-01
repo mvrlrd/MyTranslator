@@ -15,9 +15,10 @@ android {
         targetSdkVersion Config.target_sdk
         versionCode Releases.version_code
         versionName Releases.version_name
-
+        vectorDrawables.useSupportLibrary = true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+
 
     tasks.withType(KotlinCompile).all {
         kotlinOptions {

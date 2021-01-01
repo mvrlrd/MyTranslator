@@ -7,49 +7,56 @@
     android:orientation="vertical"
     tools:context=".view.activities.MainActivity">
 
-<LinearLayout
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    tools:ignore="MissingConstraints">
+ >
+
+
+    <!--    android:drawableRight="@drawable/ic_panorama_black_24dp"-->
 
     <EditText
         android:id="@+id/searchedWord_TextView"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:layout_weight="1"
         android:ems="10"
-        android:hint="type here"
+        android:hint="what to translate"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.082"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.438"
+
+
         />
 
-    <Button
+    <ImageButton
         android:id="@+id/button_go"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_weight="5"
-        android:background="#2196F3"
+        android:layout_width="57dp"
+        android:layout_height="54dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="12dp"
+        android:background="?android:attr/selectableItemBackground"
         android:onClick="onClickGo"
-        android:text="GO"
+        android:src="@drawable/ic_youtube_searched_for_24px"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="@+id/searchedWordInHistory"
         app:layout_constraintStart_toEndOf="@+id/searchedWordInHistory"
-        app:layout_constraintTop_toTopOf="@+id/searchedWordInHistory"
-         />
+        app:layout_constraintTop_toTopOf="@+id/searchedWordInHistory" />
 
 
-</LinearLayout>
+</RelativeLayout>
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/trFragmentContainerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
 
-        />
+        >
+
+    </androidx.fragment.app.FragmentContainerView>
 
 
 

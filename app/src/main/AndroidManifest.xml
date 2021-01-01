@@ -16,7 +16,7 @@
         <activity android:name=".view.activities.HistoryActivity"></activity>
         <activity android:name=".view.activities.DescriptionActivity" />
         <activity android:name=".view.activities.MainActivity"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

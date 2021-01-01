@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_translator"
+        android:icon="@drawable/g_translator_selector"
+        android:title="поиск" />
+
+    <item
+        android:id="@+id/navigation_favorites"
+        android:icon="@drawable/favorites_selector"
+        android:title="Мои слова"
+        />
+
+
+</menu>

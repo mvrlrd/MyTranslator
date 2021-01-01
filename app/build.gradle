@@ -1,9 +1,13 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
+plugins {
+    id 'com.android.application'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+    id "androidx.navigation.safeargs"
+}
+
 
 android {
     compileSdkVersion Config.compile_sdk
@@ -24,12 +28,7 @@ android {
         kotlinOptions {
             jvmTarget = "1.8"
         }
-        allprojects {
-            repositories {
-                jcenter()
-                google()
-            }
-        }
+
 
 
     }
@@ -93,6 +92,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
     kapt Room.roomCompiler
     implementation Room.roomKtx
     androidTestImplementation Room.roomTesting
@@ -109,12 +109,12 @@ dependencies {
     androidTestImplementation Testing.espresso_core
     
     //Navigation
-    implementation Navigation.navigation_fragment
-    implementation Navigation.navigation_ui_ktx
-    androidTestImplementation Navigation.testing_navigation
+//    implementation Navigation.navigation_fragment
+//    implementation Navigation.navigation_ui_ktx
+//    androidTestImplementation Navigation.testing_navigation
 
-
-
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
 
 
 

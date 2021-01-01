@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".view.activities.MainActivity">
+    tools:context=".view.activities.MainActivity"
+    >
 
 <RelativeLayout
     android:layout_width="match_parent"
@@ -49,14 +50,29 @@
 
 
 </RelativeLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/cardview_dark_background"
+        app:menu="@menu/bottom_nav_menu"
+        app:labelVisibilityMode="unlabeled"
+
+        />
+
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/trFragmentContainerView"
+        android:id="@+id/nav_host_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        app:navGraph="@navigation/nav_graph"
+        app:defaultNavHost="true"
         >
 
     </androidx.fragment.app.FragmentContainerView>
+
+
 
 
 

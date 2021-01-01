@@ -15,6 +15,7 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
+import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 
@@ -55,7 +56,7 @@ class TranslationFragment : Fragment() {
             adapter = _adapter.apply { collection = list }
         }
         callback =
-            SimpleItemTouchHelperCallback(translation_recyclerview.adapter as TranslationAdapter)
+            SimpleItemTouchHelperCallback(translation_recyclerview.adapter as ItemTouchHelperAdapter)
         ItemTouchHelper(callback).attachToRecyclerView(translation_recyclerview)
     }
 }

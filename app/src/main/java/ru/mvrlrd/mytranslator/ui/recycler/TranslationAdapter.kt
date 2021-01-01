@@ -55,7 +55,7 @@ class TranslationAdapter(val vibrator : Vibrator) :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemDismiss(position: Int) {
         Log.e("onItemDismiss", "run ")
-        onSwiped(vibrator)
+        vibrate(vibrator)
         println("${collection[position].translation}    swiped")
         collection.removeAt(position)
         notifyItemRemoved(position)
@@ -63,7 +63,7 @@ class TranslationAdapter(val vibrator : Vibrator) :
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    override fun onSwiped(vibrator: Vibrator) {
+    fun vibrate(vibrator: Vibrator) {
         val effect =
             VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
         if (vibrator.hasVibrator()) {

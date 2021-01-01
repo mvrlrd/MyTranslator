@@ -107,6 +107,12 @@ dependencies {
     testImplementation Testing.junit
     androidTestImplementation Testing.ext_junit
     androidTestImplementation Testing.espresso_core
+    
+    //Navigation
+    implementation Navigation.navigation_fragment
+    implementation Navigation.navigation_ui_ktx
+    androidTestImplementation Navigation.testing_navigation
+
 
 
 

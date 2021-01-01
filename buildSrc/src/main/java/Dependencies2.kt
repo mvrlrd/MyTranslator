@@ -71,6 +71,9 @@ object Versions {
     const val junit = "4.13.1"
     const val ext_junit ="1.1.2"
     const val espresso ="3.3.0"
+
+    //Navigation
+    const val nav_version = "2.3.2"
 }
 object Tools{
     const val support = "androidx.legacy:legacy-support-v4:${Versions.legacy_support_v4}"
@@ -128,6 +131,12 @@ object Testing {
     const val junit = "junit:junit:${Versions.junit}"
     const val ext_junit = "androidx.test.ext:junit:${Versions.ext_junit}"
     const val espresso_core = "androidx.test.espresso:espresso-core:${Versions.espresso}"
+}
+
+object Navigation{
+    const val navigation_fragment = "androidx.navigation:navigation-fragment-ktx:${Versions.nav_version}"
+    const val navigation_ui_ktx = "androidx.navigation:navigation-ui-ktx:$${Versions.nav_version}"
+    const val testing_navigation = "androidx.navigation:navigation-testing:$${Versions.nav_version}"
 }
 
 

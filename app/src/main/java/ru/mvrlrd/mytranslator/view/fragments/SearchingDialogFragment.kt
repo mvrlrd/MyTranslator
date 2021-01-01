@@ -9,7 +9,6 @@ import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.dialog_searching.*
 import ru.mvrlrd.mytranslator.R
 
-
 class SearchingDialogFragment: DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

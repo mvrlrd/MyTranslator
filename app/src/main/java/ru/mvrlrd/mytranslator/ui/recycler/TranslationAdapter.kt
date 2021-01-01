@@ -17,7 +17,7 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import java.util.*
 import kotlin.properties.Delegates
 
-class TranslationAdapter(val vibrator: Vibrator) :
+class TranslationAdapter(val vibrator : Vibrator) :
     RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter{
 
     internal var collection: MutableList<MeaningModelForRecycler> by

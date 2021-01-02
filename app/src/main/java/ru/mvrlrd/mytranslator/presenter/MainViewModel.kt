@@ -32,21 +32,7 @@ class MainViewModel
         viewModelScope.launch {
             getSearch(word) { it.fold(::handleFailure, ::handleRandomRecipes) }
         }
-
-//            val response = apiHelper.getData(word)
-//            if (response.isSuccessful
-//                && response.body()  != null
-//            ) {
-//                val data = response.body()
-//                data.let { tr ->
-//                    liveTranslations.value = tr
-//                    println(
-//                    historyDao.insert(HistoryEntity( tr?.get(0)?.text,
-//                        tr?.get(0)?.meanings?.get(0)?.translation?.translation)).toString()+"     id has been added to db")
-//                }
-//
     }
-
 
     private fun handleRandomRecipes(response: ListSearchResult?) {
         response?.printAllSearchResultResponse()
@@ -67,6 +53,24 @@ class MainViewModel
                 )
             }
         }?.flatMap { it!!.meanings }
+    }
+
+    fun saveCard(meaningModelForRecycler: MeaningModelForRecycler){
+        val historyEntity: HistoryEntity = meaningModelForRecycler.let{item ->
+            HistoryEntity(
+                0,
+                item.text,
+                item.translation,
+                item.image_url,
+                item.transcription,
+                item.partOfSpeech,
+                item.prefix
+            )
+        }
+        viewModelScope.launch {
+            historyDao.insert(historyEntity)
+        }
+        println("${historyEntity.translation}    saved")
     }
 
     fun loadHistory() {

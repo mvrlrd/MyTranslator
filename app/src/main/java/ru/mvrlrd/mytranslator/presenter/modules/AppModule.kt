@@ -11,10 +11,13 @@ import ru.mvrlrd.mytranslator.presenter.MainViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 import ru.mvrlrd.mytranslator.view.fragments.SearchingDialogFragment
+import ru.mvrlrd.mytranslator.view.fragments.TranslationFragment
+import ru.mvrlrd.mytranslator.view.fragments.translation.OnSwipeListener
 
 val appModule = module {
 //    single { RecipesAdapter() }
-    factory { TranslationAdapter(androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator)}
+//    factory { TranslationAdapter(TranslationFragment() as OnSwipeListener)}
+//    factory { TranslationAdapter()}
     single { NetworkAvailabilityHandler(androidContext()) }
 }
 

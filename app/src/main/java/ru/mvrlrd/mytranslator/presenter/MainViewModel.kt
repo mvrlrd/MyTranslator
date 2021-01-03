@@ -12,7 +12,6 @@ import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 
-
 class MainViewModel
     (
     apiHelper: ApiHelper,

@@ -19,9 +19,9 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.MainViewModel
-import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
-import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
+import ru.mvrlrd.mytranslator.ui.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.SimpleItemTouchHelperCallback
+import ru.mvrlrd.mytranslator.ui.TranslationAdapter
 import ru.mvrlrd.mytranslator.view.fragments.translation.OnSwipeListener
 
 

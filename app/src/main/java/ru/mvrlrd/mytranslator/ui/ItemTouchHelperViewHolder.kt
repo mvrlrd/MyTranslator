@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.recycler
+package ru.mvrlrd.mytranslator.ui
 
 interface ItemTouchHelperViewHolder {
     fun onItemSelected()

@@ -1,7 +1,8 @@
-package ru.mvrlrd.mytranslator.view.activities
+package ru.mvrlrd.mytranslator.ui.activities
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -17,7 +18,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initNavController()
-        getSupportActionBar()?.hide();
+        getSupportActionBar()?.hide()
+
+
     }
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()

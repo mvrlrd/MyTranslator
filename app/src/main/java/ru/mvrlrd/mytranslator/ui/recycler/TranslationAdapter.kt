@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui
+package ru.mvrlrd.mytranslator.ui.recycler
 
 import android.os.Build
 import android.util.Log
@@ -11,20 +11,22 @@ import coil.api.load
 import kotlinx.android.synthetic.main.recycler_item.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.view.fragments.translation.OnSwipeListener
 import java.util.*
 import kotlin.properties.Delegates
 
 class TranslationAdapter(private val swipeListener : OnSwipeListener) :
-    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter{
+    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(),
+    ItemTouchHelperAdapter {
 
     internal var collection: MutableList<MeaningModelForRecycler> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):TranslationHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TranslationHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.recycler_item, parent, false)
-        return TranslationHolder(view)
+        return TranslationHolder(
+            view
+        )
 //        TranslationHolder(parent.inflate(R.layout.recycler_item))
     }
 

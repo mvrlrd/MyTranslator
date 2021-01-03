@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui
+package ru.mvrlrd.mytranslator.ui.recycler
 
 import android.graphics.Canvas
 import android.util.Log
@@ -6,6 +6,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors.ALPHA_FULL
+import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperViewHolder
 
 class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter) : ItemTouchHelper.Callback() {
 

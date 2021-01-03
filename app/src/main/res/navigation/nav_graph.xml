@@ -6,7 +6,7 @@
     app:startDestination="@id/navigation_translator">
     <fragment
         android:id="@+id/navigation_translator"
-        android:name="ru.mvrlrd.mytranslator.view.fragments.TranslationFragment"
+        android:name="ru.mvrlrd.mytranslator.ui.fragments.TranslationFragment"
         android:label="translation_fragment"
         tools:layout="@layout/translation_fragment" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="ru.mvrlrd.mytranslator.view.fragments.FavoritesFragment"
+        android:name="ru.mvrlrd.mytranslator.ui.fragments.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
 

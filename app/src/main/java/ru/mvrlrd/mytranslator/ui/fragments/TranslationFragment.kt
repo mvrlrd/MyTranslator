@@ -1,16 +1,19 @@
-package ru.mvrlrd.mytranslator.view.fragments
+package ru.mvrlrd.mytranslator.ui.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,15 +21,16 @@ import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.presenter.MainViewModel
-import ru.mvrlrd.mytranslator.ui.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.SimpleItemTouchHelperCallback
-import ru.mvrlrd.mytranslator.ui.TranslationAdapter
-import ru.mvrlrd.mytranslator.view.fragments.translation.OnSwipeListener
+import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
+import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
+import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
+import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
 
-class TranslationFragment : Fragment(), OnSwipeListener {
-    private val mainViewModel: MainViewModel by inject()
+class TranslationFragment : Fragment(),
+    OnSwipeListener {
+    private val mainViewModel: TranslationViewModel by inject()
     private lateinit var callback: ItemTouchHelper.Callback
    private lateinit var _adapter: TranslationAdapter
     private lateinit var vibrator : Vibrator
@@ -44,14 +48,17 @@ class TranslationFragment : Fragment(), OnSwipeListener {
 
         vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
-        _adapter = TranslationAdapter(this as OnSwipeListener)
+        _adapter =
+            TranslationAdapter(this as OnSwipeListener)
 
         val searchButton: ImageButton = root.findViewById(R.id.search_button)
         searchButton.setOnClickListener {
+            //hide keyboard
+            val imm: InputMethodManager? =
+                activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
+            imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+
             mainViewModel.loadData(searchedWord_TextView.text.toString())
-
-            mainViewModel.loadHistory()
-
         }
         return root
     }
@@ -61,14 +68,9 @@ class TranslationFragment : Fragment(), OnSwipeListener {
         mainViewModel.liveTranslations.observe(viewLifecycleOwner, Observer { meanings ->
             handleTranslationList(meanings as MutableList<MeaningModelForRecycler>)
         })
-
-
         mainViewModel.liveHistory.observe(viewLifecycleOwner, Observer { history ->
             println("${history.toString()}      my history_______________________")
         })
-
-
-
     }
 
 
@@ -78,7 +80,9 @@ class TranslationFragment : Fragment(), OnSwipeListener {
             adapter = _adapter.apply { collection = list }
         }
         callback =
-            SimpleItemTouchHelperCallback(translation_recyclerview.adapter as ItemTouchHelperAdapter)
+            SimpleItemTouchHelperCallback(
+                translation_recyclerview.adapter as ItemTouchHelperAdapter
+            )
         ItemTouchHelper(callback).attachToRecyclerView(translation_recyclerview)
     }
 

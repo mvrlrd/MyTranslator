@@ -1,11 +1,11 @@
-package ru.mvrlrd.mytranslator
+package ru.mvrlrd.mytranslator.di
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import ru.mvrlrd.mytranslator.presenter.modules.appModule
-import ru.mvrlrd.mytranslator.presenter.modules.appModule2
-import ru.mvrlrd.mytranslator.presenter.modules.retrofitModule
+import ru.mvrlrd.mytranslator.di.modules.appModule
+import ru.mvrlrd.mytranslator.di.modules.appModule2
+import ru.mvrlrd.mytranslator.di.modules.retrofitModule
 
 class App : Application() {
     override fun onCreate() {

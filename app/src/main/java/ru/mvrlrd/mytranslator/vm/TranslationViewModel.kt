@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.presenter
+package ru.mvrlrd.mytranslator.vm
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,29 +11,26 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
+import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-class MainViewModel
+class TranslationViewModel
     (
     apiHelper: ApiHelper,
     private val historyDao: HistoryDao
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultRepository(apiHelper)
-    val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
-
+    private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
     var liveTranslations: MutableLiveData<List<MeaningModelForRecycler?>> = MutableLiveData()
-
-
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
-    var liveSearchedInHistory : MutableLiveData<HistoryEntity> = MutableLiveData()
 
     fun loadData(word: String) {
         viewModelScope.launch {
-            getSearch(word) { it.fold(::handleFailure, ::handleRandomRecipes) }
+            getSearch(word) { it.fold(::handleFailure, ::handleTranslations) }
         }
     }
 
-    private fun handleRandomRecipes(response: ListSearchResult?) {
+    private fun handleTranslations(response: ListSearchResult?) {
         response?.printAllSearchResultResponse()
         liveTranslations.value = response?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
@@ -45,7 +42,6 @@ class MainViewModel
                     meaningsResponse.partOfSpeech,
                     meaningsResponse.prefix
                 )
-
             }?.let {
                 WordModelForRecycler(
                     it
@@ -55,32 +51,39 @@ class MainViewModel
     }
 
     fun saveCard(meaningModelForRecycler: MeaningModelForRecycler){
-        val historyEntity: HistoryEntity = meaningModelForRecycler.let{item ->
-            HistoryEntity(
-                0,
-                item.text,
-                item.translation,
-                item.image_url,
-                item.transcription,
-                item.partOfSpeech,
-                item.prefix
+//        val historyEntity: HistoryEntity = meaningModelForRecycler.let{item ->
+//            HistoryEntity(
+//                0,
+//                item.text,
+//                item.translation,
+//                item.image_url,
+//                item.transcription,
+//                item.partOfSpeech,
+//                item.prefix
+//            )
+//        }
+        viewModelScope.launch {
+            println(
+               " ${historyDao.insert(meaningModelForRecycler.let{item ->
+                HistoryEntity(
+                    0,
+                    item.text,
+                    item.translation,
+                    item.image_url,
+                    item.transcription,
+                    item.partOfSpeech,
+                    item.prefix
+                )
+            })} " +
+                       "added"
             )
         }
-        viewModelScope.launch {
-            historyDao.insert(historyEntity)
-        }
-        println("${historyEntity.translation}    saved")
+//        println("${historyEntity.translation}    saved")
     }
 
     fun loadHistory() {
         viewModelScope.launch {
             liveHistory.value = historyDao.getAll()
-        }
-    }
-
-    fun findWordInHistory(word: String) {
-        viewModelScope.launch {
-            liveSearchedInHistory.value = historyDao.getCertainWord(word)
         }
     }
 

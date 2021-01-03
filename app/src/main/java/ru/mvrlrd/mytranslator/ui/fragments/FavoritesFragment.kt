@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.view.fragments
+package ru.mvrlrd.mytranslator.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

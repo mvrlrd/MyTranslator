@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.presenter.modules
+package ru.mvrlrd.mytranslator.di.modules
 
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient

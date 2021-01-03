@@ -24,7 +24,7 @@
     <dimen name="text_size_tip">10sp</dimen>
     <dimen name="text_size_standard">17sp</dimen>
     <dimen name="text_size_standard_header">20sp</dimen>
-    <dimen name="text_size_large">25sp</dimen>
+    <dimen name="text_size_large">22sp</dimen>
 
     //Corner radius
     <dimen name="bottom_sheet_dialog_corner_radius">10dp</dimen>

@@ -70,7 +70,7 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
         fun bind(meaningModelForRecycler: MeaningModelForRecycler) {
             itemView.recycler_text.text = meaningModelForRecycler.text
             itemView.recycler_translation.text = meaningModelForRecycler.translation
-            itemView.image_translation.load("https:${meaningModelForRecycler.image_url}")
+//            itemView.image_translation.load("https:${meaningModelForRecycler.image_url}")
             itemView.partOfSpeechTextView.text = meaningModelForRecycler.partOfSpeech
             itemView.prefixTextView.text = meaningModelForRecycler.prefix ?: ""
             itemView.transcriptionTextView.text = "[${meaningModelForRecycler.transcription}]"

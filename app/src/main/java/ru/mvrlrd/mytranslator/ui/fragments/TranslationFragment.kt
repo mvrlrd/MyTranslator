@@ -32,8 +32,8 @@ class TranslationFragment : Fragment(),
     OnSwipeListener {
     private val mainViewModel: TranslationViewModel by inject()
     private lateinit var callback: ItemTouchHelper.Callback
-   private lateinit var _adapter: TranslationAdapter
-    private lateinit var vibrator : Vibrator
+    private lateinit var _adapter: TranslationAdapter
+    private lateinit var vibrator: Vibrator
 
     companion object {
         fun newInstance() =

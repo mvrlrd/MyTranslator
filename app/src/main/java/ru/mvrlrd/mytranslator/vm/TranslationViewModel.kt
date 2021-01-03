@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.vm
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
@@ -21,7 +22,9 @@ class TranslationViewModel
 
     private val searchResultRepository = SearchResultRepository(apiHelper)
     private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
-    var liveTranslations: MutableLiveData<List<MeaningModelForRecycler?>> = MutableLiveData()
+    private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
+    val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
+
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
 
     fun loadData(word: String) {
@@ -32,7 +35,7 @@ class TranslationViewModel
 
     private fun handleTranslations(response: ListSearchResult?) {
         response?.printAllSearchResultResponse()
-        liveTranslations.value = response?.map { resp ->
+        _liveTranslationsList.value = response?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
                     resp.text,

@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,7 +32,7 @@ import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
 class TranslationFragment : Fragment(),
     OnSwipeListener {
-    private val mainViewModel: TranslationViewModel by inject()
+    private val translationViewModel: TranslationViewModel by inject()
     private lateinit var callback: ItemTouchHelper.Callback
     private lateinit var _adapter: TranslationAdapter
     private lateinit var vibrator: Vibrator
@@ -58,26 +60,29 @@ class TranslationFragment : Fragment(),
                 activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
-            mainViewModel.loadData(searchedWord_TextView.text.toString())
+            translationViewModel.loadData(searchedWord_TextView.text.toString())
         }
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        mainViewModel.liveTranslations.observe(viewLifecycleOwner, Observer { meanings ->
+        translationViewModel.liveTranslationsList.observe(viewLifecycleOwner, Observer { meanings ->
             handleTranslationList(meanings as MutableList<MeaningModelForRecycler>)
         })
-        mainViewModel.liveHistory.observe(viewLifecycleOwner, Observer { history ->
-            println("${history.toString()}      my history_______________________")
-        })
+
+        if (translationViewModel.liveTranslationsList.value != null) {
+            handleTranslationList(translationViewModel.liveTranslationsList.value!!)
+        } else {
+            translationViewModel.loadData("get")
+        }
     }
 
 
-    private fun handleTranslationList(list: MutableList<MeaningModelForRecycler>) {
+    private fun handleTranslationList(list: List<MeaningModelForRecycler>) {
         translation_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)
-            adapter = _adapter.apply { collection = list }
+            adapter = _adapter.apply { collection = list as MutableList<MeaningModelForRecycler> }
         }
         callback =
             SimpleItemTouchHelperCallback(
@@ -88,7 +93,7 @@ class TranslationFragment : Fragment(),
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
-        mainViewModel.saveCard(meaningModelForRecycler)
+        translationViewModel.saveCard(meaningModelForRecycler)
         vibrate(vibrator)
     }
 

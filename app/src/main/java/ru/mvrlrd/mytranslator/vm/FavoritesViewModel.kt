@@ -5,17 +5,32 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class FavoritesViewModel (private val historyDao: HistoryDao) : BaseViewModel(){
 
-    var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
+    var liveHistory : MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
+
+    init {
+        loadHistory()
+    }
 
 //    var liveSearchedInHistory : MutableLiveData<HistoryEntity> = MutableLiveData()
 
-    fun saveData(historyEntity: HistoryEntity) {
+
+    private fun loadHistory() {
         viewModelScope.launch {
-            historyDao.insert(historyEntity)
+            liveHistory.value = historyDao.getAll().map{ historyEntity ->
+                MeaningModelForRecycler(
+                    historyEntity.text,
+                    historyEntity.translation,
+                    historyEntity.image_url,
+                    historyEntity.transcription,
+                    historyEntity.partOfSpeech,
+                    historyEntity.prefix
+                )
+            }
         }
     }
 
@@ -60,11 +75,7 @@ class FavoritesViewModel (private val historyDao: HistoryDao) : BaseViewModel(){
 //        }?.flatMap { it!!.meanings }
 //    }
 
-    fun loadHistory() {
-        viewModelScope.launch {
-            liveHistory.value = historyDao.getAll()
-        }
-    }
+
 
 //    fun findWordInHistory(word: String) {
 //        viewModelScope.launch {

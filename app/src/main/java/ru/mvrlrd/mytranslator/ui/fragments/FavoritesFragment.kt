@@ -1,16 +1,20 @@
 package ru.mvrlrd.mytranslator.ui.fragments
 
+import android.os.Build
 import android.os.Bundle
+import android.os.Vibrator
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
@@ -30,19 +34,14 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class FavoritesFragment : Fragment(), OnSwipeListener {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
+    private val vibrator: Vibrator by inject()
     private lateinit var _adapter: TranslationAdapter
     private val viewModel: FavoritesViewModel by inject()
+    private lateinit var callback: ItemTouchHelper.Callback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
 
         _adapter =
             TranslationAdapter(this as OnSwipeListener)
@@ -67,8 +66,13 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
     private fun handleTranslationList(list: MutableList<MeaningModelForRecycler>) {
         translation_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)
-            adapter = _adapter.apply { collection = list }
+            adapter = _adapter.apply { collection = list  as MutableList<MeaningModelForRecycler> }
         }
+        callback =
+            SimpleItemTouchHelperCallback(
+                translation_recyclerview.adapter as ItemTouchHelperAdapter
+            )
+        ItemTouchHelper(callback).attachToRecyclerView(translation_recyclerview)
 
     }
 
@@ -84,16 +88,15 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FavoritesFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+        fun newInstance() =
+            FavoritesFragment()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
-        TODO("Not yet implemented")
+        viewModel.deleteWord(meaningModelForRecycler)
+        vibrate(vibrator)
     }
+
+
 }

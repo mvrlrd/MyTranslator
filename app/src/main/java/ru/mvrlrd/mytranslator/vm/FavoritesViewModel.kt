@@ -23,6 +23,7 @@ class FavoritesViewModel (private val historyDao: HistoryDao) : BaseViewModel(){
         viewModelScope.launch {
             liveHistory.value = historyDao.getAll().map{ historyEntity ->
                 MeaningModelForRecycler(
+                    historyEntity.id,
                     historyEntity.text,
                     historyEntity.translation,
                     historyEntity.image_url,
@@ -82,6 +83,13 @@ class FavoritesViewModel (private val historyDao: HistoryDao) : BaseViewModel(){
 //            liveSearchedInHistory.value = historyDao.getCertainWord(word)
 //        }
 //    }
+
+    fun deleteWord(meaningModelForRecycler: MeaningModelForRecycler) {
+        viewModelScope.launch {
+            historyDao.delete(meaningModelForRecycler.id)
+            loadHistory()
+        }
+    }
 
     fun clearHistory() {
         viewModelScope.launch {

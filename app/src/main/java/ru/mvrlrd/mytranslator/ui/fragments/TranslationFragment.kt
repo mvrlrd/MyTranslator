@@ -4,11 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
-import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.translation_fragment.*
+import kotlinx.android.synthetic.main.translation_fragment.view.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
@@ -32,7 +33,7 @@ class TranslationFragment : Fragment(),
     private val translationViewModel: TranslationViewModel by inject()
     private lateinit var callback: ItemTouchHelper.Callback
     private lateinit var _adapter: TranslationAdapter
-    private lateinit var vibrator: Vibrator
+    private val vibrator: Vibrator by inject()
 
     companion object {
         fun newInstance() =
@@ -45,10 +46,18 @@ class TranslationFragment : Fragment(),
     ): View? {
         val root = inflater.inflate(R.layout.translation_fragment, container, false)
 
-        vibrator = activity?.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-
         _adapter =
             TranslationAdapter(this as OnSwipeListener)
+
+        root.searchedWord_TextView.setOnEditorActionListener { _, actionId, _ ->
+            return@setOnEditorActionListener when (actionId) {
+                EditorInfo.IME_ACTION_SEARCH -> {
+                    translationViewModel.loadData(searchedWord_TextView.text.toString())
+                    true
+                }
+                else -> false
+            }
+        }
 
         val searchButton: ImageButton = root.findViewById(R.id.search_button)
         searchButton.setOnClickListener {
@@ -58,6 +67,10 @@ class TranslationFragment : Fragment(),
             imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
             translationViewModel.loadData(searchedWord_TextView.text.toString())
+
+
+
+
         }
         return root
     }

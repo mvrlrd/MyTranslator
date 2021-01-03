@@ -4,6 +4,7 @@ import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
 class MeaningsResponse(
+
     @Expose@field:SerializedName("translation") val translationResponse: TranslationResponse?,
     @Expose val imageUrl: String?,
     @Expose val transcription: String?,

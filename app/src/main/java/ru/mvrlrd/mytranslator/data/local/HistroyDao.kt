@@ -13,6 +13,9 @@ interface HistoryDao {
     @Query("DELETE FROM searching_history")
     suspend fun clear()
 
+    @Query("DELETE FROM searching_history WHERE id =:id")
+    suspend fun delete(id: Long)
+
     @Query("SELECT * FROM searching_history")
     suspend fun getAll(): List<HistoryEntity>
 

@@ -38,6 +38,7 @@ class TranslationViewModel
         _liveTranslationsList.value = response?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
+                    0,
                     resp.text,
                     meaningsResponse.translationResponse?.translation,
                     meaningsResponse.imageUrl,
@@ -54,22 +55,11 @@ class TranslationViewModel
     }
 
     fun saveCard(meaningModelForRecycler: MeaningModelForRecycler){
-//        val historyEntity: HistoryEntity = meaningModelForRecycler.let{item ->
-//            HistoryEntity(
-//                0,
-//                item.text,
-//                item.translation,
-//                item.image_url,
-//                item.transcription,
-//                item.partOfSpeech,
-//                item.prefix
-//            )
-//        }
         viewModelScope.launch {
             println(
                " ${historyDao.insert(meaningModelForRecycler.let{item ->
                 HistoryEntity(
-                    0,
+                    item.id,
                     item.text,
                     item.translation,
                     item.image_url,

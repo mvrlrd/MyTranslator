@@ -6,29 +6,26 @@ import android.os.Build
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageButton
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 import ru.mvrlrd.mytranslator.vm.TranslationViewModel
-
 
 class TranslationFragment : Fragment(),
     OnSwipeListener {
@@ -95,15 +92,6 @@ class TranslationFragment : Fragment(),
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
         translationViewModel.saveCard(meaningModelForRecycler)
         vibrate(vibrator)
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    fun vibrate(vibrator: Vibrator) {
-        val effect =
-            VibrationEffect.createOneShot(100, VibrationEffect.DEFAULT_AMPLITUDE)
-        if (vibrator.hasVibrator()) {
-            vibrator.vibrate(effect)
-        }
     }
 }
 

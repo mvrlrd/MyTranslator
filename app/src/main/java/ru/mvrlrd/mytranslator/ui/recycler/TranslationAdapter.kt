@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.recycler
 
+import android.annotation.SuppressLint
 import android.os.Build
 import android.util.Log
 import android.view.LayoutInflater
@@ -67,6 +68,12 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
     class TranslationHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
+
+
+
+
+
+        @SuppressLint("SetTextI18n")
         fun bind(meaningModelForRecycler: MeaningModelForRecycler) {
             itemView.recycler_text.text = meaningModelForRecycler.text
             itemView.recycler_translation.text = meaningModelForRecycler.translation
@@ -74,6 +81,13 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
             itemView.partOfSpeechTextView.text = meaningModelForRecycler.partOfSpeech
             itemView.prefixTextView.text = meaningModelForRecycler.prefix ?: ""
             itemView.transcriptionTextView.text = "[${meaningModelForRecycler.transcription}]"
+            
+
+            // long press on recycler item
+            itemView.setOnLongClickListener(View.OnLongClickListener {
+                it.recycler_text.text = "aaaaa"
+                false
+            })
         }
 
 //        override fun onItemSelected() {

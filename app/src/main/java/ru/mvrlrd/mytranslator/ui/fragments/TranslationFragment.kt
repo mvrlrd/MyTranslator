@@ -14,13 +14,19 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.translation_fragment.*
 import kotlinx.android.synthetic.main.translation_fragment.view.*
+import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
+import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
@@ -58,6 +64,36 @@ class TranslationFragment : Fragment(),
                 else -> false
             }
         }
+
+        val cards = listOf(HistoryEntity(1,"fuck","hernya","http1","[ewew]","n","a"),
+            HistoryEntity(2,"loh","kruto","http2","[rrrr]","v","the"))
+        val tags = listOf(GroupTag(1,"movies"),
+            GroupTag(2,"series"),
+            GroupTag(3,"travelling"))
+
+        val crossRefList =  listOf(
+            CardTagCrossRef(1,2),
+            CardTagCrossRef(1,3),
+            CardTagCrossRef(2,2))
+
+        lifecycleScope.launch {
+            cards.forEach { card ->
+                translationViewModel.historyDao.insert(card)
+            }
+            tags.forEach { tag ->
+                translationViewModel.historyDao.insertTag(tag)
+            }
+            crossRefList.forEach { crossRef ->
+                translationViewModel.historyDao.insertCardTagCrossRef(crossRef)
+            }
+
+
+            println("${translationViewModel.historyDao.getCardsOfTag(1)}+++++++++++++++++++++++++++++++++++++++++")
+        }
+
+
+
+
 
         val searchButton: ImageButton = root.findViewById(R.id.search_button)
         searchButton.setOnClickListener {

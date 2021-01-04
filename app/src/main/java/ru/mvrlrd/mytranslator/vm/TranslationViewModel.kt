@@ -17,7 +17,7 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 class TranslationViewModel
     (
     apiHelper: ApiHelper,
-    private val historyDao: HistoryDao
+     val historyDao: HistoryDao
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultRepository(apiHelper)

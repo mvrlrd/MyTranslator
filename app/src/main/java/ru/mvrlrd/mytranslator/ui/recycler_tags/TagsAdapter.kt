@@ -3,6 +3,7 @@ package ru.mvrlrd.mytranslator.ui.recycler_tags
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recycler_tag_item.view.*
 import ru.mvrlrd.mytranslator.R
@@ -32,8 +33,17 @@ class TagsAdapter :
             )
         }
 
-        override fun onBindViewHolder(holder: TagsHolder, position: Int) =
-            holder.bind(collection[position])
+
+    override fun onBindViewHolder(holder: TagsHolder, position: Int) {
+        holder.bind(collection[position])
+        holder.itemView.tagCheckbox.setChecked(collection[position].isChecked)
+        holder.itemView.tagCheckbox.setOnClickListener { view ->
+            if (view is CheckBox) {
+                collection[position].isChecked = view.isChecked
+            }
+        }
+    }
+
 
         override fun getItemCount() = collection.size
 
@@ -41,9 +51,14 @@ class TagsAdapter :
         class TagsHolder(itemView: View) :
             RecyclerView.ViewHolder(itemView) {
 
+
             fun bind(tag: GroupTag) {
                 itemView.tagCheckbox.text = tag.tag
+
+
             }
+
+
         }
     }
 

@@ -6,7 +6,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 
-@Database(entities = [HistoryEntity::class, GroupTag::class, CardTagCrossRef::class], version = 3)
+@Database(entities = [HistoryEntity::class, GroupTag::class, CardTagCrossRef::class], version = 4)
 abstract class AppSearchingHistoryDataBase : RoomDatabase() {
     abstract fun historyDao(): HistoryDao
 }

@@ -3,6 +3,7 @@ package ru.mvrlrd.mytranslator.vm
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultRepository
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
@@ -93,15 +94,25 @@ class TranslationViewModel
     }
 
     fun loadTag(tagText : String){
+        val groupTag = GroupTag(0,tagText, false)
+
         viewModelScope.launch {
-            historyDao.insertTag(GroupTag(0,tagText))
+            for (i in historyDao.getAllTags()){
+                if (i.equals(groupTag)){
+                    _tagList.value = historyDao.getAllTags()
+                    cancel()
+                }
+            }
+            historyDao.insertTag(GroupTag(0,tagText, false))
             _tagList.value = historyDao.getAllTags()
         }
     }
-//    fun getAllTags(){
+//    fun getAllTags(): List<GroupTag>{
+//        var listOfTags = emptyList<GroupTag>()
 //        viewModelScope.launch {
-//
+//            listOfTags = historyDao.getAllTags()
 //        }
+//        return listOfTags
 //    }
 
     companion object {

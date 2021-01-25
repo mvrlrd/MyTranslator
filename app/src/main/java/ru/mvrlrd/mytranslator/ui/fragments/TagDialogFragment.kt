@@ -29,7 +29,37 @@ class TagDialogFragment : DialogFragment() {
         savedInstanceState: Bundle?
     ): View? {
         val root : View = inflater.inflate(R.layout.dialog_fragment_tag, container,false  )
-        translationViewModel.loadTag("programming")
+        translationViewModel.loadTag("hobbies")
+        translationViewModel.loadTag("football")
+        translationViewModel.loadTag("verbs")
+        translationViewModel.loadTag("music")
+        translationViewModel.loadTag("human")
+        translationViewModel.loadTag("earth")
+        translationViewModel.loadTag("ecology")
+        translationViewModel.loadTag("IT")
+        translationViewModel.loadTag("kitchen")
+        translationViewModel.loadTag("home")
+        translationViewModel.loadTag("job")
+        translationViewModel.loadTag("extreme")
+        translationViewModel.loadTag("ocean")
+        translationViewModel.loadTag("mountains")
+        translationViewModel.loadTag("hiding")
+
+        translationViewModel.loadTag("hobbies2")
+        translationViewModel.loadTag("football2")
+        translationViewModel.loadTag("verbs2")
+        translationViewModel.loadTag("music2")
+        translationViewModel.loadTag("human2")
+        translationViewModel.loadTag("earth2")
+        translationViewModel.loadTag("ecology2")
+        translationViewModel.loadTag("IT2")
+        translationViewModel.loadTag("kitchen2")
+        translationViewModel.loadTag("home2")
+        translationViewModel.loadTag("job2")
+        translationViewModel.loadTag("extreme2")
+        translationViewModel.loadTag("ocean2")
+        translationViewModel.loadTag("mountains2")
+        translationViewModel.loadTag("hiding2")
         return root
     }
 
@@ -51,4 +81,6 @@ class TagDialogFragment : DialogFragment() {
             adapter = tagAdapter.apply { collection = list as MutableList<GroupTag> }
         }
     }
+
+
 }

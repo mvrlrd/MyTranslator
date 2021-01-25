@@ -10,6 +10,7 @@ import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
+import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
@@ -24,6 +25,10 @@ class TranslationViewModel
     private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
+
+    var _tagList = MutableLiveData<List<GroupTag>>()
+    val liveTagList : LiveData<List<GroupTag>> = _tagList
+
 
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
 
@@ -86,6 +91,18 @@ class TranslationViewModel
             liveHistory.value = emptyList()
         }
     }
+
+    fun loadTag(tagText : String){
+        viewModelScope.launch {
+            historyDao.insertTag(GroupTag(0,tagText))
+            _tagList.value = historyDao.getAllTags()
+        }
+    }
+//    fun getAllTags(){
+//        viewModelScope.launch {
+//
+//        }
+//    }
 
     companion object {
         const val TAG = "MainViewModel"

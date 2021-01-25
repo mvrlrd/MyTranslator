@@ -16,11 +16,13 @@ import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
+import ru.mvrlrd.mytranslator.ui.recycler_tags.OnItemChecked
 import ru.mvrlrd.mytranslator.ui.recycler_tags.TagsAdapter
 import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
-class TagDialogFragment : DialogFragment() {
-    private val tagAdapter = TagsAdapter()
+class TagDialogFragment : DialogFragment(), OnItemChecked {
+     override var checkedList: MutableList<GroupTag> = mutableListOf()
+    private val tagAdapter = TagsAdapter(this as OnItemChecked)
     private val translationViewModel: TranslationViewModel by inject()
 
     override fun onCreateView(
@@ -82,5 +84,7 @@ class TagDialogFragment : DialogFragment() {
         }
     }
 
+    override fun onChecked() {
 
+    }
 }

@@ -1,5 +1,8 @@
 package ru.mvrlrd.mytranslator.ui.recycler_tags
 
+import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+
 interface OnItemChecked {
-    fun onChecked():Boolean
+    var checkedList:MutableList<GroupTag>
+    fun onChecked()
 }

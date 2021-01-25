@@ -11,16 +11,8 @@ import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import kotlin.properties.Delegates
 
 
-class TagsAdapter :
+class TagsAdapter(val onItemChecked: OnItemChecked) :
         RecyclerView.Adapter<TagsAdapter.TagsHolder>(){
-
-//    val collection = listOf(
-//        GroupTag(1,"series/movies"),
-//        GroupTag(2,"programming"),
-//        GroupTag(3,"travelling"),
-//        GroupTag(4,"games"),
-//        GroupTag(5,"sport")
-//    )
 
         var collection: MutableList<GroupTag> by
         Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
@@ -32,13 +24,20 @@ class TagsAdapter :
                 view
             )
         }
-
+// передаю список нажатых чекбоксов в транслэйшн фрагмент. надо будет связать эти тэги со словом через реф кросс
 
     override fun onBindViewHolder(holder: TagsHolder, position: Int) {
         holder.bind(collection[position])
         holder.itemView.tagCheckbox.setChecked(collection[position].isChecked)
         holder.itemView.tagCheckbox.setOnClickListener { view ->
             if (view is CheckBox) {
+                if (collection[position].isChecked ){
+                    onItemChecked.checkedList.add(collection[position])
+                }else{
+                    if (onItemChecked.checkedList.contains(collection[position])){
+                        onItemChecked.checkedList.remove(collection[position])
+                    }
+                }
                 collection[position].isChecked = view.isChecked
             }
         }

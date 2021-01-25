@@ -21,8 +21,6 @@
             android:imeOptions="actionSearch"
             android:inputType="text"/>
 
-
-
         <ImageButton
             android:id="@+id/search_button"
             android:layout_width="57dp"

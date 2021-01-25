@@ -67,31 +67,33 @@ class TranslationFragment : Fragment(),
             }
         }
 
-        val cards = listOf(HistoryEntity(1,"fuck","hernya","http1","[ewew]","n","a"),
-            HistoryEntity(2,"loh","kruto","http2","[rrrr]","v","the"))
-        val tags = listOf(GroupTag(1,"movies"),
-            GroupTag(2,"series"),
-            GroupTag(3,"travelling"))
-
-        val crossRefList =  listOf(
-            CardTagCrossRef(1,2),
-            CardTagCrossRef(1,3),
-            CardTagCrossRef(2,2))
-
-        lifecycleScope.launch {
-            cards.forEach { card ->
-                translationViewModel.historyDao.insert(card)
-            }
-            tags.forEach { tag ->
-                translationViewModel.historyDao.insertTag(tag)
-            }
-            crossRefList.forEach { crossRef ->
-                translationViewModel.historyDao.insertCardTagCrossRef(crossRef)
-            }
-
-
-            println("${translationViewModel.historyDao.getCardsOfTag(1)}+++++++++++++++++++++++++++++++++++++++++")
-        }
+//        val cards = listOf(HistoryEntity(1,"fuck","hernya","http1","[ewew]","n","a"),
+//            HistoryEntity(2,"loh","kruto","http2","[rrrr]","v","the"))
+//        val tags = listOf(GroupTag(1,"series/movies"),
+//            GroupTag(2,"programming"),
+//            GroupTag(3,"travelling"),
+//        GroupTag(4,"games"),
+//        GroupTag(5,"sport"))
+//
+//        val crossRefList =  listOf(
+//            CardTagCrossRef(1,2),
+//            CardTagCrossRef(1,3),
+//            CardTagCrossRef(2,2))
+//
+//        lifecycleScope.launch {
+//            cards.forEach { card ->
+//                translationViewModel.historyDao.insert(card)
+//            }
+//            tags.forEach { tag ->
+//                translationViewModel.historyDao.insertTag(tag)
+//            }
+//            crossRefList.forEach { crossRef ->
+//                translationViewModel.historyDao.insertCardTagCrossRef(crossRef)
+//            }
+//
+//
+//            println("${translationViewModel.historyDao.getCardsOfTag(1)}+++++++++++++++++++++++++++++++++++++++++")
+//        }
 
 
 
@@ -146,30 +148,40 @@ class TranslationFragment : Fragment(),
     }
 
     override fun onItemLongPressed() {
+        val dialog = TagDialogFragment()
+        dialog.show(parentFragmentManager, "tagDialog")
+
+
         // setup the alert builder
         // setup the alert builder
-        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-        builder.setTitle("Choose some animals")
-// add a checkbox list
-// add a checkbox list
-        val animals =
-            arrayOf("horse", "cow", "camel", "sheep", "goat")
-        val checkedItems = booleanArrayOf(true, false, false, true, false)
-        builder.setMultiChoiceItems(animals, checkedItems,
-            OnMultiChoiceClickListener { dialog, which, isChecked ->
-                // user checked or unchecked a box
-            })
-// add OK and Cancel buttons
-// add OK and Cancel buttons
-        builder.setPositiveButton("OK",
-            DialogInterface.OnClickListener { dialog, which ->
-                // user clicked OK
-            })
-        builder.setNegativeButton("Cancel", null)
-// create and show the alert dialog
-// create and show the alert dialog
-        val dialog: AlertDialog = builder.create()
-        dialog.show()
+//        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+//        builder.setTitle("Choose tag")
+//// add a checkbox list
+//// add a checkbox list
+//        val tags = listOf(GroupTag(1,"series/movies"),
+//            GroupTag(2,"programming"),
+//            GroupTag(3,"travelling"),
+//            GroupTag(4,"games"),
+//            GroupTag(5,"sport"))
+//
+//        val tagsStr =
+//            arrayOf("series/movies", "programming", "travelling", "games", "sport")
+//        val checkedItems = booleanArrayOf(false, false, false, false, false)
+//        builder.setMultiChoiceItems(tagsStr, checkedItems,
+//            OnMultiChoiceClickListener { dialog, which, isChecked ->
+//                // user checked or unchecked a box
+//            })
+//// add OK and Cancel buttons
+//// add OK and Cancel buttons
+//        builder.setPositiveButton("OK",
+//            DialogInterface.OnClickListener { dialog, which ->
+//                // user clicked OK
+//            })
+//        builder.setNegativeButton("Cancel", null)
+//// create and show the alert dialog
+//// create and show the alert dialog
+//        val dialog: AlertDialog = builder.create()
+//        dialog.show()
     }
 }
 

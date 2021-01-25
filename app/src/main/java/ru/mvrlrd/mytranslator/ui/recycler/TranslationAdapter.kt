@@ -86,7 +86,7 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
             // long press on recycler item
             itemView.setOnLongClickListener(View.OnLongClickListener {
                 swipeListener.onItemLongPressed()
-                it.recycler_text.text = "aaaaa"
+//                it.recycler_text.text = "aaaaa"
                 false
             })
         }

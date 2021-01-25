@@ -1,7 +1,9 @@
 package ru.mvrlrd.mytranslator.ui.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.app.Activity
-import android.content.Context
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
@@ -141,6 +143,33 @@ class TranslationFragment : Fragment(),
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
         translationViewModel.saveCard(meaningModelForRecycler)
         vibrate(vibrator)
+    }
+
+    override fun onItemLongPressed() {
+        // setup the alert builder
+        // setup the alert builder
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setTitle("Choose some animals")
+// add a checkbox list
+// add a checkbox list
+        val animals =
+            arrayOf("horse", "cow", "camel", "sheep", "goat")
+        val checkedItems = booleanArrayOf(true, false, false, true, false)
+        builder.setMultiChoiceItems(animals, checkedItems,
+            OnMultiChoiceClickListener { dialog, which, isChecked ->
+                // user checked or unchecked a box
+            })
+// add OK and Cancel buttons
+// add OK and Cancel buttons
+        builder.setPositiveButton("OK",
+            DialogInterface.OnClickListener { dialog, which ->
+                // user clicked OK
+            })
+        builder.setNegativeButton("Cancel", null)
+// create and show the alert dialog
+// create and show the alert dialog
+        val dialog: AlertDialog = builder.create()
+        dialog.show()
     }
 }
 

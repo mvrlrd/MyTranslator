@@ -1,13 +1,16 @@
 package ru.mvrlrd.mytranslator.ui.fragments
 
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,7 +24,7 @@ import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 import ru.mvrlrd.mytranslator.vm.FavoritesViewModel
-import ru.mvrlrd.mytranslator.vm.TranslationViewModel
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -98,5 +101,7 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         vibrate(vibrator)
     }
 
+    override fun onItemLongPressed() {
 
+    }
 }

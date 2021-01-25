@@ -33,7 +33,7 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
 
 
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) =
-        holder.bind(collection[position])
+        holder.bind(collection[position],swipeListener)
 
     override fun getItemCount() = collection.size
 
@@ -74,7 +74,7 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
 
 
         @SuppressLint("SetTextI18n")
-        fun bind(meaningModelForRecycler: MeaningModelForRecycler) {
+        fun bind(meaningModelForRecycler: MeaningModelForRecycler, swipeListener: OnSwipeListener) {
             itemView.recycler_text.text = meaningModelForRecycler.text
             itemView.recycler_translation.text = meaningModelForRecycler.translation
 //            itemView.image_translation.load("https:${meaningModelForRecycler.image_url}")
@@ -85,6 +85,7 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
 
             // long press on recycler item
             itemView.setOnLongClickListener(View.OnLongClickListener {
+                swipeListener.onItemLongPressed()
                 it.recycler_text.text = "aaaaa"
                 false
             })

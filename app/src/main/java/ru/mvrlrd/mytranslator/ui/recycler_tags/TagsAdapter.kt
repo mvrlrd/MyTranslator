@@ -11,7 +11,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import kotlin.properties.Delegates
 
 
-class TagsAdapter(val onItemChecked: OnItemChecked) :
+class TagsAdapter(private val onItemChecked: OnItemChecked) :
         RecyclerView.Adapter<TagsAdapter.TagsHolder>(){
 
         var collection: MutableList<GroupTag> by

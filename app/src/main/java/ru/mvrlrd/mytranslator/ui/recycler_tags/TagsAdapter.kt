@@ -32,7 +32,9 @@ class TagsAdapter(private val onItemChecked: OnItemChecked) :
         holder.itemView.tagCheckbox.setOnClickListener { view ->
             if (view is CheckBox) {
                 if (collection[position].isChecked ){
+                    /// лист остается пустым потому что изначально все не отмечено
                     onItemChecked.checkedList.add(collection[position])
+
                 }else{
                     if (onItemChecked.checkedList.contains(collection[position])){
                         onItemChecked.checkedList.remove(collection[position])

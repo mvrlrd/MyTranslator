@@ -1,9 +1,12 @@
 package ru.mvrlrd.mytranslator.ui.fragments
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,12 +23,13 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
     private val tagAdapter = TagsAdapter(this as OnItemChecked)
     private val translationViewModel: TranslationViewModel by inject()
 
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val root : View = inflater.inflate(R.layout.dialog_fragment_tag, container,false  )
+        val root : View = inflater.inflate(R.layout.dialog_fragment_tag, container,true  )
         translationViewModel.loadTag("hobbies")
         translationViewModel.loadTag("football")
         translationViewModel.loadTag("verbs")
@@ -57,6 +61,17 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
 //        translationViewModel.loadTag("ocean2")
 //        translationViewModel.loadTag("mountains2")
 //        translationViewModel.loadTag("hiding2")
+        val cancelButton: Button = root.findViewById(R.id.cancel_button)
+        val okButton: Button = root.findViewById(R.id.ok_button)
+
+        cancelButton.setOnClickListener {
+            dismiss()
+        }
+        okButton.setOnClickListener {
+            //придумать как сохранять в чекд лист позиции с галочками
+            sendResult(checkedList[0].tag)
+        }
+
         return root
     }
 
@@ -83,11 +98,15 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         return checkedList
     }
 
-    fun onOkButtonClicked(view : View){
-
+    private fun sendResult(message: String) {
+println(targetFragment.toString()+"______________________________________")
+        targetFragment ?: return
+        println("send resuuuuuuuuuuuuuuuuuuuuuuuult")
+        val intent = Intent().putExtra("message", message)
+        targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+//        searchingByIngredients_EditText.text?.clear()
+        dismiss()
     }
 
-    fun onCancelButtonClicked(view : View){
 
-    }
 }

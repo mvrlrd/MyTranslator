@@ -9,6 +9,7 @@ import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
 import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
+import ru.mvrlrd.mytranslator.ui.fragments.TagDialogFragment
 import ru.mvrlrd.mytranslator.vm.FavoritesViewModel
 
 val appModule = module {
@@ -27,5 +28,6 @@ val appModule2 = module {
     single { TranslationViewModel(get(), get()) }
     viewModel { FavoritesViewModel(get()) }
     single { androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }
+    single { TagDialogFragment() }
 
 }

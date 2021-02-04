@@ -4,9 +4,11 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.app.Activity
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -36,16 +38,26 @@ import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
+
+private const val TARGET_FRAGMENT_REQUEST_CODE = 1
+private const val EXTRA_GREETING_MESSAGE = "message"
+
 class TranslationFragment : Fragment(),
     OnSwipeListener {
     private val translationViewModel: TranslationViewModel by inject()
     private lateinit var callback: ItemTouchHelper.Callback
     private lateinit var _adapter: TranslationAdapter
     private val vibrator: Vibrator by inject()
+    private val tagDialogFragment: TagDialogFragment by inject()
 
-    companion object {
-        fun newInstance() =
-            TranslationFragment()
+//    companion object {
+//        fun newInstance() =
+//            TranslationFragment()
+//    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        tagDialogFragment.setTargetFragment(this, TARGET_FRAGMENT_REQUEST_CODE)
     }
 
     override fun onCreateView(
@@ -148,8 +160,7 @@ class TranslationFragment : Fragment(),
     }
 
     override fun onItemLongPressed() {
-        val dialog = TagDialogFragment()
-        dialog.show(parentFragmentManager, "tagDialog")
+        tagDialogFragment.show(parentFragmentManager, "tagDialog")
 
 
         // setup the alert builder
@@ -182,6 +193,23 @@ class TranslationFragment : Fragment(),
 //// create and show the alert dialog
 //        val dialog: AlertDialog = builder.create()
 //        dialog.show()
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode != Activity.RESULT_OK) {
+            Log.e(
+                "TranslationFragment",
+                "resultCode = $requestCode doesn't equal to Activity.Result_OK"
+            )
+            return
+        }
+        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
+            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
+                println("My Log,$it")
+            }
+        }
     }
 }
 

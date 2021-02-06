@@ -29,14 +29,20 @@ class TagsAdapter(private val onItemChecked: OnItemChecked) :
     override fun onBindViewHolder(holder: TagsHolder, position: Int) {
         holder.bind(collection[position])
         holder.itemView.tagCheckbox.setChecked(collection[position].isChecked)
+
+        
+
         holder.itemView.tagCheckbox.setOnClickListener { view ->
             if (view is CheckBox) {
-                if (collection[position].isChecked ){
-                    /// лист остается пустым потому что изначально все не отмечено
+
+
+                if ((view.isChecked)&&(!onItemChecked.checkedList.contains(collection[position]))) {
+                    println("+++++++++++++++++C H E C K E D ! ! !++++++++++++++++++++${view.text}")
                     onItemChecked.checkedList.add(collection[position])
 
-                }else{
-                    if (onItemChecked.checkedList.contains(collection[position])){
+                } else {
+                    if ((onItemChecked.checkedList.contains(collection[position]))&&(!view.isChecked)) {
+                        println("+++++++++++++++++UN C H E C K E D ! ! !++++++++++++++++++++${view.text}")
                         onItemChecked.checkedList.remove(collection[position])
                     }
                 }

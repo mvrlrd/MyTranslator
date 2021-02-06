@@ -69,7 +69,7 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         }
         okButton.setOnClickListener {
             //придумать как сохранять в чекд лист позиции с галочками
-            sendResult(checkedList[0].tag)
+            sendResult("done")
         }
 
         return root
@@ -94,17 +94,17 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         }
     }
 
-    override fun onChecked(): List<GroupTag>  {
-        return checkedList
+    override fun fillCheckedList() {
+        translationViewModel.checkedList = checkedList
     }
 
     private fun sendResult(message: String) {
-println(targetFragment.toString()+"______________________________________")
         targetFragment ?: return
-        println("send resuuuuuuuuuuuuuuuuuuuuuuuult")
         val intent = Intent().putExtra("message", message)
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
 //        searchingByIngredients_EditText.text?.clear()
+        println(checkedList.toString())
+        fillCheckedList()
         dismiss()
     }
 

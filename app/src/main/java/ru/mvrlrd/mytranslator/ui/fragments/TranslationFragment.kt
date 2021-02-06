@@ -208,6 +208,10 @@ class TranslationFragment : Fragment(),
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
             data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
                 println("My Log,$it")
+                for(i in translationViewModel.checkedList){
+                    println(i.toString())
+                }
+
             }
         }
     }

@@ -22,6 +22,7 @@ class TranslationViewModel
      val historyDao: HistoryDao
 ) : BaseViewModel() {
 
+    var checkedList: MutableList<GroupTag> = mutableListOf()
     private val searchResultRepository = SearchResultRepository(apiHelper)
     private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()

@@ -24,4 +24,8 @@ data class GroupTag(
             false
         }else this.tag == other.tag
     }
+
+    override fun toString(): String {
+        return "$tag      $isChecked"
+    }
 }

@@ -4,5 +4,5 @@ import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 
 interface OnItemChecked {
     var checkedList:MutableList<GroupTag>
-    fun onChecked() : List<GroupTag>
+    fun fillCheckedList()
 }

@@ -41,6 +41,7 @@ import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
+private const val TAG = "TranslationFragment"
 
 class TranslationFragment : Fragment(),
     OnSwipeListener {
@@ -207,10 +208,11 @@ class TranslationFragment : Fragment(),
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
             data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                println("My Log,$it")
+                Log.e(TAG,translationViewModel.checkedList.size.toString())
                 for(i in translationViewModel.checkedList){
-                    println(i.toString())
+                    Log.e(TAG,i.toString())
                 }
+                println("$TAG, $it")
 
             }
         }

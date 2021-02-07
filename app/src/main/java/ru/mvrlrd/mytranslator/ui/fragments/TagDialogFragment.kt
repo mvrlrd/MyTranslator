@@ -3,6 +3,7 @@ package ru.mvrlrd.mytranslator.ui.fragments
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,8 +19,12 @@ import ru.mvrlrd.mytranslator.ui.recycler_tags.OnItemChecked
 import ru.mvrlrd.mytranslator.ui.recycler_tags.TagsAdapter
 import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
+
+
+
+private const val TAG = "TagFragment"
 class TagDialogFragment : DialogFragment(), OnItemChecked {
-     override var checkedList: MutableList<GroupTag> = mutableListOf()
+     override var _checkedList: MutableList<GroupTag> = mutableListOf()
     private val tagAdapter = TagsAdapter(this as OnItemChecked)
     private val translationViewModel: TranslationViewModel by inject()
 
@@ -95,16 +100,21 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
     }
 
     override fun fillCheckedList() {
-        translationViewModel.checkedList = checkedList
+        Log.e(TAG,_checkedList.size.toString())
+
+        translationViewModel.checkedList.addAll(_checkedList)
+        Log.e(TAG,translationViewModel.checkedList.size.toString())
     }
 
     private fun sendResult(message: String) {
         targetFragment ?: return
         val intent = Intent().putExtra("message", message)
+        fillCheckedList()
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
 //        searchingByIngredients_EditText.text?.clear()
-        println(checkedList.toString())
-        fillCheckedList()
+//        println(checkedList.toString())
+        Log.e(TAG,translationViewModel.toString())
+
         dismiss()
     }
 

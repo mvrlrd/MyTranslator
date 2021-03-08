@@ -37,8 +37,17 @@ interface HistoryDao {
     suspend fun getCertainWord(word: String): HistoryEntity
 
 
+    @Query("SELECT * FROM cardtagcrossref")
+    suspend fun getAllCrossRef(): List<CardTagCrossRef>
 
-//
+
+
+
+    @Query("DELETE  FROM cardtagcrossref WHERE id =:id AND tagId =:tagID")
+    suspend fun removeAssignedTag(id : Long, tagID : Long)
+
+
+
     @Transaction
     @Query("SELECT * FROM searching_history WHERE id = :id")
     suspend fun getTagsOfCard(id: Long): CardWithTag

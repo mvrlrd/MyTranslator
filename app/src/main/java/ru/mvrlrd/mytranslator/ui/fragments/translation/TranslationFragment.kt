@@ -42,11 +42,6 @@ class TranslationFragment : Fragment(),
     private val vibrator: Vibrator by inject()
     private val tagDialogFragment: TagDialogFragment by inject()
 
-//    companion object {
-//        fun newInstance() =
-//            TranslationFragment()
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         tagDialogFragment.setTargetFragment(this,

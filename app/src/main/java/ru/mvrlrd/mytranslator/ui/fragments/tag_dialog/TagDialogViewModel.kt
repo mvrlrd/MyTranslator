@@ -1,11 +1,13 @@
 package ru.mvrlrd.mytranslator.ui.fragments.tag_dialog
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import okhttp3.internal.cacheGet
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
@@ -38,6 +40,19 @@ class TagDialogViewModel(
     fun addTagToCurrentCard(idCard: Long, idTag:Long){
         viewModelScope.launch {
             historyDao.insertCardTagCrossRef(CardTagCrossRef(idCard,idTag))
+        }
+    }
+
+
+    fun getAllCrossRef(){
+        viewModelScope.launch {
+            historyDao.getAllCrossRef()
+        }
+    }
+
+    fun deleteTagFromCard(idCard: Long, idTag:Long){
+        viewModelScope.launch {
+            historyDao.removeAssignedTag(idCard,idTag)
         }
     }
 

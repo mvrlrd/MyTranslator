@@ -3,6 +3,7 @@ package ru.mvrlrd.mytranslator.ui.fragments.favorites
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,7 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
@@ -24,8 +26,10 @@ import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
+private const val TARGET_FRAGMENT_REQUEST_CODE = 1
+private const val EXTRA_GREETING_MESSAGE = "message"
+private const val TAG = "TranslationFragment"
 
 /**
  * A simple [Fragment] subclass.
@@ -34,6 +38,8 @@ private const val ARG_PARAM2 = "param2"
  */
 class FavoritesFragment : Fragment(), OnSwipeListener {
 
+    private val tagDialogFragment: TagDialogFragment by inject()
+
     private val vibrator: Vibrator by inject()
     private lateinit var _adapter: TranslationAdapter
     private val viewModel: FavoritesViewModel by inject()
@@ -41,15 +47,18 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        tagDialogFragment.setTargetFragment(this,
+            TARGET_FRAGMENT_REQUEST_CODE
+        )
 
-        _adapter =
-            TranslationAdapter(this as OnSwipeListener)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        _adapter =
+            TranslationAdapter(this as OnSwipeListener)
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
@@ -97,7 +106,12 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         vibrate(vibrator)
     }
 
-    override fun onItemLongPressed(currentCardId: Long) {
 
+    override fun onItemLongPressed(currentCardId: Long) {
+        val bundle = Bundle()
+        bundle.putLong("id", currentCardId)
+        Log.e("Looooo","current   ${currentCardId}")
+        tagDialogFragment.arguments = bundle
+        tagDialogFragment.show(parentFragmentManager, "tagDialog")
     }
 }

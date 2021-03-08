@@ -14,6 +14,7 @@ import kotlinx.android.synthetic.main.dialog_fragment_tag.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.recycler_tags.OnItemChecked
 import ru.mvrlrd.mytranslator.ui.recycler_tags.TagsAdapter
 
@@ -22,10 +23,11 @@ private const val TAG = "TagFragment"
 
 class TagDialogFragment : DialogFragment(), OnItemChecked {
 
-
-     override var _checkedList: MutableList<GroupTag> = mutableListOf()
+    override var _checkedList: MutableList<GroupTag> = mutableListOf()
     private val tagAdapter = TagsAdapter(this as OnItemChecked)
     private val tagDialogViewModel: TagDialogViewModel by inject()
+
+    private var allTagsForCurrentCard: MutableList<GroupTag> = mutableListOf()
 
 
     override fun onCreateView(
@@ -46,21 +48,45 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
 
         val bundle = arguments
         val currentCardId = bundle!!.getLong("id", 0)
-        Log.e(TAG,"current card id    ${arguments}")
-
-        Log.e(TAG,"current card id    ${currentCardId.toString()}")
+//        Log.e(TAG,"current card id    ${arguments}")
+//
+//        Log.e(TAG,"current card id    ${currentCardId.toString()}")
 
 
         val cancelButton: Button = root.findViewById(R.id.cancel_button)
         val okButton: Button = root.findViewById(R.id.ok_button)
 
+        tagDialogViewModel.getAllTagsForCurrentCard(currentCardId)
+
+        tagDialogViewModel.liveTagsOfCurrentCard.observe(viewLifecycleOwner, Observer { tags ->
+//            for(t in tags){
+//                Log.e(TAG,"$currentCardId    ${t.tag}   hey ho")
+//            }
+allTagsForCurrentCard = tags as MutableList<GroupTag>
+        })
+
+
         cancelButton.setOnClickListener {
+
             dismiss()
         }
         okButton.setOnClickListener {
+            saveTag(currentCardId)
+            dismiss()
             //придумать как сохранять в чекд лист позиции с галочками
         }
         return root
+    }
+
+     private fun saveTag(cardId: Long) {
+         for (tag in tagDialogViewModel.liveAllTagList.value!!) {
+             Log.e(TAG,"what about check  ${tag.tag}  ${tag.isChecked}")
+             if (tag.isChecked) {tagDialogViewModel.addTagToCurrentCard(cardId, tag.tagId)}
+             if ((!tag.isChecked)&&(allTagsForCurrentCard.contains(tag))){
+                 tagDialogViewModel.deleteTagFromCard(cardId,tag.tagId)
+             }
+
+         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,6 +95,10 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
 
 
         tagDialogViewModel.liveAllTagList.observe(viewLifecycleOwner, Observer { tags ->
+            for(tag in tags){
+                tag.isChecked = allTagsForCurrentCard.contains(tag)
+            }
+
             handleTagList(tags as MutableList<GroupTag>)
         })
 
@@ -77,10 +107,10 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         }
     }
 
-    private fun handleTagList(list: List<GroupTag>) {
+    private fun handleTagList(allTags: List<GroupTag>) {
         tags_recyclerview.apply {
             layoutManager =  LinearLayoutManager(this.context)
-            adapter = tagAdapter.apply { collection = list as MutableList<GroupTag> }
+            adapter = tagAdapter.apply { collection = allTags as MutableList<GroupTag> }
         }
     }
 

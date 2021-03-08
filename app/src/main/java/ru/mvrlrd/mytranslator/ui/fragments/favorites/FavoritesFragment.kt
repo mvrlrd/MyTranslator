@@ -1,8 +1,5 @@
-package ru.mvrlrd.mytranslator.ui.fragments
+package ru.mvrlrd.mytranslator.ui.fragments.favorites
 
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
@@ -23,7 +20,6 @@ import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
-import ru.mvrlrd.mytranslator.vm.FavoritesViewModel
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -101,7 +97,7 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         vibrate(vibrator)
     }
 
-    override fun onItemLongPressed() {
+    override fun onItemLongPressed(currentCardId: Long) {
 
     }
 }

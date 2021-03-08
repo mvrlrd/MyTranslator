@@ -1,10 +1,9 @@
-package ru.mvrlrd.mytranslator.vm
+package ru.mvrlrd.mytranslator.ui.fragments.favorites
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
-import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 

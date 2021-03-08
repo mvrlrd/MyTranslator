@@ -41,7 +41,7 @@ interface HistoryDao {
 //
     @Transaction
     @Query("SELECT * FROM searching_history WHERE id = :id")
-    suspend fun getTagsOfCard(id: Long): List<CardWithTag>
+    suspend fun getTagsOfCard(id: Long): CardWithTag
 
     @Transaction
     @Query("SELECT * FROM searching_history WHERE id = :tagId")

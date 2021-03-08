@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.vm
+package ru.mvrlrd.mytranslator.ui.fragments.translation
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,6 +13,7 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
@@ -22,14 +23,11 @@ class TranslationViewModel
      val historyDao: HistoryDao
 ) : BaseViewModel() {
 
-    var checkedList: MutableList<GroupTag> = mutableListOf()
     private val searchResultRepository = SearchResultRepository(apiHelper)
     private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
 
-    var _tagList = MutableLiveData<List<GroupTag>>()
-    val liveTagList : LiveData<List<GroupTag>> = _tagList
 
 
     var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
@@ -39,6 +37,7 @@ class TranslationViewModel
             getSearch(word) { it.fold(::handleFailure, ::handleTranslations) }
         }
     }
+
 
     private fun handleTranslations(response: ListSearchResult?) {
         response?.printAllSearchResultResponse()
@@ -78,7 +77,6 @@ class TranslationViewModel
                        "added"
             )
         }
-//        println("${historyEntity.translation}    saved")
     }
 
     fun loadHistory() {
@@ -94,27 +92,10 @@ class TranslationViewModel
         }
     }
 
-    fun loadTag(tagText : String){
-        val groupTag = GroupTag(0,tagText, false)
 
-        viewModelScope.launch {
-            for (i in historyDao.getAllTags()){
-                if (i.equals(groupTag)){
-                    _tagList.value = historyDao.getAllTags()
-                    cancel()
-                }
-            }
-            historyDao.insertTag(GroupTag(0,tagText, false))
-            _tagList.value = historyDao.getAllTags()
-        }
-    }
-//    fun getAllTags(): List<GroupTag>{
-//        var listOfTags = emptyList<GroupTag>()
-//        viewModelScope.launch {
-//            listOfTags = historyDao.getAllTags()
-//        }
-//        return listOfTags
-//    }
+
+
+
 
     companion object {
         const val TAG = "MainViewModel"

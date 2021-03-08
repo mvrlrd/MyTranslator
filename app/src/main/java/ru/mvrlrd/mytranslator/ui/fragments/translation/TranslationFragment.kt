@@ -1,8 +1,5 @@
-package ru.mvrlrd.mytranslator.ui.fragments
+package ru.mvrlrd.mytranslator.ui.fragments.translation
 
-import android.app.AlertDialog
-import android.content.DialogInterface
-import android.content.DialogInterface.OnMultiChoiceClickListener
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
@@ -18,25 +15,19 @@ import android.widget.ImageButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.translation_fragment.*
 import kotlinx.android.synthetic.main.translation_fragment.view.*
-import kotlinx.coroutines.launch
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
-import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
-import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
 import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
-import ru.mvrlrd.mytranslator.vm.TranslationViewModel
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
@@ -58,7 +49,9 @@ class TranslationFragment : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tagDialogFragment.setTargetFragment(this, TARGET_FRAGMENT_REQUEST_CODE)
+        tagDialogFragment.setTargetFragment(this,
+            TARGET_FRAGMENT_REQUEST_CODE
+        )
     }
 
     override fun onCreateView(
@@ -160,62 +153,36 @@ class TranslationFragment : Fragment(),
         vibrate(vibrator)
     }
 
-    override fun onItemLongPressed() {
+
+
+    override fun onItemLongPressed(currentCardId: Long) {
+        val bundle = Bundle()
+        bundle.putLong("id", currentCardId)
+        Log.e("Looooo","current   ${currentCardId}")
+        tagDialogFragment.arguments = bundle
         tagDialogFragment.show(parentFragmentManager, "tagDialog")
-
-
-        // setup the alert builder
-        // setup the alert builder
-//        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
-//        builder.setTitle("Choose tag")
-//// add a checkbox list
-//// add a checkbox list
-//        val tags = listOf(GroupTag(1,"series/movies"),
-//            GroupTag(2,"programming"),
-//            GroupTag(3,"travelling"),
-//            GroupTag(4,"games"),
-//            GroupTag(5,"sport"))
-//
-//        val tagsStr =
-//            arrayOf("series/movies", "programming", "travelling", "games", "sport")
-//        val checkedItems = booleanArrayOf(false, false, false, false, false)
-//        builder.setMultiChoiceItems(tagsStr, checkedItems,
-//            OnMultiChoiceClickListener { dialog, which, isChecked ->
-//                // user checked or unchecked a box
-//            })
-//// add OK and Cancel buttons
-//// add OK and Cancel buttons
-//        builder.setPositiveButton("OK",
-//            DialogInterface.OnClickListener { dialog, which ->
-//                // user clicked OK
-//            })
-//        builder.setNegativeButton("Cancel", null)
-//// create and show the alert dialog
-//// create and show the alert dialog
-//        val dialog: AlertDialog = builder.create()
-//        dialog.show()
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            Log.e(
-                "TranslationFragment",
-                "resultCode = $requestCode doesn't equal to Activity.Result_OK"
-            )
-            return
-        }
-        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                Log.e(TAG,translationViewModel.checkedList.size.toString())
-                for(i in translationViewModel.checkedList){
-                    Log.e(TAG,i.toString())
-                }
-                println("$TAG, $it")
-
-            }
-        }
+//        if (resultCode != Activity.RESULT_OK) {
+//            Log.e(
+//                "TranslationFragment",
+//                "resultCode = $requestCode doesn't equal to Activity.Result_OK"
+//            )
+//            return
+//        }
+//        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
+//            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
+//                Log.e(TAG,translationViewModel.checkedList.size.toString())
+//                for(i in translationViewModel.checkedList){
+//                    Log.e(TAG,i.toString())
+//                }
+//                println("$TAG, $it")
+//
+//            }
+//        }
     }
 }
 

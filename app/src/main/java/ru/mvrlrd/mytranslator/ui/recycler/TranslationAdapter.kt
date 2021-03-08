@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
 import kotlinx.android.synthetic.main.recycler_item.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
@@ -85,7 +84,8 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
 
             // long press on recycler item
             itemView.setOnLongClickListener(View.OnLongClickListener {
-                swipeListener.onItemLongPressed()
+                Log.e("TAG","fffff   ${meaningModelForRecycler.id}")
+                swipeListener.onItemLongPressed(meaningModelForRecycler.id)
 //                it.recycler_text.text = "aaaaa"
                 false
             })

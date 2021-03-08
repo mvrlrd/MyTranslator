@@ -7,10 +7,11 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
-import ru.mvrlrd.mytranslator.vm.TranslationViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.translation.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
-import ru.mvrlrd.mytranslator.ui.fragments.TagDialogFragment
-import ru.mvrlrd.mytranslator.vm.FavoritesViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
+import ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogViewModel
 
 val appModule = module {
     single { NetworkAvailabilityHandler(androidContext()) }
@@ -26,7 +27,12 @@ val appModule2 = module {
     }
     single { get<AppSearchingHistoryDataBase>().historyDao() }
     single { TranslationViewModel(get(), get()) }
-    viewModel { FavoritesViewModel(get()) }
+    single { TagDialogViewModel(get()) }
+    viewModel {
+        FavoritesViewModel(
+            get()
+        )
+    }
     single { androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }
     single { TagDialogFragment() }
 

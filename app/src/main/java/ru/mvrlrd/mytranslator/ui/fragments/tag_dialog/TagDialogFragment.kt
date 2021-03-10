@@ -36,15 +36,15 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         savedInstanceState: Bundle?
     ): View? {
         val root : View = inflater.inflate(R.layout.dialog_fragment_tag, container,true  )
-        tagDialogViewModel.loadTagToDataBase("hobbies")
-        tagDialogViewModel.loadTagToDataBase("football")
-        tagDialogViewModel.loadTagToDataBase("verbs")
-        tagDialogViewModel.loadTagToDataBase("music")
-        tagDialogViewModel.loadTagToDataBase("human")
-        tagDialogViewModel.loadTagToDataBase("earth")
-        tagDialogViewModel.loadTagToDataBase("ecology")
-        tagDialogViewModel.loadTagToDataBase("IT")
-        tagDialogViewModel.loadTagToDataBase("kitchen")
+//        tagDialogViewModel.loadTagToDataBase("hobbies")
+//        tagDialogViewModel.loadTagToDataBase("football")
+//        tagDialogViewModel.loadTagToDataBase("verbs")
+//        tagDialogViewModel.loadTagToDataBase("music")
+//        tagDialogViewModel.loadTagToDataBase("human")
+//        tagDialogViewModel.loadTagToDataBase("earth")
+//        tagDialogViewModel.loadTagToDataBase("ecology")
+//        tagDialogViewModel.loadTagToDataBase("IT")
+//        tagDialogViewModel.loadTagToDataBase("kitchen")
 
         val bundle = arguments
         val currentCardId = bundle!!.getLong("id", 0)

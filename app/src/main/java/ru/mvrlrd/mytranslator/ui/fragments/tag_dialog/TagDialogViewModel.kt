@@ -22,19 +22,29 @@ class TagDialogViewModel(
     var _allTagList = MutableLiveData<List<GroupTag>>()
     val liveAllTagList : LiveData<List<GroupTag>> = _allTagList
 
+    init {
+        getAllTags()
+    }
+
 
         fun loadTagToDataBase(tagText : String){
             val groupTag = GroupTag(0,tagText, false)
             viewModelScope.launch {
                 for (i in historyDao.getAllTags()){
-                    if (i.equals(groupTag)){
+                    if (i == groupTag){
                         _allTagList.value = historyDao.getAllTags()
                         cancel()
                     }
                 }
                 historyDao.insertTag(GroupTag(0,tagText, false))
-                _allTagList.value = historyDao.getAllTags()
+                getAllTags()
             }
+    }
+
+    private fun getAllTags(){
+        viewModelScope.launch {
+            _allTagList.value = historyDao.getAllTags()
+        }
     }
 
     fun addTagToCurrentCard(idCard: Long, idTag:Long){

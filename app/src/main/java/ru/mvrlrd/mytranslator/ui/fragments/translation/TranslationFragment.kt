@@ -151,34 +151,34 @@ class TranslationFragment : Fragment(),
 
 
     override fun onItemLongPressed(currentCardId: Long) {
-        val bundle = Bundle()
-        bundle.putLong("id", currentCardId)
-        Log.e("Looooo","current   ${currentCardId}")
-        tagDialogFragment.arguments = bundle
-        tagDialogFragment.show(parentFragmentManager, "tagDialog")
+//        val bundle = Bundle()
+//        bundle.putLong("id", currentCardId)
+//        Log.e("Looooo","current   ${currentCardId}")
+//        tagDialogFragment.arguments = bundle
+//        tagDialogFragment.show(parentFragmentManager, "tagDialog")
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-//        if (resultCode != Activity.RESULT_OK) {
-//            Log.e(
-//                "TranslationFragment",
-//                "resultCode = $requestCode doesn't equal to Activity.Result_OK"
-//            )
-//            return
-//        }
-//        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-//            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-//                Log.e(TAG,translationViewModel.checkedList.size.toString())
-//                for(i in translationViewModel.checkedList){
-//                    Log.e(TAG,i.toString())
-//                }
-//                println("$TAG, $it")
-//
-//            }
-//        }
-    }
+//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+//        super.onActivityResult(requestCode, resultCode, data)
+////        if (resultCode != Activity.RESULT_OK) {
+////            Log.e(
+////                "TranslationFragment",
+////                "resultCode = $requestCode doesn't equal to Activity.Result_OK"
+////            )
+////            return
+////        }
+////        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
+////            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
+////                Log.e(TAG,translationViewModel.checkedList.size.toString())
+////                for(i in translationViewModel.checkedList){
+////                    Log.e(TAG,i.toString())
+////                }
+////                println("$TAG, $it")
+////
+////            }
+////        }
+//    }
 }
 
 

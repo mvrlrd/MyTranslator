@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "searching_history")
-data class HistoryEntity (
+data class CardOfWord (
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo val text: String?,
     @ColumnInfo var translation: String?,

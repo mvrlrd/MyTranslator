@@ -12,11 +12,7 @@ data class GroupTag(
     val tagId: Long,
     @SerializedName("tag")
     val tag: String,
-
     var isChecked: Boolean
-
-
-
 
 ) {
     override fun equals(other: Any?): Boolean {

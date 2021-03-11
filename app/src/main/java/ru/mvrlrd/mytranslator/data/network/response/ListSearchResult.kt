@@ -5,7 +5,6 @@ import android.util.Log
 class ListSearchResult : ArrayList<SearchResultResponse>()
 
 {
-
     fun printAllSearchResultResponse() {
         println(this.toString())
         for (i in this){

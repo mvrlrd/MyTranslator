@@ -2,14 +2,14 @@ package ru.mvrlrd.mytranslator.data.local
 
 import androidx.room.*
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
-import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
+import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 
 @Dao
 interface HistoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(historyEntity: HistoryEntity?): Long
+    suspend fun insert(cardOfWord: CardOfWord?): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTag(tag: GroupTag): Long
@@ -25,16 +25,16 @@ interface HistoryDao {
     suspend fun clearTags()
 
     @Query("DELETE FROM searching_history WHERE id =:id")
-    suspend fun delete(id: Long)
+    suspend fun delete(id: Long): Int
 
     @Query("SELECT * FROM searching_history")
-    suspend fun getAll(): List<HistoryEntity>
+    suspend fun getAll(): List<CardOfWord>
 
     @Query("SELECT * FROM group_tags")
     suspend fun getAllTags(): List<GroupTag>
 
     @Query("SELECT * FROM searching_history WHERE text=:word")
-    suspend fun getCertainWord(word: String): HistoryEntity
+    suspend fun getCertainWord(word: String): CardOfWord
 
 
     @Query("SELECT * FROM cardtagcrossref")
@@ -44,7 +44,7 @@ interface HistoryDao {
 
 
     @Query("DELETE  FROM cardtagcrossref WHERE id =:id AND tagId =:tagID")
-    suspend fun removeAssignedTag(id : Long, tagID : Long)
+    suspend fun removeAssignedTag(id : Long, tagID : Long) : Int
 
 
 

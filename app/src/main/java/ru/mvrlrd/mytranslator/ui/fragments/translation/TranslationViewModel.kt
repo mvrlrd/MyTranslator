@@ -3,34 +3,33 @@ package ru.mvrlrd.mytranslator.ui.fragments.translation
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.SearchResultRepository
+import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
-import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
-import ru.mvrlrd.mytranslator.data.local.entity.HistoryEntity
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
+import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class TranslationViewModel
     (
     apiHelper: ApiHelper,
-     val historyDao: HistoryDao
+    dbHelper: DbHelper,
+    private val historyDao: HistoryDao
 ) : BaseViewModel() {
 
-    private val searchResultRepository = SearchResultRepository(apiHelper)
+    private val searchResultRepository = SearchResultIRepository(apiHelper,dbHelper)
     private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
 
 
 
-    var liveHistory : MutableLiveData<List<HistoryEntity>> = MutableLiveData()
+    var liveHistory : MutableLiveData<List<CardOfWord>> = MutableLiveData()
 
     fun loadData(word: String) {
         viewModelScope.launch {
@@ -40,7 +39,7 @@ class TranslationViewModel
 
 
     private fun handleTranslations(response: ListSearchResult?) {
-        response?.printAllSearchResultResponse()
+//        response?.printAllSearchResultResponse()
         _liveTranslationsList.value = response?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
@@ -64,7 +63,7 @@ class TranslationViewModel
         viewModelScope.launch {
             println(
                " ${historyDao.insert(meaningModelForRecycler.let{item ->
-                HistoryEntity(
+                CardOfWord(
                     item.id,
                     item.text,
                     item.translation,

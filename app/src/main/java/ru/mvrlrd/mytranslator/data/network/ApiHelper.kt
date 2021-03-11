@@ -8,7 +8,7 @@ import ru.mvrlrd.mytranslator.functional.Either
 
 
 class ApiHelper(private val apiService: ISkyengApiService,private val networkHandler: NetworkAvailabilityHandler) :
-    DataSource {
+    RemoteDataSource {
 
     override suspend fun getData(wordForTranslation : String): Either<Failure, ListSearchResult?> =
         requestData { apiService.search(wordForTranslation)}
@@ -25,10 +25,8 @@ class ApiHelper(private val apiService: ISkyengApiService,private val networkHan
         when (networkHandler.isConnected()) {
             true -> {
                 try {
-                                                        println("YES")
                     responseHandle(request())
                 } catch (exception: Throwable) {
-                                                        println("NOPE")
                     Either.Left(Failure.ServerError)
                 }
             }

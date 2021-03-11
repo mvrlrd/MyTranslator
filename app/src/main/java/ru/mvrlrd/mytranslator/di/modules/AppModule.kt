@@ -29,7 +29,7 @@ val appModule2 = module {
         ).fallbackToDestructiveMigration().build()
     }
     single { get<AppSearchingHistoryDataBase>().historyDao() }
-    single { TranslationViewModel(get(), get(), get()) }
+    single { TranslationViewModel(get(), get()) }
     single { TagDialogViewModel(get()) }
     single { SearchResultIRepository(get(),get()) }
     viewModel {

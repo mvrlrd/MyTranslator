@@ -18,9 +18,9 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
         return Either.Right(historyDao.insert(cardOfWord))
     }
 
-//    override suspend fun deleteCardFromDb(id: Long): Either<Failure, Long> {
-//        return Either.Right(historyDao.delete(id))
-//    }
+    override suspend fun deleteCardFromDb(id: Long): Either<Failure, Int> {
+        return Either.Right(historyDao.delete(id))
+    }
 //
 //    override suspend fun assignTagToCard(
 //        cardId: Long,

@@ -3,11 +3,24 @@ package ru.mvrlrd.mytranslator.ui.fragments.favorites
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
+import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.domain.use_cases.DeleteCardFromFavorites
+import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
+import ru.mvrlrd.mytranslator.domain.use_cases.SaveCardToFavorites
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-class FavoritesViewModel (private val historyDao: HistoryDao) : BaseViewModel(){
+class FavoritesViewModel(
+    private val historyDao: HistoryDao,
+    apiHelper: ApiHelper,
+    dbHelper: DbHelper
+) : BaseViewModel() {
+
+    private val searchResultRepository = SearchResultIRepository(apiHelper,dbHelper)
+    private val deleteCardFromFavorites: DeleteCardFromFavorites = DeleteCardFromFavorites(searchResultRepository)
 
     var liveHistory : MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
 
@@ -83,12 +96,18 @@ class FavoritesViewModel (private val historyDao: HistoryDao) : BaseViewModel(){
 //        }
 //    }
 
-    fun deleteWord(meaningModelForRecycler: MeaningModelForRecycler) {
+    fun deleteWord(meaningModelForRecycler: MeaningModelForRecycler){
         viewModelScope.launch {
-            historyDao.delete(meaningModelForRecycler.id)
-            loadHistory()
+            println("${deleteCardFromFavorites(meaningModelForRecycler.id)}    deleted")
         }
     }
+
+//    fun deleteWord(meaningModelForRecycler: MeaningModelForRecycler) {
+//        viewModelScope.launch {
+//            historyDao.delete(meaningModelForRecycler.id)
+//            loadHistory()
+//        }
+//    }
 
     fun clearHistory() {
         viewModelScope.launch {

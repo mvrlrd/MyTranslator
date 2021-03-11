@@ -17,7 +17,7 @@ interface IRepository {
 
     suspend fun saveCardToDb(cardOfWord: CardOfWord) : Either<Failure, Long>
 
-//    suspend fun deleteCardFromDb(id : Long) : Either<Failure, Long>
+    suspend fun deleteCardFromDb(id : Long) : Either<Failure, Int>
 //
 //    suspend fun addNewTag(tag : String): Either<Failure, Long>
 //

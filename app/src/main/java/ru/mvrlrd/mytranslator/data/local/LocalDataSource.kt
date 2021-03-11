@@ -9,7 +9,7 @@ interface LocalDataSource {
 
     suspend fun saveCardToDb(cardOfWord : CardOfWord) : Either<Failure, Long>
 
-//    suspend fun deleteCardFromDb(id : Long) : Either<Failure, Long>
+    suspend fun deleteCardFromDb(id : Long) : Either<Failure, Int>
 //
 //    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Map<Long,Long>>
 //

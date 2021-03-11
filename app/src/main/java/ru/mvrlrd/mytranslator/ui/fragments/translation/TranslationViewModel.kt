@@ -12,6 +12,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.domain.use_cases.SaveCardToFavorites
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
@@ -24,12 +25,11 @@ class TranslationViewModel
 
     private val searchResultRepository = SearchResultIRepository(apiHelper,dbHelper)
     private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
+    private val cardSaver : SaveCardToFavorites = SaveCardToFavorites(searchResultRepository)
+
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
 
-
-
-    var liveHistory : MutableLiveData<List<CardOfWord>> = MutableLiveData()
 
     fun loadData(word: String) {
         viewModelScope.launch {
@@ -61,40 +61,19 @@ class TranslationViewModel
 
     fun saveCard(meaningModelForRecycler: MeaningModelForRecycler){
         viewModelScope.launch {
-            println(
-               " ${historyDao.insert(meaningModelForRecycler.let{item ->
-                CardOfWord(
-                    item.id,
-                    item.text,
-                    item.translation,
-                    item.image_url,
-                    item.transcription,
-                    item.partOfSpeech,
-                    item.prefix
-                )
-            })} " +
-                       "added"
-            )
+           meaningModelForRecycler.let { item ->
+               cardSaver(CardOfWord(
+                   item.id,
+                   item.text,
+                   item.translation,
+                   item.image_url,
+                   item.transcription,
+                   item.partOfSpeech,
+                   item.prefix
+               ))
+           }
         }
     }
-
-    fun loadHistory() {
-        viewModelScope.launch {
-            liveHistory.value = historyDao.getAll()
-        }
-    }
-
-    fun clearHistory() {
-        viewModelScope.launch {
-            historyDao.clear()
-            liveHistory.value = emptyList()
-        }
-    }
-
-
-
-
-
 
     companion object {
         const val TAG = "MainViewModel"

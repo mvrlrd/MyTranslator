@@ -26,9 +26,9 @@ class SearchResultIRepository(
         return localDataSource.saveCardToDb(cardOfWord)
     }
 
-//    override suspend fun deleteCardFromDb(id: Long): Either<Failure, Long> {
-//        return localDataSource.deleteCardFromDb(id)
-//    }
+    override suspend fun deleteCardFromDb(id: Long): Either<Failure, Int> {
+        return localDataSource.deleteCardFromDb(id)
+    }
 //
 //    override suspend fun assignTagToCard(
 //        cardId: Long,

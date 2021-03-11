@@ -7,6 +7,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
+import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.ui.fragments.translation.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
@@ -30,9 +31,10 @@ val appModule2 = module {
     single { get<AppSearchingHistoryDataBase>().historyDao() }
     single { TranslationViewModel(get(), get(), get()) }
     single { TagDialogViewModel(get()) }
+    single { SearchResultIRepository(get(),get()) }
     viewModel {
         FavoritesViewModel(
-            get()
+            get(), get(), get()
         )
     }
     single { androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }

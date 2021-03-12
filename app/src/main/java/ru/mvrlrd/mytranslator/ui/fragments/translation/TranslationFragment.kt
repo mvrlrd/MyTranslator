@@ -62,7 +62,7 @@ class TranslationFragment : Fragment(),
         root.searchedWord_TextView.setOnEditorActionListener { _, actionId, _ ->
             return@setOnEditorActionListener when (actionId) {
                 EditorInfo.IME_ACTION_SEARCH -> {
-                    translationViewModel.loadData(searchedWord_TextView.text.toString())
+                    translationViewModel.loadDataFromWeb(searchedWord_TextView.text.toString())
                     true
                 }
                 else -> false
@@ -76,7 +76,7 @@ class TranslationFragment : Fragment(),
                 activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager?
             imm?.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
 
-            translationViewModel.loadData(searchedWord_TextView.text.toString())
+            translationViewModel.loadDataFromWeb(searchedWord_TextView.text.toString())
 
 
 
@@ -94,7 +94,7 @@ class TranslationFragment : Fragment(),
         if (translationViewModel.liveTranslationsList.value != null) {
             handleTranslationList(translationViewModel.liveTranslationsList.value!!)
         } else {
-            translationViewModel.loadData("get")
+            translationViewModel.loadDataFromWeb("get")
         }
     }
 
@@ -113,7 +113,7 @@ class TranslationFragment : Fragment(),
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
-        translationViewModel.saveCard(meaningModelForRecycler)
+        translationViewModel.saveCardToDb(meaningModelForRecycler)
         vibrate(vibrator)
     }
 

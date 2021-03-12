@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.translation
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -21,28 +22,24 @@ class TranslationViewModel
     dbHelper: DbHelper
 ) : BaseViewModel() {
 
-    private val searchResultRepository = SearchResultIRepository(apiHelper,dbHelper)
-    private val getSearch: GetSearchResult = GetSearchResult(searchResultRepository)
-    private val cardSaver : SaveCardToFavorites = SaveCardToFavorites(searchResultRepository)
-
+    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+    private val searcherWithApi: GetSearchResult = GetSearchResult(searchResultRepository)
+    private val cardSaverToDb: SaveCardToFavorites = SaveCardToFavorites(searchResultRepository)
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
 
-
-    fun loadData(word: String) {
+    fun loadDataFromWeb(word: String) {
         viewModelScope.launch {
-            getSearch(word) {
+            searcherWithApi(word) {
                 it.fold(
                     ::handleFailure,
-                    ::handleTranslations
+                    ::handleLoadingData
                 )
             }
         }
     }
 
-
-    private fun handleTranslations(response: ListSearchResult?) {
-//        response?.printAllSearchResultResponse()
+    private fun handleLoadingData(response: ListSearchResult?) {
         _liveTranslationsList.value = response?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
@@ -62,23 +59,35 @@ class TranslationViewModel
         }?.flatMap { it!!.meanings }
     }
 
-    fun saveCard(meaningModelForRecycler: MeaningModelForRecycler){
+    fun saveCardToDb(meaningModelForRecycler: MeaningModelForRecycler) {
         viewModelScope.launch {
-           meaningModelForRecycler.let { item ->
-               cardSaver(CardOfWord(
-                   item.id,
-                   item.text,
-                   item.translation,
-                   item.image_url,
-                   item.transcription,
-                   item.partOfSpeech,
-                   item.prefix
-               ))
-           }
+            meaningModelForRecycler.let { item ->
+                cardSaverToDb(
+                    CardOfWord(
+                        item.id,
+                        item.text,
+                        item.translation,
+                        item.image_url,
+                        item.transcription,
+                        item.partOfSpeech,
+                        item.prefix
+                    )
+                )
+                {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleSavingCard
+                    )
+                }
+            }
         }
     }
 
+    private fun handleSavingCard(id: Long) {
+        Log.d(TAG, "id#$id was added to the database")
+    }
+
     companion object {
-        const val TAG = "MainViewModel"
+        const val TAG = "TranslationViewModel"
     }
 }

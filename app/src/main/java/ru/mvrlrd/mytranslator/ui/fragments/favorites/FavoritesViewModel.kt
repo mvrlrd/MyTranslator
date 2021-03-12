@@ -33,13 +33,13 @@ class FavoritesViewModel(
             getAllCardsFromDb(Unit) {
                 it.fold(
                     ::handleFailure,
-                    ::handleFavorites
+                    ::mapCardForRecycler
                 )
             }
         }
     }
 
-    private fun handleFavorites(allCardsList: List<CardOfWord>) {
+    private fun mapCardForRecycler(allCardsList: List<CardOfWord>) {
         liveHistory.value = allCardsList.map { card ->
             MeaningModelForRecycler(
                 card.id,
@@ -65,7 +65,7 @@ class FavoritesViewModel(
     }
 
     private fun handleDeleting(quantity: Int) {
-        Log.d(TAG, "$quantity item was deleted")
+        Log.d(TAG, "$quantity item was deleted from the database")
     }
 
     companion object {

@@ -10,7 +10,6 @@ import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.data.local.HistoryDao
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.domain.use_cases.SaveCardToFavorites
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
@@ -32,7 +31,12 @@ class TranslationViewModel
 
     fun loadData(word: String) {
         viewModelScope.launch {
-            getSearch(word) { it.fold(::handleFailure, ::handleTranslations) }
+            getSearch(word) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleTranslations
+                )
+            }
         }
     }
 

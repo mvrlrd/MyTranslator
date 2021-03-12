@@ -44,7 +44,8 @@ class TranslationFragment : Fragment(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tagDialogFragment.setTargetFragment(this,
+        tagDialogFragment.setTargetFragment(
+            this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
     }
@@ -67,38 +68,6 @@ class TranslationFragment : Fragment(),
                 else -> false
             }
         }
-
-//        val cards = listOf(HistoryEntity(1,"fuck","hernya","http1","[ewew]","n","a"),
-//            HistoryEntity(2,"loh","kruto","http2","[rrrr]","v","the"))
-//        val tags = listOf(GroupTag(1,"series/movies"),
-//            GroupTag(2,"programming"),
-//            GroupTag(3,"travelling"),
-//        GroupTag(4,"games"),
-//        GroupTag(5,"sport"))
-//
-//        val crossRefList =  listOf(
-//            CardTagCrossRef(1,2),
-//            CardTagCrossRef(1,3),
-//            CardTagCrossRef(2,2))
-//
-//        lifecycleScope.launch {
-//            cards.forEach { card ->
-//                translationViewModel.historyDao.insert(card)
-//            }
-//            tags.forEach { tag ->
-//                translationViewModel.historyDao.insertTag(tag)
-//            }
-//            crossRefList.forEach { crossRef ->
-//                translationViewModel.historyDao.insertCardTagCrossRef(crossRef)
-//            }
-//
-//
-//            println("${translationViewModel.historyDao.getCardsOfTag(1)}+++++++++++++++++++++++++++++++++++++++++")
-//        }
-
-
-
-
 
         val searchButton: ImageButton = root.findViewById(R.id.search_button)
         searchButton.setOnClickListener {

@@ -34,7 +34,7 @@ val appModule2 = module {
     single { SearchResultIRepository(get(),get()) }
     viewModel {
         FavoritesViewModel(
-            get(), get(), get()
+            get(), get()
         )
     }
     single { androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }

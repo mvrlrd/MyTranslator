@@ -42,9 +42,9 @@ class SearchResultIRepository(
 //        return localDataSource.assignTagToCard(cardId,tagId)
 //    }
 //
-//    override suspend fun addNewTag(tag: String): Either<Failure, Long> {
-//        return localDataSource.
-//    }
+    override suspend fun addNewTagToDb(tag: String): Either<Failure, Long> {
+        return localDataSource.insertNewTagToDb(tag)
+    }
 //
 //    override suspend fun deleteTagFromCard(
 //        cardId: Long,

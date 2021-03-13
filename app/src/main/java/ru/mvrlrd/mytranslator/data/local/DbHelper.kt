@@ -5,6 +5,7 @@ import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.functional.Either
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
@@ -41,10 +42,14 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
     ): Either<Failure, Int> {
         return Either.Right(historyDao.removeAssignedTag(cardId, tagId))
     }
-//
-//    override suspend fun insertNewTag(tag: String): Either<Failure, Long> {
-//        return Either.Right(historyDao.insertTag(GroupTag(0,tag = tag, isChecked = false)))
-//    }
+
+    override suspend fun insertNewTagToDb(tag: String): Either<Failure, Long> {
+        return Either.Right(historyDao.insertNewTagToDb(GroupTag(0,tag = tag, isChecked = false)))
+    }
+
+    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag> {
+        return Either.Right(historyDao.getTagsOfCard(cardId))
+    }
 }
 
 //override suspend fun getData(wordForTranslation : String): Either<Failure, ListSearchResult?> =

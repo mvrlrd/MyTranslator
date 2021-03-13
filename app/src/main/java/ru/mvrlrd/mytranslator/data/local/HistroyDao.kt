@@ -12,7 +12,7 @@ interface HistoryDao {
     suspend fun insert(cardOfWord: CardOfWord?): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertTag(tag: GroupTag): Long
+    suspend fun insertNewTagToDb(tag: GroupTag): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCardTagCrossRef(cardTagCrossRef: CardTagCrossRef): Map<Long,Long>

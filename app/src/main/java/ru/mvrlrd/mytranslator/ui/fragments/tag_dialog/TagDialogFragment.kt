@@ -40,11 +40,7 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
 //        tagDialogViewModel.loadTagToDataBase("football")
 //        tagDialogViewModel.loadTagToDataBase("verbs")
 //        tagDialogViewModel.loadTagToDataBase("music")
-//        tagDialogViewModel.loadTagToDataBase("human")
-//        tagDialogViewModel.loadTagToDataBase("earth")
-//        tagDialogViewModel.loadTagToDataBase("ecology")
-//        tagDialogViewModel.loadTagToDataBase("IT")
-//        tagDialogViewModel.loadTagToDataBase("kitchen")
+
 
         val bundle = arguments
         val currentCardId = bundle!!.getLong("id", 0)

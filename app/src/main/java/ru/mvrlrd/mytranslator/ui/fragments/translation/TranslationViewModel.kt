@@ -9,10 +9,10 @@ import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
-import ru.mvrlrd.mytranslator.domain.use_cases.GetSearchResult
+import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
-import ru.mvrlrd.mytranslator.domain.use_cases.SaveCardToFavorites
+import ru.mvrlrd.mytranslator.domain.use_cases.cards.SaveCardToFavorites
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 

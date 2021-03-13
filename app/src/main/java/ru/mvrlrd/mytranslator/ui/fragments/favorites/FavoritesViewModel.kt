@@ -8,8 +8,8 @@ import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.domain.use_cases.DeleteCardFromFavorites
-import ru.mvrlrd.mytranslator.domain.use_cases.GetAllCardsFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.cards.DeleteCardFromFavorites
+import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetAllCardsFromDb
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 

@@ -3,6 +3,7 @@ package ru.mvrlrd.mytranslator.data
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
 import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.IRepository
@@ -28,6 +29,10 @@ class SearchResultIRepository(
 
     override suspend fun deleteCardFromDb(id: Long): Either<Failure, Int> {
         return localDataSource.deleteCardFromDb(id)
+    }
+
+    override suspend fun getAllTags(): Either<Failure, List<GroupTag>> {
+        return localDataSource.getAllTags()
     }
 //
 //    override suspend fun assignTagToCard(

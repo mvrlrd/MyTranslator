@@ -30,7 +30,7 @@ val appModule2 = module {
     }
     single { get<AppSearchingHistoryDataBase>().historyDao() }
     single { TranslationViewModel(get(), get()) }
-    single { TagDialogViewModel(get()) }
+    single { TagDialogViewModel(get(), get()) }
     single { SearchResultIRepository(get(),get()) }
     viewModel {
         FavoritesViewModel(

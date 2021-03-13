@@ -18,11 +18,13 @@ interface IRepository {
     suspend fun saveCardToDb(cardOfWord: CardOfWord) : Either<Failure, Long>
 
     suspend fun deleteCardFromDb(id : Long) : Either<Failure, Int>
+
+    suspend fun getAllTags() : Either<Failure, List<GroupTag>>
 //
 //    suspend fun addNewTag(tag : String): Either<Failure, Long>
 //
-//    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Map<Long,Long>>
+    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Map<Long,Long>>
 //
-//    suspend fun deleteTagFromCard(cardId : Long, tagId : Long)
+    suspend fun deleteTagFromCard(cardId : Long, tagId : Long): Either<Failure, Int>
 
 }

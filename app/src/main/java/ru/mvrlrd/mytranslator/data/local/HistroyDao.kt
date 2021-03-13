@@ -15,7 +15,7 @@ interface HistoryDao {
     suspend fun insertTag(tag: GroupTag): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertCardTagCrossRef(cardTagCrossRef: CardTagCrossRef)
+    suspend fun insertCardTagCrossRef(cardTagCrossRef: CardTagCrossRef): Map<Long,Long>
 
 
     @Query("DELETE FROM searching_history")

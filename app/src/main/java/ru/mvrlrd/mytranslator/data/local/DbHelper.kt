@@ -4,6 +4,7 @@ import retrofit2.Response
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.functional.Either
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
@@ -21,20 +22,25 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
     override suspend fun deleteCardFromDb(id: Long): Either<Failure, Int> {
         return Either.Right(historyDao.delete(id))
     }
-//
-//    override suspend fun assignTagToCard(
-//        cardId: Long,
-//        tagId: Long
-//    ): Either<Failure, Map<Long, Long>> {
-//        return Either.Right(historyDao.)
-//    }
-//
-//    override suspend fun deleteTagFromCard(
-//        cardId: Long,
-//        tagId: Long
-//    ) {
-//         Either.Right(historyDao.removeAssignedTag(cardId, tagId))
-//    }
+
+    override suspend fun getAllTags(): Either<Failure, List<GroupTag>> {
+        return Either.Right(historyDao.getAllTags())
+    }
+
+
+    override suspend fun assignTagToCard(
+        cardId: Long,
+        tagId: Long
+    ): Either<Failure, Map<Long, Long>> {
+        return Either.Right(historyDao.insertCardTagCrossRef(CardTagCrossRef(cardId,tagId)))
+    }
+
+    override suspend fun deleteTagFromCard(
+        cardId: Long,
+        tagId: Long
+    ): Either<Failure, Int> {
+        return Either.Right(historyDao.removeAssignedTag(cardId, tagId))
+    }
 //
 //    override suspend fun insertNewTag(tag: String): Either<Failure, Long> {
 //        return Either.Right(historyDao.insertTag(GroupTag(0,tag = tag, isChecked = false)))

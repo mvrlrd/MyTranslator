@@ -56,7 +56,7 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         val cancelButton: Button = root.findViewById(R.id.cancel_button)
         val okButton: Button = root.findViewById(R.id.ok_button)
 
-        tagDialogViewModel.getAllTagsForCurrentCard(currentCardId)
+//        tagDialogViewModel.getAllTagsForCurrentCard(currentCardId)
 
         tagDialogViewModel.liveTagsOfCurrentCard.observe(viewLifecycleOwner, Observer { tags ->
 //            for(t in tags){
@@ -81,10 +81,10 @@ allTagsForCurrentCard = tags as MutableList<GroupTag>
      private fun saveTag(cardId: Long) {
          for (tag in tagDialogViewModel.liveAllTagList.value!!) {
              Log.e(TAG,"what about check  ${tag.tag}  ${tag.isChecked}")
-             if (tag.isChecked) {tagDialogViewModel.addTagToCurrentCard(cardId, tag.tagId)}
-             if ((!tag.isChecked)&&(allTagsForCurrentCard.contains(tag))){
-                 tagDialogViewModel.deleteTagFromCard(cardId,tag.tagId)
-             }
+//             if (tag.isChecked) {tagDialogViewModel.addTagToCurrentCard(cardId, tag.tagId)}
+//             if ((!tag.isChecked)&&(allTagsForCurrentCard.contains(tag))){
+//                 tagDialogViewModel.deleteTagFromCard(cardId,tag.tagId)
+//             }
 
          }
     }

@@ -1,76 +1,92 @@
 package ru.mvrlrd.mytranslator.ui.fragments.tag_dialog
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import okhttp3.internal.cacheGet
-import ru.mvrlrd.mytranslator.data.local.HistoryDao
+import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
+import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.domain.use_cases.tags.AddererTagToCard
+import ru.mvrlrd.mytranslator.domain.use_cases.tags.RemoverTagFromCard
+import ru.mvrlrd.mytranslator.domain.use_cases.tags.TagsLoader
+import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class TagDialogViewModel(
-    private val historyDao: HistoryDao
-) : ViewModel() {
-    var currentId: Long = 0
-    var _tagsOfCurrentCard = MutableLiveData<List<GroupTag>>()
+    apiHelper: ApiHelper,
+    dbHelper: DbHelper
+) : BaseViewModel() {
+
+    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+    private val tagsLoader: TagsLoader = TagsLoader(searchResultRepository)
+    private val addererTagToCard : AddererTagToCard = AddererTagToCard(searchResultRepository)
+    private val removerTagFromCard: RemoverTagFromCard = RemoverTagFromCard(searchResultRepository)
+
+    private var _tagsOfCurrentCard = MutableLiveData<List<GroupTag>>()
     val liveTagsOfCurrentCard : LiveData<List<GroupTag>> = _tagsOfCurrentCard
 
-    var _allTagList = MutableLiveData<List<GroupTag>>()
+    private var _allTagList = MutableLiveData<List<GroupTag>>()
     val liveAllTagList : LiveData<List<GroupTag>> = _allTagList
 
     init {
         getAllTags()
     }
 
-
-        fun loadTagToDataBase(tagText : String){
-            val groupTag = GroupTag(0,tagText, false)
-            viewModelScope.launch {
-                for (i in historyDao.getAllTags()){
-                    if (i == groupTag){
-                        _allTagList.value = historyDao.getAllTags()
-                        cancel()
-                    }
-                }
-                historyDao.insertTag(GroupTag(0,tagText, false))
-                getAllTags()
-            }
-    }
+//
+//        fun loadTagToDataBase(tagText : String){
+//            val groupTag = GroupTag(0,tagText, false)
+//            viewModelScope.launch {
+//                for (i in historyDao.getAllTags()){
+//                    if (i == groupTag){
+//                        _allTagList.value = historyDao.getAllTags()
+//                        cancel()
+//                    }
+//                }
+//                historyDao.insertTag(GroupTag(0,tagText, false))
+//                getAllTags()
+//            }
+//    }
 
     private fun getAllTags(){
-        viewModelScope.launch {
-            _allTagList.value = historyDao.getAllTags()
+        viewModelScope.launch  {
+
+            tagsLoader(Unit) {
+                it.fold(
+                    ::handleFailure,
+                    ::mapCardForRecycler
+                )
+            }
         }
+    }
+    private fun mapCardForRecycler(allTagsList: List<GroupTag>) {
+        _allTagList.value = allTagsList
     }
 
     fun addTagToCurrentCard(idCard: Long, idTag:Long){
         viewModelScope.launch {
-            historyDao.insertCardTagCrossRef(CardTagCrossRef(idCard,idTag))
+            addererTagToCard(arrayOf(idCard, idTag))
         }
     }
-
-
-    fun getAllCrossRef(){
-        viewModelScope.launch {
-            historyDao.getAllCrossRef()
-        }
-    }
-
+//
+//
+//    fun getAllCrossRef(){
+//        viewModelScope.launch {
+//            historyDao.getAllCrossRef()
+//        }
+//    }
+//
     fun deleteTagFromCard(idCard: Long, idTag:Long){
         viewModelScope.launch {
-            historyDao.removeAssignedTag(idCard,idTag)
+            removerTagFromCard(arrayOf(idCard,idTag))
         }
     }
-
-    fun getAllTagsForCurrentCard(currentCardId : Long){
-        viewModelScope.launch {
-            historyDao.getTagsOfCard(currentCardId).tags.let {_tagsOfCurrentCard.value = it}
-        }
-    }
+//
+//    fun getAllTagsForCurrentCard(currentCardId : Long){
+//        viewModelScope.launch {
+//            historyDao.getTagsOfCard(currentCardId).tags.let {_tagsOfCurrentCard.value = it}
+//        }
+//    }
 
 
 }

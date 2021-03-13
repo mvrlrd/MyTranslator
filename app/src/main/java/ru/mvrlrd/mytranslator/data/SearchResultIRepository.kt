@@ -4,11 +4,11 @@ import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.IRepository
 import ru.mvrlrd.mytranslator.functional.Either
-import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 
 class SearchResultIRepository(
     private val remoteDataSource: RemoteDataSource,
@@ -34,22 +34,21 @@ class SearchResultIRepository(
     override suspend fun getAllTags(): Either<Failure, List<GroupTag>> {
         return localDataSource.getAllTags()
     }
-//
-//    override suspend fun assignTagToCard(
-//        cardId: Long,
-//        tagId: Long
-//    ): Either<Failure, Map<Long, Long>> {
-//        return localDataSource.assignTagToCard(cardId,tagId)
-//    }
-//
+
     override suspend fun addNewTagToDb(tag: String): Either<Failure, Long> {
         return localDataSource.insertNewTagToDb(tag)
     }
-//
-//    override suspend fun deleteTagFromCard(
-//        cardId: Long,
-//        tagId: Long
-//    ) {
-//         localDataSource.deleteTagFromCard(cardId, tagId)
-//    }
+
+    override suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long> {
+        return localDataSource.assignTagToCard(cardId, tagId)
+    }
+
+    override suspend fun deleteTagFromCard(cardId: Long, tagId: Long): Either<Failure, Int> {
+        return localDataSource.deleteTagFromCard(cardId, tagId)
+    }
+
+    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag> {
+        return localDataSource.getTagsOfCurrentCard(cardId)
+    }
+
 }

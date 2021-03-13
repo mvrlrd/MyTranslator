@@ -32,7 +32,7 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
     override suspend fun assignTagToCard(
         cardId: Long,
         tagId: Long
-    ): Either<Failure, Map<Long, Long>> {
+    ): Either<Failure,  Long> {
         return Either.Right(historyDao.insertCardTagCrossRef(CardTagCrossRef(cardId,tagId)))
     }
 

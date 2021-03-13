@@ -15,7 +15,7 @@ interface LocalDataSource {
 
     suspend fun getAllTags() : Either<Failure, List<GroupTag>>
 
-    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Map<Long,Long>>
+    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Long>
 
     suspend fun deleteTagFromCard(cardId : Long, tagId : Long) : Either<Failure, Int>
 

@@ -35,10 +35,6 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
         savedInstanceState: Bundle?
     ): View? {
         val root : View = inflater.inflate(R.layout.dialog_fragment_tag, container,true  )
-//        tagDialogViewModel.loadTagToDataBase("hobbies")
-//        tagDialogViewModel.loadTagToDataBase("football")
-//        tagDialogViewModel.loadTagToDataBase("verbs")
-//        tagDialogViewModel.loadTagToDataBase("music")
 
 
         val bundle = arguments
@@ -86,17 +82,13 @@ allTagsForCurrentCard = tags as MutableList<GroupTag>
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
         tagDialogViewModel.liveAllTagList.observe(viewLifecycleOwner, Observer { tags ->
-            for(tag in tags){
+            for (tag in tags) {
                 tag.isChecked = allTagsForCurrentCard.contains(tag)
             }
-
             handleTagList(tags as MutableList<GroupTag>)
         })
-
+        //for the first loading
         if (tagDialogViewModel.liveAllTagList.value != null) {
             handleTagList(tagDialogViewModel.liveAllTagList.value!!)
         }
@@ -104,8 +96,8 @@ allTagsForCurrentCard = tags as MutableList<GroupTag>
 
     private fun handleTagList(allTags: List<GroupTag>) {
         tags_recyclerview.apply {
-            layoutManager =  LinearLayoutManager(this.context)
-            adapter = tagAdapter.apply { collection = allTags as MutableList<GroupTag> }
+            layoutManager = LinearLayoutManager(this.context)
+            adapter = tagAdapter.apply { allTagList = allTags as MutableList<GroupTag> }
         }
     }
 

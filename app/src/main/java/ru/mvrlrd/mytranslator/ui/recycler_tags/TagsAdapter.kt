@@ -14,7 +14,7 @@ import kotlin.properties.Delegates
 class TagsAdapter(private val onItemChecked: OnItemChecked) :
         RecyclerView.Adapter<TagsAdapter.TagsHolder>(){
 
-        var collection: MutableList<GroupTag> by
+        var allTagList: MutableList<GroupTag> by
         Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagsHolder {
@@ -27,30 +27,30 @@ class TagsAdapter(private val onItemChecked: OnItemChecked) :
 // передаю список нажатых чекбоксов в транслэйшн фрагмент. надо будет связать эти тэги со словом через реф кросс
 
     override fun onBindViewHolder(holder: TagsHolder, position: Int) {
-        holder.bind(collection[position])
-        holder.itemView.tagCheckbox.setChecked(collection[position].isChecked)
+        holder.bind(allTagList[position])
+        holder.itemView.tagCheckbox.setChecked(allTagList[position].isChecked)
 
         ////////
 
         holder.itemView.tagCheckbox.setOnClickListener { view ->
             if (view is CheckBox) {
-                if ((view.isChecked)&&(!onItemChecked._checkedList.contains(collection[position]))) {
+                if ((view.isChecked)&&(!onItemChecked._checkedList.contains(allTagList[position]))) {
                     println("+++++++++++++++++C H E C K E D ! ! !++++++++++++++++++++${view.text}")
-                    onItemChecked._checkedList.add(collection[position])
+                    onItemChecked._checkedList.add(allTagList[position])
 
                 } else {
-                    if ((onItemChecked._checkedList.contains(collection[position]))&&(!view.isChecked)) {
+                    if ((onItemChecked._checkedList.contains(allTagList[position]))&&(!view.isChecked)) {
                         println("+++++++++++++++++UN C H E C K E D ! ! !++++++++++++++++++++${view.text}")
-                        onItemChecked._checkedList.remove(collection[position])
+                        onItemChecked._checkedList.remove(allTagList[position])
                     }
                 }
-                collection[position].isChecked = view.isChecked
+                allTagList[position].isChecked = view.isChecked
             }
         }
     }
 
 
-        override fun getItemCount() = collection.size
+        override fun getItemCount() = allTagList.size
 
 
         class TagsHolder(itemView: View) :

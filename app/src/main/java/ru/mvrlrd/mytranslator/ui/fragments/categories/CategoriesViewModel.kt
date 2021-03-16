@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,8 @@ import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.tags.*
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
+
+private val TAG = "CatViewModel"
 class CategoriesViewModel(
     apiHelper: ApiHelper,
     dbHelper: DbHelper
@@ -31,25 +34,28 @@ class CategoriesViewModel(
 //    private var _tagsOfCurrentCard = MutableLiveData<List<GroupTag>>()
 //    val liveTagsOfCurrentCard : LiveData<List<GroupTag>> = _tagsOfCurrentCard
 
-    @Volatile
+
     private var _allCategoryList = MutableLiveData<List<Category>>()
     val liveAllCategoriesList : LiveData<List<Category>> = _allCategoryList
 
     init {
-        getAllCategories()
+//        getAllCategories()
     }
 
 
-    fun addNewCategory(tagText: String, icon: String) {
+     suspend fun addNewCategory(tagText: String, icon: String) {
         val groupTag = Category(0, tagText, icon)
 
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {
+                val job: Job =
                 viewModelScope.launch {
                     newCategoryAdderer(arrayOf(tagText,icon))
-                    getAllCategories()
                 }
+                Log.e(TAG,"added new category to DB")
+                job.join()
+                getAllCategories()
             }
             _allCategoryList.value!!.contains(groupTag) -> {
                 return
@@ -59,18 +65,21 @@ class CategoriesViewModel(
     }
 
 
-    private fun getAllCategories(){
+     fun getAllCategories(){
         viewModelScope.launch  {
+            Log.e(TAG,"get all cates starts")
             categoriesLoader(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::mapCardForRecycler
                 )
             }
+
         }
     }
     private fun mapCardForRecycler(allCategoriesList: List<Category>) {
         _allCategoryList.value = allCategoriesList
+        Log.e(TAG,"map cats to livedata")
     }
 
     fun addTagToCurrentCard(idCard: Long, idTag:Long){

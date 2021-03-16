@@ -1,11 +1,14 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.textfield.TextInputEditText
@@ -23,12 +26,14 @@ private const val ARG_PARAM2 = "param2"
  * Use the [AddingCategoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AddingCategoryFragment : Fragment() {
+class AddingCategoryFragment : DialogFragment() {
 
     private val addNewCategoryViewModel: AddNewCategoryViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setStyle(STYLE_NO_FRAME,android.R.style.Theme_Holo_Light)
 
     }
 
@@ -48,23 +53,17 @@ class AddingCategoryFragment : Fragment() {
 
         addNewButton.setOnClickListener {
 //            clearAllCategories()
-            Log.e("AddCategoryFr", nameTextField.text.toString())
-            addNewCategory(nameTextField.text.toString(), "d")
-          onBackPressed2()
+            sendResult(nameTextField.text.toString())
+//            addNewCategory(nameTextField.text.toString(), "d")
+//            dismiss()
 
-//            val transaction = activity?.supportFragmentManager?.beginTransaction()
-//            transaction?.replace(R.id.nav_host_fragment_container, )
-//            transaction?.disallowAddToBackStack()
-//            transaction?.commit()
+
 
         }
         // Inflate the layout for this fragment
         return root
     }
-    fun onBackPressed2() {
-//activity?.onBackPressed()
 
-    }
 
     private fun addNewCategory(name: String, picName: String){
         addNewCategoryViewModel.addNewCategory(name, picName)
@@ -102,6 +101,18 @@ class AddingCategoryFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         Log.e("add category","onResume")
+    }
+
+        private fun sendResult(message: String) {
+        targetFragment ?: return
+        val intent = Intent().putExtra("message", message)
+
+        targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+//        searchingByIngredients_EditText.text?.clear()
+//        println(checkedList.toString())
+
+
+        dismiss()
     }
 
     companion object {

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_translator"
+        android:id="@+id/navigation_categories"
         android:icon="@drawable/g_translator_selector"
         android:title="@string/categories" />
 

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.tags.*
@@ -24,23 +24,23 @@ class TagDialogViewModel(
     private val newTagAdderer : NewTagAdderer = NewTagAdderer(searchResultRepository)
     private val currentCardTagsPicker : CurrentCardTagsPicker = CurrentCardTagsPicker(searchResultRepository)
 
-    private var _tagsOfCurrentCard = MutableLiveData<List<GroupTag>>()
-    val liveTagsOfCurrentCard : LiveData<List<GroupTag>> = _tagsOfCurrentCard
+    private var _tagsOfCurrentCard = MutableLiveData<List<Category>>()
+    val liveTagsOfCurrentCard : LiveData<List<Category>> = _tagsOfCurrentCard
 
-    private var _allTagList = MutableLiveData<List<GroupTag>>()
-    val liveAllTagList : LiveData<List<GroupTag>> = _allTagList
+    private var _allTagList = MutableLiveData<List<Category>>()
+    val liveAllTagList : LiveData<List<Category>> = _allTagList
 
     init {
         getAllTags()
     }
 
     fun loadTagToDataBase(tagText: String) {
-        val groupTag = GroupTag(0, tagText, false)
+        val groupTag = Category(0, tagText, "false")
         when {
             _allTagList.value.isNullOrEmpty()
                     || !_allTagList.value!!.contains(groupTag) -> {
                 viewModelScope.launch {
-                    newTagAdderer(tagText)
+                    newTagAdderer(arrayOf(tagText,"sdf"))
                     getAllTags()
                 }
             }
@@ -60,7 +60,7 @@ class TagDialogViewModel(
             }
         }
     }
-    private fun mapCardForRecycler(allTagsList: List<GroupTag>) {
+    private fun mapCardForRecycler(allTagsList: List<Category>) {
         _allTagList.value = allTagsList
     }
 

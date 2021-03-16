@@ -1,7 +1,7 @@
 package ru.mvrlrd.mytranslator.data.local
 
 import androidx.room.*
-import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
@@ -12,7 +12,7 @@ interface HistoryDao {
     suspend fun insert(cardOfWord: CardOfWord?): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewTagToDb(tag: GroupTag): Long
+    suspend fun insertNewTagToDb(tag: Category): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCardTagCrossRef(cardTagCrossRef: CardTagCrossRef):Long
@@ -22,7 +22,7 @@ interface HistoryDao {
     suspend fun clear()
 
     @Query("DELETE FROM group_tags")
-    suspend fun clearTags()
+    suspend fun clearCategories():Int
 
     @Query("DELETE FROM searching_history WHERE id =:id")
     suspend fun delete(id: Long): Int
@@ -31,7 +31,7 @@ interface HistoryDao {
     suspend fun getAll(): List<CardOfWord>
 
     @Query("SELECT * FROM group_tags")
-    suspend fun getAllTags(): List<GroupTag>
+    suspend fun getAllTags(): List<Category>
 
     @Query("SELECT * FROM searching_history WHERE text=:word")
     suspend fun getCertainWord(word: String): CardOfWord
@@ -43,8 +43,8 @@ interface HistoryDao {
 
 
 
-    @Query("DELETE  FROM cardtagcrossref WHERE id =:id AND tagId =:tagID")
-    suspend fun removeAssignedTag(id : Long, tagID : Long) : Int
+    @Query("DELETE  FROM cardtagcrossref WHERE id =:id AND categoryId =:categoryId")
+    suspend fun removeAssignedTag(id : Long, categoryId : Long) : Int
 
 
 
@@ -53,7 +53,7 @@ interface HistoryDao {
     suspend fun getTagsOfCard(id: Long): CardWithTag
 
     @Transaction
-    @Query("SELECT * FROM searching_history WHERE id = :tagId")
-    suspend fun getCardsOfTag(tagId: Long): List<CardWithTag>
+    @Query("SELECT * FROM searching_history WHERE id = :categoryId")
+    suspend fun getCardsOfTag(categoryId: Long): List<CardWithTag>
 
 }

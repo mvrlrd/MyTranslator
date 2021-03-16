@@ -2,10 +2,10 @@ package ru.mvrlrd.mytranslator.data.local.entity.relations
 
 import androidx.room.Entity
 
-@Entity(primaryKeys = ["id", "tagId"])
+@Entity(primaryKeys = ["id", "categoryId"])
 data class CardTagCrossRef(
     val id: Long,
-    val tagId: Long
+    val categoryId: Long
 )
 
 

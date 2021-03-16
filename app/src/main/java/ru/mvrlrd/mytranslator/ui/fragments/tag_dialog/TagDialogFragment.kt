@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.dialog_fragment_tag.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.recycler_tags.OnItemChecked
 import ru.mvrlrd.mytranslator.ui.recycler_tags.TagsAdapter
 
@@ -22,11 +22,11 @@ private const val TAG = "TagFragment"
 
 class TagDialogFragment : DialogFragment(), OnItemChecked {
 
-    override var _checkedList: MutableList<GroupTag> = mutableListOf()
+    override var _checkedList: MutableList<Category> = mutableListOf()
     private val tagAdapter = TagsAdapter(this as OnItemChecked)
     private val tagDialogViewModel: TagDialogViewModel by inject()
 
-    private var allTagsForCurrentCard: MutableList<GroupTag> = mutableListOf()
+    private var allTagsForCurrentCard: MutableList<Category> = mutableListOf()
 
 
     override fun onCreateView(
@@ -53,7 +53,7 @@ class TagDialogFragment : DialogFragment(), OnItemChecked {
 //            for(t in tags){
 //                Log.e(TAG,"$currentCardId    ${t.tag}   hey ho")
 //            }
-allTagsForCurrentCard = tags as MutableList<GroupTag>
+allTagsForCurrentCard = tags as MutableList<Category>
         })
 
 
@@ -71,7 +71,7 @@ allTagsForCurrentCard = tags as MutableList<GroupTag>
 
      private fun saveTag(cardId: Long) {
          for (tag in tagDialogViewModel.liveAllTagList.value!!) {
-             Log.e(TAG,"what about check  ${tag.tag}  ${tag.isChecked}")
+             Log.e(TAG,"what about check  ${tag.name}  ${tag.name}")
 //             if (tag.isChecked) {tagDialogViewModel.addTagToCurrentCard(cardId, tag.tagId)}
 //             if ((!tag.isChecked)&&(allTagsForCurrentCard.contains(tag))){
 //                 tagDialogViewModel.deleteTagFromCard(cardId,tag.tagId)
@@ -84,9 +84,9 @@ allTagsForCurrentCard = tags as MutableList<GroupTag>
         super.onViewCreated(view, savedInstanceState)
         tagDialogViewModel.liveAllTagList.observe(viewLifecycleOwner, Observer { tags ->
             for (tag in tags) {
-                tag.isChecked = allTagsForCurrentCard.contains(tag)
+//                tag.isChecked = allTagsForCurrentCard.contains(tag)
             }
-            handleTagList(tags as MutableList<GroupTag>)
+            handleTagList(tags as MutableList<Category>)
         })
         //for the first loading
         if (tagDialogViewModel.liveAllTagList.value != null) {
@@ -94,10 +94,10 @@ allTagsForCurrentCard = tags as MutableList<GroupTag>
         }
     }
 
-    private fun handleTagList(allTags: List<GroupTag>) {
+    private fun handleTagList(allTags: List<Category>) {
         tags_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)
-            adapter = tagAdapter.apply { allTagList = allTags as MutableList<GroupTag> }
+            adapter = tagAdapter.apply { allTagList = allTags as MutableList<Category> }
         }
     }
 

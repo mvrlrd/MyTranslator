@@ -11,6 +11,10 @@ import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.ui.fragments.translation.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
+import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddNewCategoryViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
+import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogViewModel
@@ -37,6 +41,16 @@ val appModule2 = module {
             get(), get()
         )
     }
+    single{
+        CategoriesAdapter()
+    }
+
+    single { AddingCategoryFragment() }
+    viewModel { AddNewCategoryViewModel(get(),get()) }
+
+    viewModel { CategoriesViewModel(get(),get()) }
+
+
     single { androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }
     single { TagDialogFragment() }
 

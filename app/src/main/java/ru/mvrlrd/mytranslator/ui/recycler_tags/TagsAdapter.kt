@@ -7,14 +7,14 @@ import android.widget.CheckBox
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recycler_tag_item.view.*
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
+import ru.mvrlrd.mytranslator.data.local.entity.Category
 import kotlin.properties.Delegates
 
 
 class TagsAdapter(private val onItemChecked: OnItemChecked) :
         RecyclerView.Adapter<TagsAdapter.TagsHolder>(){
 
-        var allTagList: MutableList<GroupTag> by
+        var allTagList: MutableList<Category> by
         Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TagsHolder {
@@ -28,7 +28,7 @@ class TagsAdapter(private val onItemChecked: OnItemChecked) :
 
     override fun onBindViewHolder(holder: TagsHolder, position: Int) {
         holder.bind(allTagList[position])
-        holder.itemView.tagCheckbox.setChecked(allTagList[position].isChecked)
+//        holder.itemView.tagCheckbox.setChecked(allTagList[position].isChecked)
 
         ////////
 
@@ -44,7 +44,7 @@ class TagsAdapter(private val onItemChecked: OnItemChecked) :
                         onItemChecked._checkedList.remove(allTagList[position])
                     }
                 }
-                allTagList[position].isChecked = view.isChecked
+//                allTagList[position].isChecked = view.isChecked
             }
         }
     }
@@ -57,8 +57,8 @@ class TagsAdapter(private val onItemChecked: OnItemChecked) :
             RecyclerView.ViewHolder(itemView) {
 
 
-            fun bind(tag: GroupTag) {
-                itemView.tagCheckbox.text = tag.tag
+            fun bind(tag: Category) {
+                itemView.tagCheckbox.text = tag.name
 
 
             }

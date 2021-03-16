@@ -1,20 +1,21 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories
+package ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog
 
+import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.joinAll
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.domain.use_cases.tags.*
+import ru.mvrlrd.mytranslator.domain.use_cases.tags.ClearCategories
+import ru.mvrlrd.mytranslator.domain.use_cases.tags.NewTagAdderer
+import ru.mvrlrd.mytranslator.domain.use_cases.tags.TagsLoader
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-class CategoriesViewModel(
+class AddNewCategoryViewModel(
     apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
@@ -23,6 +24,8 @@ class CategoriesViewModel(
     private val categoriesLoader: TagsLoader = TagsLoader(searchResultRepository)
 //    private val addererTagToCard : AddererTagToCard = AddererTagToCard(searchResultRepository)
 //    private val removerTagFromCard: RemoverTagFromCard = RemoverTagFromCard(searchResultRepository)
+
+    private val clearerCategories : ClearCategories = ClearCategories(searchResultRepository)
 
 
     private val newCategoryAdderer : NewTagAdderer = NewTagAdderer(searchResultRepository)
@@ -56,6 +59,12 @@ class CategoriesViewModel(
             }
         }
 
+    }
+
+    fun clearCategories(){
+        viewModelScope.launch {
+            clearerCategories(Unit)
+        }
     }
 
 
@@ -92,13 +101,10 @@ class CategoriesViewModel(
 //                    ::handleFailure,
 //                    ::handleCardWithTag
 //                )
-            }
         }
     }
+}
 
-    private fun handleCardWithTag(cardWithTag: CardWithTag){
+private fun handleCardWithTag(cardWithTag: CardWithTag){
 //        cardWithTag.tags.let { _tagsOfCurrentCard.value = it }
-    }
-
-
-
+}

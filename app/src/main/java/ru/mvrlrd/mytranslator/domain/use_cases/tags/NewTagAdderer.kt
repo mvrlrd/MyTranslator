@@ -6,9 +6,9 @@ import ru.mvrlrd.mytranslator.domain.use_cases.UseCase
 import ru.mvrlrd.mytranslator.functional.Either
 
 class NewTagAdderer(private val searchResultRepository: IRepository) :
-    UseCase<Long, String>() {
+    UseCase<Long, Array<String>>() {
 
-    override suspend fun run(params: String): Either<Failure, Long> {
-        return searchResultRepository.addNewTagToDb(params)
+    override suspend fun run(params: Array<String>): Either<Failure, Long> {
+        return searchResultRepository.addNewTagToDb(params[0],params[1])
     }
 }

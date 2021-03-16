@@ -14,7 +14,6 @@ import kotlinx.android.synthetic.main.dialog_fragment_tag.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.GroupTag
-import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.recycler_tags.OnItemChecked
 import ru.mvrlrd.mytranslator.ui.recycler_tags.TagsAdapter
 

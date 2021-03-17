@@ -43,25 +43,30 @@ class CategoriesViewModel(
     }
 
 
-     suspend fun addNewCategory(tagText: String, icon: String) {
+     fun addNewCategory(tagText: String, icon: String) {
         val groupTag = Category(0, tagText, icon)
-
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {
-                val job: Job =
                 viewModelScope.launch {
-                    newCategoryAdderer(arrayOf(tagText,icon))
+                    newCategoryAdderer(arrayOf(tagText,icon)){
+                        it.fold(
+                            ::handleFailure,
+                            ::handleAdding
+                        )
+                    }
                 }
-                Log.e(TAG,"added new category to DB")
-                job.join()
-                getAllCategories()
             }
             _allCategoryList.value!!.contains(groupTag) -> {
                 return
             }
         }
 
+    }
+
+    private fun handleAdding(l:Long){
+        Log.e(TAG,"${l}      added")
+        getAllCategories()
     }
 
 

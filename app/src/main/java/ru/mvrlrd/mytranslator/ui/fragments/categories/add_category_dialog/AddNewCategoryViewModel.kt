@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog
 
-import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -34,7 +33,7 @@ class AddNewCategoryViewModel(
 //    private var _tagsOfCurrentCard = MutableLiveData<List<GroupTag>>()
 //    val liveTagsOfCurrentCard : LiveData<List<GroupTag>> = _tagsOfCurrentCard
 
-    @Volatile
+
     private var _allCategoryList = MutableLiveData<List<Category>>()
     val liveAllCategoriesList : LiveData<List<Category>> = _allCategoryList
 

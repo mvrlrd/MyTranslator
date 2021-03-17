@@ -8,27 +8,35 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.categories_fragment.*
+import kotlinx.android.synthetic.main.fragment_adding_category.*
 import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
 
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
 
 /**
  * A simple [Fragment] subclass.
  * Use the [AddingCategoryFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class AddingCategoryFragment : DialogFragment() {
+class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val addNewCategoryViewModel: AddNewCategoryViewModel by inject()
+    protected val iconsAdapter : IconsAdapter by inject { parametersOf(this)}
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,19 +59,26 @@ class AddingCategoryFragment : DialogFragment() {
 //        }
 
 
+
+
         addNewButton.setOnClickListener {
-//            clearAllCategories()
             sendResult(nameTextField.text.toString())
-//            addNewCategory(nameTextField.text.toString(), "d")
-//            dismiss()
-
-
-
+//            clearAllCategories()
+            dismiss()
         }
         // Inflate the layout for this fragment
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        icons_of_categories_recyclerview.apply {
+            layoutManager = GridLayoutManager(this.context,3)
+            adapter = iconsAdapter
+        }
+
+    }
 
     private fun addNewCategory(name: String, picName: String){
         addNewCategoryViewModel.addNewCategory(name, picName)
@@ -106,14 +121,13 @@ class AddingCategoryFragment : DialogFragment() {
         private fun sendResult(message: String) {
         targetFragment ?: return
         val intent = Intent().putExtra("message", message)
-
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
-//        searchingByIngredients_EditText.text?.clear()
-//        println(checkedList.toString())
-
-
-        dismiss()
     }
+
+    override fun onIconClicked(id: Int) {
+        Log.e("add category","$id   was chosen ")
+    }
+
 
     companion object {
         /**

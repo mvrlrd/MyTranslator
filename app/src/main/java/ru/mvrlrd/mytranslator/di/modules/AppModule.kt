@@ -14,6 +14,7 @@ import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddNewCategoryViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesViewModel
@@ -25,6 +26,7 @@ val appModule = module {
 }
 
 val appModule2 = module {
+    factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -44,6 +46,7 @@ val appModule2 = module {
     single{
         CategoriesAdapter()
     }
+//    single { IconsAdapter(get()) }
 
     single { AddingCategoryFragment() }
     viewModel { AddNewCategoryViewModel(get(),get()) }

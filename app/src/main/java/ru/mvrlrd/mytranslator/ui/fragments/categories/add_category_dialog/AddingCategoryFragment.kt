@@ -35,7 +35,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycl
 class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val addNewCategoryViewModel: AddNewCategoryViewModel by inject()
-    protected val iconsAdapter : IconsAdapter by inject { parametersOf(this)}
+    protected val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

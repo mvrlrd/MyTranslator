@@ -12,7 +12,7 @@ import ru.mvrlrd.mytranslator.R
 
 private val TAG = "IconsAdapter"
 
-class IconsAdapter(val listener: IconAdapterListener) :
+class IconsAdapter(private val listener: IconAdapterListener) :
     RecyclerView.Adapter<IconsAdapter.IconHolder>()
 {
      var collection = listOf(
@@ -58,22 +58,24 @@ class IconsAdapter(val listener: IconAdapterListener) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
 
-        fun bind(id : Int) {
+        fun bind(idOfPic: Int) {
 
-            itemView.iconView.load(id)
-            itemView.setOnClickListener {
-                listener.onIconClicked(id)
-                Log.e(TAG," inside bind")
+//            itemView.iconView.load(id)
+            itemView.iconImageView.load(idOfPic)
+            itemView.iconImageView.setOnClickListener {
+                Log.e(TAG, " ${idOfPic}")
+                    listener.onIconClicked(idOfPic)
+
+
             }
 
-        }
 
+        }
     }
 
+        interface IconAdapterListener {
+            fun onIconClicked(id: Int)
+        }
 
-interface IconAdapterListener{
-    fun onIconClicked(id: Int)
-}
 
-
-}
+    }

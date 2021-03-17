@@ -5,8 +5,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/iconView"
+    <ImageView
+        android:id="@+id/iconImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:clickable="true"

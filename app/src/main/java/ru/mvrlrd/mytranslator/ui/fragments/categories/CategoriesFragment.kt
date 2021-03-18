@@ -97,8 +97,13 @@ class CategoriesFragment : Fragment() {
             return
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                categoriesViewModel.addNewCategory(it,"oo")
+            data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
+                categoriesViewModel.addNewCategory(it[0],it[1])
+
+                Log.e(
+                    TAG,
+                    "resultCode = ${it[0]}   it is a new category in db with icon ${it[1]}"
+                )
             }
         }
     }

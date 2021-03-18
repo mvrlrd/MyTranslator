@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import kotlinx.android.synthetic.main.category_item.view.*
+import kotlinx.android.synthetic.main.icon_item.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import kotlin.properties.Delegates
@@ -39,8 +41,9 @@ class CategoriesAdapter :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
 
-        fun bind(str : Category) {
-            itemView.textViewItem.text = str.name
+        fun bind(category : Category) {
+            itemView.textViewItem.text = category.name
+            itemView.categoryIcon.load(category.icon.toInt())
 
         }
 

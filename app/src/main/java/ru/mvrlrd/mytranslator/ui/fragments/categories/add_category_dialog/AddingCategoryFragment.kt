@@ -36,6 +36,7 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
 
     private val addNewCategoryViewModel: AddNewCategoryViewModel by inject()
     protected val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
+    private var iconId: String =""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +63,7 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
 
 
         addNewButton.setOnClickListener {
-            sendResult(nameTextField.text.toString())
+            sendResult(nameTextField.text.toString(), iconId)
 //            clearAllCategories()
             dismiss()
         }
@@ -118,14 +119,15 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
         Log.e("add category","onResume")
     }
 
-        private fun sendResult(message: String) {
+        private fun sendResult(message: String, id: String) {
         targetFragment ?: return
-        val intent = Intent().putExtra("message", message)
+        val intent = Intent().putExtra("message", arrayOf(message,id))
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
     override fun onIconClicked(id: Int) {
         Log.e("add category","$id   was chosen ")
+        iconId = id.toString()
     }
 
 

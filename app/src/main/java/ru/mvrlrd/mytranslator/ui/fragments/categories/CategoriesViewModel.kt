@@ -43,13 +43,13 @@ class CategoriesViewModel(
     }
 
 
-     fun addNewCategory(tagText: String, icon: String) {
-        val groupTag = Category(0, tagText, icon)
+     fun addNewCategory(name: String, icon: String) {
+        val groupTag = Category(0, name, icon)
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {
                 viewModelScope.launch {
-                    newCategoryAdderer(arrayOf(tagText,icon)){
+                    newCategoryAdderer(arrayOf(name,icon)){
                         it.fold(
                             ::handleFailure,
                             ::handleAdding

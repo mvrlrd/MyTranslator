@@ -26,9 +26,9 @@ class CategoriesViewModel(
     private val categoriesLoader: TagsLoader = TagsLoader(searchResultRepository)
 //    private val addererTagToCard : AddererTagToCard = AddererTagToCard(searchResultRepository)
 //    private val removerTagFromCard: RemoverTagFromCard = RemoverTagFromCard(searchResultRepository)
+private val clearerCategories : ClearCategories = ClearCategories(searchResultRepository)
 
-
-    private val newCategoryAdderer : NewTagAdderer = NewTagAdderer(searchResultRepository)
+    private val newCategoryAdderer: NewTagAdderer = NewTagAdderer(searchResultRepository)
 //    private val currentCardTagsPicker : CurrentCardTagsPicker = CurrentCardTagsPicker(searchResultRepository)
 
 //    private var _tagsOfCurrentCard = MutableLiveData<List<GroupTag>>()
@@ -36,20 +36,20 @@ class CategoriesViewModel(
 
 
     private var _allCategoryList = MutableLiveData<List<Category>>()
-    val liveAllCategoriesList : LiveData<List<Category>> = _allCategoryList
+    val liveAllCategoriesList: LiveData<List<Category>> = _allCategoryList
 
     init {
 //        getAllCategories()
     }
 
 
-     fun addNewCategory(name: String, icon: String) {
+    fun addNewCategory(name: String, icon: String) {
         val groupTag = Category(0, name, icon)
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {
                 viewModelScope.launch {
-                    newCategoryAdderer(arrayOf(name,icon)){
+                    newCategoryAdderer(arrayOf(name, icon)) {
                         it.fold(
                             ::handleFailure,
                             ::handleAdding
@@ -64,51 +64,69 @@ class CategoriesViewModel(
 
     }
 
-    private fun handleAdding(l:Long){
-        Log.e(TAG,"${l}      added")
-        getAllCategories()
+    private fun handleAdding(quantity: Long) {
+        Log.e(TAG, "$quantity      added")
+        refreshCategoriesScreen()
     }
 
 
-     fun getAllCategories(){
-        viewModelScope.launch  {
-            Log.e(TAG,"get all cates starts")
+    fun refreshCategoriesScreen() {
+        viewModelScope.launch {
             categoriesLoader(Unit) {
                 it.fold(
                     ::handleFailure,
-                    ::mapCardForRecycler
+                    ::refreshListOfCategories
                 )
             }
 
         }
     }
-    private fun mapCardForRecycler(allCategoriesList: List<Category>) {
+
+    private fun refreshListOfCategories(allCategoriesList: List<Category>) {
         _allCategoryList.value = allCategoriesList
-        Log.e(TAG,"map cats to livedata")
     }
 
-    fun addTagToCurrentCard(idCard: Long, idTag:Long){
+    fun addTagToCurrentCard(idCard: Long, idTag: Long) {
         viewModelScope.launch {
 //            addererTagToCard(arrayOf(idCard, idTag))
         }
     }
 
-    fun deleteTagFromCard(idCard: Long, idTag:Long){
+    fun deleteTagFromCard(idCard: Long, idTag: Long) {
         viewModelScope.launch {
 //            removerTagFromCard(arrayOf(idCard,idTag))
         }
     }
 
-    fun getAllTagsForCurrentCard(currentCardId : Long){
+    fun getAllTagsForCurrentCard(currentCardId: Long) {
         viewModelScope.launch {
 //            currentCardTagsPicker(currentCardId) {
 //                it.fold(
 //                    ::handleFailure,
 //                    ::handleCardWithTag
 //                )
-            }
         }
     }
+
+    fun clearCategories() {
+        viewModelScope.launch {
+            clearerCategories(Unit){
+                it.fold(
+                    ::handleFailure,
+                    ::handleClearingCategories
+                )
+            }
+
+        }
+    }
+
+    private fun handleClearingCategories(numOfDeleted: Int){
+        Log.e(TAG, "$numOfDeleted were deleted from db")
+        refreshCategoriesScreen()
+    }
+}
+
+
 
     private fun handleCardWithTag(cardWithTag: CardWithTag){
 //        cardWithTag.tags.let { _tagsOfCurrentCard.value = it }

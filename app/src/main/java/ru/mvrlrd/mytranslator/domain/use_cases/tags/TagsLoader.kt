@@ -11,7 +11,6 @@ class TagsLoader(private val searchResultRepository: IRepository) :
     UseCase<List<Category>, Unit>() {
 
     override suspend fun run(params: Unit): Either<Failure, List<Category>> {
-        Log.e("TagLoader", "i am in run here too")
         return searchResultRepository.getAllTags()
     }
 }

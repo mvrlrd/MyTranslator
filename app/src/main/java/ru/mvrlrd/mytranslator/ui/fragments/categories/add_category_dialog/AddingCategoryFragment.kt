@@ -13,13 +13,16 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.categories_fragment.*
 import kotlinx.android.synthetic.main.fragment_adding_category.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.ui.activities.MainActivity
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
 
 
@@ -37,6 +40,8 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
     private val addNewCategoryViewModel: AddNewCategoryViewModel by inject()
     protected val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
     private var iconId: String =""
+
+    var lastRequest: ()-> Unit = {}
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -63,9 +68,23 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
 
 
         addNewButton.setOnClickListener {
-            sendResult(nameTextField.text.toString(), iconId)
+            val name = nameTextField.text.toString()
+            var message = ""
+            when{
+                name.isBlank() -> { message = emptyName() }
+                iconId.isEmpty()-> { message = emptyIcon() }
+            }
+            if (message.isNotBlank()){
+                showSnackBar(message, lastRequest )
+            }else{
+                sendResult(nameTextField.text.toString(), iconId)
+                dismiss()
+            }
+
+
+
 //            clearAllCategories()
-            dismiss()
+
         }
         // Inflate the layout for this fragment
         return root
@@ -80,6 +99,30 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
         }
 
     }
+
+    private fun emptyName():String{
+        lastRequest = {pri()}
+
+        return "fofo"
+    }
+
+    private fun pri(){
+        println("____________________________________+++++++++++++++++++++++++++++++++++++++")
+    }
+
+      private fun emptyIcon(): String{
+          lastRequest = {emptyIcon()}
+          return "dodo"
+      }
+
+    private fun showSnackBar(message: String, action: () -> Unit){
+        Snackbar.make(
+            this.place_for_snack_dialog_fragment,
+            message,
+            Snackbar.LENGTH_LONG
+        ).setAction("Reload") { action() }.show()
+    }
+
 
     private fun addNewCategory(name: String, picName: String){
         addNewCategoryViewModel.addNewCategory(name, picName)

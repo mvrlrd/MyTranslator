@@ -11,7 +11,7 @@ abstract class BaseViewModel : ViewModel() {
 
     protected fun handleFailure(failure: Failure) {
         _failure.value = failure
-        println("errrroroororor")
+        println("errrroroorororeeeeeeeeeeeeeeeeeeeeeeJJJJJJJJJJJ")
         println(failure.javaClass)
     }
 }

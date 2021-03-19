@@ -77,7 +77,9 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
             if (message.isNotBlank()){
                 showSnackBar(message, lastRequest )
             }else{
-                sendResult(nameTextField.text.toString(), iconId)
+                nameTextField.text?.clear()
+                sendResult(name, iconId)
+                iconId = ""
                 dismiss()
             }
 

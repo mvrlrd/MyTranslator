@@ -42,9 +42,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
 
 
     override fun onBindViewHolder(holder: IconHolder, position: Int) {
-
          holder.bind(collection[position])
-
     }
 
     override fun getItemCount() = collection.size
@@ -58,15 +56,12 @@ class IconsAdapter(private val listener: IconAdapterListener) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
 
-        fun bind(idOfPic: Int) {
-
-//            itemView.iconView.load(id)
-            itemView.iconImageView.load(idOfPic)
+        fun bind(idOfDrawable: Int) {
+            itemView.iconImageView.load(idOfDrawable)
             itemView.iconImageView.setOnClickListener {
-                Log.e(TAG, " ${idOfPic}")
-                    listener.onIconClicked(idOfPic)
-
-
+                Log.e(TAG, " $idOfDrawable")
+                    listener.onIconClicked(idOfDrawable)
+                itemView.iconImageView.isSelected = !itemView.iconImageView.isSelected
             }
 
 

@@ -5,14 +5,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:paddingLeft="40dp"
-    android:paddingTop="40dp">
+    android:paddingTop="40dp"
+    >
 
     <ImageView
         android:id="@+id/iconImageView"
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:clickable="true"
-        android:focusable="true" />
+        android:focusable="true"
+        android:background="@drawable/categories_item_selector"/>
 
 
 

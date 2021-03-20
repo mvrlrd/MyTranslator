@@ -5,12 +5,13 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.categories_fragment.*
 import org.koin.android.ext.android.inject
@@ -18,6 +19,7 @@ import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
 import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
+
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
@@ -69,6 +71,12 @@ class CategoriesFragment : Fragment() {
             layoutManager = GridLayoutManager(this.context, 3)
             adapter = catAdapter.apply { collection = allCategories as MutableList<Category> }
         }
+        categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) addNewCategoryFloatingActionButton.hide()
+                else if (dy < 0) addNewCategoryFloatingActionButton.show()
+            }
+        })
     }
 
 

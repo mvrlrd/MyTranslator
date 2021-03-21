@@ -15,9 +15,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.categories_fragment.*
 import org.koin.android.ext.android.inject
+import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.WordsInCategoryFragment
 import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
 
 
@@ -25,11 +28,11 @@ private const val TARGET_FRAGMENT_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "CategoryFragment"
 
-class CategoriesFragment : Fragment() {
+class CategoriesFragment : Fragment(), OnItemClickListener {
 
     private val categoriesViewModel : CategoriesViewModel by inject()
     private val addCategoryFragment : AddingCategoryFragment by inject()
-    private val catAdapter: CategoriesAdapter by inject()
+    private val catAdapter: CategoriesAdapter by inject { parametersOf(this) }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,19 +54,15 @@ class CategoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         categoriesViewModel.liveAllCategoriesList.observe(
             viewLifecycleOwner,
             Observer { categories ->
                 handleCategoryRecycler(categories as MutableList<Category>)
             })
-
         //for the first loading
         if (categoriesViewModel.liveAllCategoriesList.value != null) {
             handleCategoryRecycler(categoriesViewModel.liveAllCategoriesList.value!!)
         }
-
-
     }
 
     private fun handleCategoryRecycler(allCategories: List<Category>) {
@@ -78,7 +77,6 @@ class CategoriesFragment : Fragment() {
             }
         })
     }
-
 
     private fun goToAddingNewCategoryDialogFragment() {
         addCategoryFragment.show(parentFragmentManager, "tagDialog")
@@ -104,5 +102,20 @@ class CategoriesFragment : Fragment() {
                 categoriesViewModel.addNewCategory(it[0], it[1])
             }
         }
+    }
+
+    override fun onItemClick(categoryId: Long) {
+        requireActivity()
+            .supportFragmentManager
+            .beginTransaction()
+            .replace(
+                (requireView().parent as ViewGroup).id, WordsInCategoryFragment.newInstance(
+                    "new",
+                    categoryId.toString()
+                )
+            )
+            .addToBackStack(null)
+            .commit()
+
     }
 }

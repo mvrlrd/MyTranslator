@@ -7,24 +7,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.adding_category_fragment.*
 import kotlinx.android.synthetic.main.categories_fragment.*
-import kotlinx.android.synthetic.main.fragment_adding_category.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.ui.activities.MainActivity
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
 
 
@@ -58,7 +53,7 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
         savedInstanceState: Bundle?
     ): View? {
 
-        val root = inflater.inflate(R.layout.fragment_adding_category, container, false)
+        val root = inflater.inflate(R.layout.adding_category_fragment, container, false)
 
         val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField : TextInputEditText = root.findViewById(R.id.newCategoryEditText)

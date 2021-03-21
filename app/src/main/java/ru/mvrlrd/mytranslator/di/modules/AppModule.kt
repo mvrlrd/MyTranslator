@@ -11,6 +11,7 @@ import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.ui.fragments.translation.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
+import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddNewCategoryViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
@@ -27,6 +28,8 @@ val appModule = module {
 
 val appModule2 = module {
     factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
+    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener)}
+
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -43,9 +46,9 @@ val appModule2 = module {
             get(), get()
         )
     }
-    single{
-        CategoriesAdapter()
-    }
+//    single{
+//        CategoriesAdapter()
+//    }
 //    single { IconsAdapter(get()) }
 
     single { AddingCategoryFragment() }

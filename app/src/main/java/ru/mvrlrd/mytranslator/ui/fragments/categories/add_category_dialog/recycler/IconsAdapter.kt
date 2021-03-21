@@ -6,8 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
-import kotlinx.android.synthetic.main.category_item.view.*
-import kotlinx.android.synthetic.main.icon_item.view.*
+import kotlinx.android.synthetic.main.item_icon.view.*
+
 import ru.mvrlrd.mytranslator.R
 
 private val TAG = "IconsAdapter"
@@ -69,7 +69,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IconHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.icon_item, parent, false)
+            .inflate(R.layout.item_icon, parent, false)
 
 
         return IconHolder(

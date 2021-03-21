@@ -3,5 +3,5 @@
         <!-- Color when the row is selected -->
         <item android:drawable="@android:color/holo_blue_bright" android:state_pressed="false" android:state_selected="true" />
         <!-- Standard background color -->
-        <item android:drawable="@android:color/holo_purple" android:state_selected="false" />
+        <item android:drawable="@android:color/transparent" android:state_selected="false" />
     </selector>

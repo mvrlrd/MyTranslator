@@ -13,7 +13,7 @@
     android:id="@+id/categoryIcon"
     android:layout_width="50dp"
     android:layout_height="50dp"
-    android:src="@drawable/bank"
+
 
     />
 

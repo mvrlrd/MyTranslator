@@ -171,7 +171,7 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
     }
 
     override fun onIconClicked(id: Int) {
-        Log.e("add category","$id   was chosen ")
+//        Log.e("add category","$id   was chosen ")
         iconId = id.toString()
     }
 

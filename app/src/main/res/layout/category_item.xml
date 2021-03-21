@@ -13,14 +13,16 @@
     android:id="@+id/categoryIcon"
     android:layout_width="50dp"
     android:layout_height="50dp"
+    android:layout_gravity="center"
 
 
     />
 
     <TextView
         android:id="@+id/textViewItem"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
+        android:layout_gravity="center"
         android:textSize="22sp"
         />
 

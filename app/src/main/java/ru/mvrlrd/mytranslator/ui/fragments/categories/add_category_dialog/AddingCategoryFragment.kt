@@ -13,6 +13,8 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_main.*
@@ -58,7 +60,7 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
 
         val root = inflater.inflate(R.layout.fragment_adding_category, container, false)
 
-        val addNewButton: Button = root.findViewById(R.id.addNewCategoryConfirmationButton)
+        val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField : TextInputEditText = root.findViewById(R.id.newCategoryEditText)
 //        if (nameTextField.text?.length!! >0){
             addNewButton.isClickable = true
@@ -95,11 +97,23 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+       handleRecycler()
+
+    }
+
+    private fun  handleRecycler(){
+
         icons_of_categories_recyclerview.apply {
             layoutManager = GridLayoutManager(this.context,3)
             adapter = iconsAdapter
         }
 
+        icons_of_categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) addNewCategoryFab.hide()
+                else if (dy < 0) addNewCategoryFab.show()
+            }
+        })
     }
 
     private fun emptyName():String{

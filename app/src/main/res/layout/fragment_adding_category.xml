@@ -37,21 +37,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/addNewCategoryConfirmationButton"
-            android:layout_width="162dp"
-            android:layout_height="45dp"
-            android:layout_marginBottom="40dp"
-            android:background="@color/colorAccent"
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/addNewCategoryFab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:clickable="true"
-            android:focusable="true"
-            android:text="ADD"
-            android:textColor="@color/cardview_light_background"
-            android:textSize="36dp"
+            app:layout_anchorGravity="top|end"
+            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+            android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:backgroundTint="@android:color/holo_purple"
+            app:srcCompat="@android:drawable/ic_input_add" />
+
 
 
 

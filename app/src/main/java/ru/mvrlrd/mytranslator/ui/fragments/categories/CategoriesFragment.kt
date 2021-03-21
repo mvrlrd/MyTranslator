@@ -41,7 +41,7 @@ class CategoriesFragment : Fragment() {
             TARGET_FRAGMENT_REQUEST_CODE
         )
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
-        val but: FloatingActionButton = root.findViewById(R.id.addNewCategoryFloatingActionButton)
+        val but: FloatingActionButton = root.findViewById(R.id.gotoAddingCategoryFragmentFab)
         but.setOnClickListener {
             goToAddingNewCategoryDialogFragment()
 //            categoriesViewModel.clearCategories()
@@ -73,8 +73,8 @@ class CategoriesFragment : Fragment() {
         }
         categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) addNewCategoryFloatingActionButton.hide()
-                else if (dy < 0) addNewCategoryFloatingActionButton.show()
+                if (dy > 0) gotoAddingCategoryFragmentFab.hide()
+                else if (dy < 0) gotoAddingCategoryFragmentFab.show()
             }
         })
     }

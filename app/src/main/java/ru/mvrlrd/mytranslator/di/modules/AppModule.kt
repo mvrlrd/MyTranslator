@@ -17,6 +17,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddNew
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddingWordViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesViewModel
@@ -57,7 +58,7 @@ val appModule2 = module {
     viewModel { AddNewCategoryViewModel(get(),get()) }
 
     viewModel { CategoriesViewModel(get(),get()) }
-
+    viewModel { AddingWordViewModel(get(),get()) }
 
     single { androidContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator }
     single { TagDialogFragment() }

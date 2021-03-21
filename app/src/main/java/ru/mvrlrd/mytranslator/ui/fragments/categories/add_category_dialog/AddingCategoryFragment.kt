@@ -67,8 +67,6 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
 //        }
 
 
-
-
         addNewButton.setOnClickListener {
             val name = nameTextField.text.toString()
             var message = ""
@@ -96,19 +94,16 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-       handleRecycler()
-
+        handleRecycler()
     }
 
-    private fun  handleRecycler(){
-
+    private fun handleRecycler() {
         icons_of_categories_recyclerview.apply {
-            layoutManager = GridLayoutManager(this.context,3)
+            layoutManager = GridLayoutManager(this.context, 3)
             adapter = iconsAdapter
         }
-
-        icons_of_categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+        icons_of_categories_recyclerview.addOnScrollListener(object :
+            RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) addNewCategoryFab.hide()
                 else if (dy < 0) addNewCategoryFab.show()

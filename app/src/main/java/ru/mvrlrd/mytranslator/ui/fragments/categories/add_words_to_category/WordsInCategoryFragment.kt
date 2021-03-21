@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -22,6 +25,8 @@ class WordsInCategoryFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
 
+    private val addNewWordFragment : AddNewWordDialogFragment by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -35,7 +40,15 @@ class WordsInCategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.words_in_category_fragment, container, false)
+
+        val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
+
+        root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
+            addNewWordFragment.show(parentFragmentManager, "addNewWordDialog")
+//            categoriesViewModel.clearCategories()
+        }
+
+        return root
     }
 
     companion object {

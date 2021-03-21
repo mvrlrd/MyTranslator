@@ -16,6 +16,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddNewCategoryViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment
 import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesViewModel
@@ -46,6 +47,7 @@ val appModule2 = module {
             get(), get()
         )
     }
+    single { AddNewWordDialogFragment() }
 //    single{
 //        CategoriesAdapter()
 //    }

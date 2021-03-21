@@ -12,7 +12,7 @@ class WordsInCategoryViewModel(
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
 
-    
+
 
 
 }

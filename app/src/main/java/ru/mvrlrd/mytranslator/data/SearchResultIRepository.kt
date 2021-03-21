@@ -5,6 +5,7 @@ import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.IRepository
@@ -53,5 +54,9 @@ class SearchResultIRepository(
 
     override suspend fun clearCategoriesFromDb(): Either<Failure, Int> {
         return localDataSource.clearCategories()
+    }
+
+    override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords> {
+        TODO("Not yet implemented")
     }
 }

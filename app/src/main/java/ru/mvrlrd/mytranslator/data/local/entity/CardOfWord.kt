@@ -20,4 +20,10 @@ data class CardOfWord (
 ):Parcelable{
 //    @Ignore
 //    constructor(text:String?,translation: String? ): this(0,text,translation)
+
+    override fun equals(other: Any?): Boolean {
+        return if (other !is CardOfWord){
+            false
+        }else this.text == other.text
+    }
 }

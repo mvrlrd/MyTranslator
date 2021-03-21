@@ -5,6 +5,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.functional.Either
 
 class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
@@ -50,6 +51,11 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
 
     override suspend fun clearCategories(): Either<Failure, Int> {
         return Either.Right(historyDao.clearCategories())
+    }
+
+
+    override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords> {
+        return Either.Right(historyDao.getCardsOfCategory(categoryId))
     }
 }
 

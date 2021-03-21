@@ -4,6 +4,7 @@ import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.functional.Either
 
 interface LocalDataSource {
@@ -24,4 +25,6 @@ interface LocalDataSource {
     suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag>
 
     suspend fun clearCategories(): Either<Failure, Int>
+
+    suspend fun getCardsOfCategory(categoryId:Long):Either<Failure,CategoryWithWords>
 }

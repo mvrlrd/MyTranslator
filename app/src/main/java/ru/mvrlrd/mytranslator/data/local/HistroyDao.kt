@@ -5,14 +5,15 @@ import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardTagCrossRef
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 
 @Dao
 interface HistoryDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(cardOfWord: CardOfWord?): Long
+    suspend fun insert(word: CardOfWord?): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertNewTagToDb(tag: Category): Long
+    suspend fun insertNewTagToDb(category: Category): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCardTagCrossRef(cardTagCrossRef: CardTagCrossRef):Long
@@ -51,6 +52,10 @@ interface HistoryDao {
     @Transaction
     @Query("SELECT * FROM searching_history WHERE id = :id")
     suspend fun getTagsOfCard(id: Long): CardWithTag
+
+    @Transaction
+    @Query("SELECT * FROM group_tags WHERE categoryId = :categoryId")
+    suspend fun getCardsOfCategory(categoryId: Long): CategoryWithWords
 
     @Transaction
     @Query("SELECT * FROM searching_history WHERE id = :categoryId")

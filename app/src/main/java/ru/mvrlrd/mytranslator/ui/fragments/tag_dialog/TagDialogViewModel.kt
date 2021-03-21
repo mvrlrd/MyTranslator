@@ -9,6 +9,7 @@ import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.domain.use_cases.cards.AddererWordToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.tags.*
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
@@ -19,7 +20,7 @@ class TagDialogViewModel(
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
     private val tagsLoader: TagsLoader = TagsLoader(searchResultRepository)
-    private val addererTagToCard : AddererTagToCard = AddererTagToCard(searchResultRepository)
+    private val addererWordToCategory : AddererWordToCategory = AddererWordToCategory(searchResultRepository)
     private val removerTagFromCard: RemoverTagFromCard = RemoverTagFromCard(searchResultRepository)
     private val newTagAdderer : NewTagAdderer = NewTagAdderer(searchResultRepository)
     private val currentCardTagsPicker : CurrentCardTagsPicker = CurrentCardTagsPicker(searchResultRepository)
@@ -66,7 +67,7 @@ class TagDialogViewModel(
 
     fun addTagToCurrentCard(idCard: Long, idTag:Long){
         viewModelScope.launch {
-            addererTagToCard(arrayOf(idCard, idTag))
+            addererWordToCategory(arrayOf(idCard, idTag))
         }
     }
 

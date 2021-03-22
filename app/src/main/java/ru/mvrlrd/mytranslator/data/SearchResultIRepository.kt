@@ -57,6 +57,6 @@ class SearchResultIRepository(
     }
 
     override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords> {
-        TODO("Not yet implemented")
+        return localDataSource.getCardsOfCategory(categoryId)
     }
 }

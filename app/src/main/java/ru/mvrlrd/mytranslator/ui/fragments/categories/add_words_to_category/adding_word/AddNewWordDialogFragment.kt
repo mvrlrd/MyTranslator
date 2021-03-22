@@ -16,6 +16,7 @@ import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.WordsInCategoryViewModel
+import java.lang.StringBuilder
 
 class AddNewWordDialogFragment : DialogFragment(), IconsAdapter.IconAdapterListener {
 
@@ -46,17 +47,18 @@ private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
 //            "",
 //            "",
 //            ""))
-                val cardOfWord = CardOfWord(
-                    0,
-                    textField.text.toString(),
-                    "",
-                    "haha",
-                    "",
-                    "",
-                    ""
-                )
-                wordsInCategoryViewModel.saveWordToDb(cardOfWord)
-//                sendResult(cardOfWord.toStringArray())
+
+
+//                wordsInCategoryViewModel.saveWordToDb(cardOfWord)
+
+//                val bundle = arguments
+//                val currentCategoryId = bundle!!.getLong("id", 0)
+//                    wordsInCategoryViewModel.getAllWordsOfCategory(currentCategoryId)
+val str = StringBuilder()
+                str.append(textField.text.toString())
+                textField.text?.clear()
+
+                sendResult(str.toString())
 
                 dismiss()
         }
@@ -64,9 +66,9 @@ private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
             return root
     }
 
-    private fun sendResult(arr: Array<String?>) {
+    private fun sendResult(str: String) {
         targetFragment ?: return
-        val intent = Intent().putExtra("message", arr)
+        val intent = Intent().putExtra("message", str)
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 

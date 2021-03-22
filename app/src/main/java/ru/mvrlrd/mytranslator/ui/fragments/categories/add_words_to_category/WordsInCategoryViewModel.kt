@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.AddererWordToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetAllCardsFromDb
@@ -32,10 +33,17 @@ class WordsInCategoryViewModel(
         SaveCardToFavorites(searchResultRepository)
 
 
-    private var _liveId = MutableLiveData<Long>()
-    val liveId: LiveData<Long> = _liveId
+    private var _liveWordList = MutableLiveData<List<CardOfWord>>()
+    val liveWordList: LiveData<List<CardOfWord>> = _liveWordList
 
-    fun saveWordToCategory(categoryId: Long, cardId: Long) {
+//    private var _liveId = MutableLiveData<Long>()
+//    val liveId: LiveData<Long> = _liveId
+
+    var categoryId: Long = 0L
+
+
+
+    private fun saveWordToCategory(categoryId: Long, cardId: Long) {
         viewModelScope.launch {
             addererWordToCategory(arrayOf(cardId, categoryId)){
                 it.fold(
@@ -48,6 +56,7 @@ class WordsInCategoryViewModel(
 
     private fun handleAddingToCategory(id: Long){
         Log.e(TAG, "$id   word was added to Category" )
+        getAllWordsOfCategory(categoryId)
     }
 
     fun saveWordToDb(cardOfWord: CardOfWord) {
@@ -62,44 +71,25 @@ class WordsInCategoryViewModel(
 }
     private fun handleAddingWordToDb(wordId:Long){
         Log.e(TAG, "$wordId   word was added to Db" )
-        _liveId.value = wordId
+        saveWordToCategory(categoryId, wordId)
+
+//        _liveId.value = wordId
     }
 
+fun getAllWordsOfCategory(categoryId : Long){
+    viewModelScope.launch {
+        getterCardsOfCategory(categoryId){it.fold(
+            ::handleFailure,
+            ::handleGettingAllWords
+        )}
+    }
+}
 
-//    fun saveWordToDb(array: MutableList<String?>) {
-//        viewModelScope.launch {
-//            var wordId : Any = 0L
-//            array.let {
-//                saveCardToFavorites(CardOfWord(
-//                    0,
-//                    it[2],
-//                    it[3],
-//                    it[4],
-//                    it[5],
-//                    it[6],
-//                    it[7]
-//                )){wordId = it.fold(
-//                    ::handleFailure,
-//                    ::handleSavingToDb
-//                )}
-//            }
-//            if (wordId is Long){
-//                array[0]?.toLong()?.let { addererWordToCategory(arrayOf(it,(wordId as Long).toLong())){it.fold(
-//                    ::handleFailure,
-//                    ::handleCrossRef
-//                )} }
-//            }
-//
-//
-//        }
-//    }
-//    private fun handleSavingToDb(id:Long):Long{
-//        return id
-//    }
-//
-//    private fun handleCrossRef(id:Long){
-//        Log.e(TAG,"$id was added")
-//    }
+    private fun handleGettingAllWords(categoryWithWords: CategoryWithWords){
+        _liveWordList.value = categoryWithWords.cards
+    }
 
-
+    fun clearLive(){
+//        _liveId.value = null
+    }
 }

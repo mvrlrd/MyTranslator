@@ -9,11 +9,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.words_in_category_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Category
 
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.recycler.WordsAdapter
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +41,7 @@ class WordsInCategoryFragment : Fragment() {
     private var param1: Long? = null
 
 
+    private val wordsAdapter : WordsAdapter by inject()
     private val addNewWordFragment : AddNewWordDialogFragment by inject()
     private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
 
@@ -44,6 +51,7 @@ class WordsInCategoryFragment : Fragment() {
             param1 = it.getLong(ARG_PARAM1)
 
         }
+        param1?.let { wordsInCategoryViewModel.getAllWordsOfCategory(it) }
     }
 
     override fun onCreateView(
@@ -56,13 +64,18 @@ class WordsInCategoryFragment : Fragment() {
             this,
           TARGET_FRAGMENT_REQUEST_CODE
         )
-
+wordsInCategoryViewModel.categoryId = param1!!
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
 
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
+            val bundle = Bundle()
+        bundle.putLong("id", param1!!)
+        addNewWordFragment.arguments = bundle
             addNewWordFragment.show(parentFragmentManager, "addNewWordDialog")
+
 //            categoriesViewModel.clearCategories()
         }
+
 
 
 
@@ -73,10 +86,23 @@ class WordsInCategoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        wordsInCategoryViewModel.liveId.observe(viewLifecycleOwner, Observer { wordId ->
-            param1?.let { wordsInCategoryViewModel.saveWordToCategory(it,wordId) }
+//        wordsInCategoryViewModel.liveId.observe(viewLifecycleOwner, Observer { wordId ->
+//            param1?.let { wordsInCategoryViewModel.saveWordToCategory(it,wordId) }
+//        })
+
+        wordsInCategoryViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
+            param1?.let { handleRecycler(wordList) }
         })
 
+
+
+    }
+
+    private fun handleRecycler(wordList: List<CardOfWord>){
+        words_recycler.apply {
+            layoutManager = LinearLayoutManager(this.context)
+            adapter = wordsAdapter.apply { collection = wordList as MutableList<CardOfWord> }
+        }
     }
 
     companion object {
@@ -94,11 +120,53 @@ class WordsInCategoryFragment : Fragment() {
             WordsInCategoryFragment().apply {
                 arguments = Bundle().apply {
                     putLong(ARG_PARAM1, param1)
-
                 }
             }
     }
 
+    override fun onPause() {
+        super.onPause()
+        Log.e(
+            TAG,
+            "onPause"
+        )
+
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.e(
+            TAG,
+            "onStart"
+        )
+    }
+
+    override fun onResume() {
+        super.onResume()
+//        handleRecycler(wordsInCategoryViewModel.liveWordList.value)
+//        wordsInCategoryViewModel.getAllWordsOfCategory(param1!!)
+        Log.e(
+            TAG,
+            "onResume"
+        )
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.e(
+            TAG,
+            "onStop"
+        )
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        Log.e(
+            TAG,
+            "onDestroy"
+        )
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -110,15 +178,25 @@ class WordsInCategoryFragment : Fragment() {
             return
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-            data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
+            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
 ///////////////////получать нужную инфу из диалога где вводятся новые слова(с переводом) сохранять эти слова в базу и привязывать через кроссреф к текущей категории)
-                Log.e(TAG,"$param1   ${it[1]}    is here" )
 
-                val array = mutableListOf<String?>()
-                array.add(param1.toString())
-                for(i in it){
-                    array.add(i)
+
+                it.let{
+                    CardOfWord(
+                        0,
+                        it,
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ).let {
+                        wordsInCategoryViewModel.saveWordToDb(it)
+                    }
                 }
+
+
 
             }
         }

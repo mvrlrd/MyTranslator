@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment"
+    tools:context=".ui.fragments.dialog_fragments.NewWordDialog"
     android:background="@color/cardview_dark_background"
     android:orientation="vertical">
 

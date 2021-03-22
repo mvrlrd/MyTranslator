@@ -8,20 +8,20 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
-import ru.mvrlrd.mytranslator.ui.fragments.translation.TranslationViewModel
+import ru.mvrlrd.mytranslator.ui.old.old.translation.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.WordsInCategoryViewModel
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.recycler.WordsAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
-import ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesViewModel
-import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.AddingCategoryFragment
+import ru.mvrlrd.mytranslator.ui.fragments.words.WordsInCategoryViewModel
+import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
+import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
+import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogViewModel
 
 val appSources = module {
     single { NetworkAvailabilityHandler(androidContext()) }
@@ -48,11 +48,11 @@ val appViewModules = module{
 
 val appFragments = module {
     single { AddingCategoryFragment() }
-    single { AddNewWordDialogFragment() }
+    single { NewWordDialog() }
     single { TagDialogFragment() }
 
     factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
-    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener)}
+    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener) }
     single { WordsAdapter() }
 }
 

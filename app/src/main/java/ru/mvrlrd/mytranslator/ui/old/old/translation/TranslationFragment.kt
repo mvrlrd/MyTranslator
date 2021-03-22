@@ -1,11 +1,9 @@
-package ru.mvrlrd.mytranslator.ui.fragments.translation
+package ru.mvrlrd.mytranslator.ui.old.old.translation
 
 import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,11 +21,11 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.ui.fragments.tag_dialog.TagDialogFragment
-import ru.mvrlrd.mytranslator.ui.recycler.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.recycler.OnSwipeListener
-import ru.mvrlrd.mytranslator.ui.recycler.SimpleItemTouchHelperCallback
-import ru.mvrlrd.mytranslator.ui.recycler.TranslationAdapter
+import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
+import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
+import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
+import ru.mvrlrd.mytranslator.ui.old.old.TranslationAdapter
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1

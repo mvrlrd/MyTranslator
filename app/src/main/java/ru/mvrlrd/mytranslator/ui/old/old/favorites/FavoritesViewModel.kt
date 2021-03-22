@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.favorites
+package ru.mvrlrd.mytranslator.ui.old.old.favorites
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData

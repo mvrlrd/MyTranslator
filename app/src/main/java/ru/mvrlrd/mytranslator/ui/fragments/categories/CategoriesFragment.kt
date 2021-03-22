@@ -19,9 +19,9 @@ import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.AddingCategoryFragment
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.WordsInCategoryFragment
-import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.AddingCategoryFragment
+import ru.mvrlrd.mytranslator.ui.fragments.words.WordsInCategoryFragment
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1

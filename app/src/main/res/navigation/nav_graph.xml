@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_favorites"
-        android:name="ru.mvrlrd.mytranslator.ui.fragments.favorites.FavoritesFragment"
+        android:name="ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
 

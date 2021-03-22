@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog
+package ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments
 
 import android.app.Activity
 import android.content.Intent
@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.adding_category_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 
 private val TAG = "AddingCategoryFragment"
 class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListener {

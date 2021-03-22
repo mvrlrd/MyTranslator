@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.recycler
+package ru.mvrlrd.mytranslator.ui.old.old
 
 import android.annotation.SuppressLint
 import android.os.Build

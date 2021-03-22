@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.translation
+package ru.mvrlrd.mytranslator.ui.old.old.translation
 
 import android.util.Log
 import androidx.lifecycle.LiveData

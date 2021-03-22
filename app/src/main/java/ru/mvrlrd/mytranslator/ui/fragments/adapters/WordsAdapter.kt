@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.recycler
+package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
 import android.view.LayoutInflater
 import android.view.View

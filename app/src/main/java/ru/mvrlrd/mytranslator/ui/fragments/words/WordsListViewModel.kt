@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category
+package ru.mvrlrd.mytranslator.ui.fragments.words
 
 import android.util.Log
 import androidx.lifecycle.LiveData

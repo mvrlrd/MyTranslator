@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler
+package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.item_icon.view.*
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.data.local.entity.IconItem
 
 private val TAG = "IconsAdapter"
 

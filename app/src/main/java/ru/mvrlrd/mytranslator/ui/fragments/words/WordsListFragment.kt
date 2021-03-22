@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category
+package ru.mvrlrd.mytranslator.ui.fragments.words
 
 import android.app.Activity
 import android.content.Intent
@@ -15,8 +15,8 @@ import kotlinx.android.synthetic.main.words_in_category_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word.AddNewWordDialogFragment
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.recycler.WordsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
 
 
 private const val ARG_PARAM1 = "param"
@@ -28,7 +28,7 @@ private const val TAG = "WordsInCategoryFragment"
 class WordsInCategoryFragment : Fragment() {
     private var param: Long? = null
     private val wordsAdapter: WordsAdapter by inject()
-    private val addNewWordFragment: AddNewWordDialogFragment by inject()
+    private val newWord: NewWordDialog by inject()
     private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class WordsInCategoryFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        addNewWordFragment.setTargetFragment(
+        newWord.setTargetFragment(
             this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
@@ -53,8 +53,8 @@ class WordsInCategoryFragment : Fragment() {
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
             val bundle = Bundle()
             bundle.putLong("id", param!!)
-            addNewWordFragment.arguments = bundle
-            addNewWordFragment.show(parentFragmentManager, "addNewWordDialog")
+            newWord.arguments = bundle
+            newWord.show(parentFragmentManager, "addNewWordDialog")
 //            categoriesViewModel.clearCategories()
         }
         return root

@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.tag_dialog
+package ru.mvrlrd.mytranslator.ui.old.old.tag_dialog
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.adding_word
+package ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments
 
 
 import android.app.Activity
@@ -11,10 +11,10 @@ import androidx.fragment.app.DialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import java.lang.StringBuilder
 
-class AddNewWordDialogFragment : DialogFragment(), IconsAdapter.IconAdapterListener {
+class NewWordDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

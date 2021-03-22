@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.fragments.tag_dialog
+package ru.mvrlrd.mytranslator.ui.old.old.tag_dialog
 
 
 import android.os.Bundle
@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.dialog_fragment_tag.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.ui.recycler_tags.OnItemChecked
-import ru.mvrlrd.mytranslator.ui.recycler_tags.TagsAdapter
+import ru.mvrlrd.mytranslator.ui.old.old.recycler_tags.OnItemChecked
+import ru.mvrlrd.mytranslator.ui.old.old.recycler_tags.TagsAdapter
 
 
 private const val TAG = "TagFragment"

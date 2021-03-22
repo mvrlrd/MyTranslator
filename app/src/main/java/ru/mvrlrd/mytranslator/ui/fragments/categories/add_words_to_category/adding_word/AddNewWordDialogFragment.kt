@@ -15,11 +15,12 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.ui.fragments.categories.add_category_dialog.recycler.IconsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.categories.add_words_to_category.WordsInCategoryViewModel
 
 class AddNewWordDialogFragment : DialogFragment(), IconsAdapter.IconAdapterListener {
 
-    private val addingWordViewModel: AddingWordViewModel by inject()
-
+//    private val addingWordViewModel: AddingWordViewModel by inject()
+private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,8 +46,17 @@ class AddNewWordDialogFragment : DialogFragment(), IconsAdapter.IconAdapterListe
 //            "",
 //            "",
 //            ""))
-
-                sendResult(textField.text.toString())
+                val cardOfWord = CardOfWord(
+                    0,
+                    textField.text.toString(),
+                    "",
+                    "haha",
+                    "",
+                    "",
+                    ""
+                )
+                wordsInCategoryViewModel.saveWordToDb(cardOfWord)
+//                sendResult(cardOfWord.toStringArray())
 
                 dismiss()
         }
@@ -54,9 +64,9 @@ class AddNewWordDialogFragment : DialogFragment(), IconsAdapter.IconAdapterListe
             return root
     }
 
-    private fun sendResult(message: String) {
+    private fun sendResult(arr: Array<String?>) {
         targetFragment ?: return
-        val intent = Intent().putExtra("message", message)
+        val intent = Intent().putExtra("message", arr)
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 

@@ -130,13 +130,7 @@ class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListene
     }
 
 
-    private fun addNewCategory(name: String, picName: String){
-        addNewCategoryViewModel.addNewCategory(name, picName)
-    }
 
-    private fun clearAllCategories(){
-        addNewCategoryViewModel.clearCategories()
-    }
 
     override fun onPause() {
         super.onPause()

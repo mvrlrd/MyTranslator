@@ -26,4 +26,15 @@ data class CardOfWord (
             false
         }else this.text == other.text
     }
+
+    fun toStringArray(): Array<String?> {
+        return arrayOf(
+            this.id.toString(),
+            this.text,
+            this.translation,
+            this.image_url,
+            this.transcription,
+            this.partOfSpeech,
+            this.prefix)
+    }
 }

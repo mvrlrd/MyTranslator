@@ -110,8 +110,7 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
             .beginTransaction()
             .replace(
                 (requireView().parent as ViewGroup).id, WordsInCategoryFragment.newInstance(
-                    "new",
-                    categoryId.toString()
+                    categoryId
                 )
             )
             .addToBackStack(null)

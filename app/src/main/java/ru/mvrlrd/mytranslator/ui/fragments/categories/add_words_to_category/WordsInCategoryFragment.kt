@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
@@ -31,8 +32,8 @@ private const val TAG = "WordsInCategoryFragment"
  */
 class WordsInCategoryFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var param1: Long? = null
+
 
     private val addNewWordFragment : AddNewWordDialogFragment by inject()
     private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
@@ -40,8 +41,8 @@ class WordsInCategoryFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            param1 = it.getLong(ARG_PARAM1)
+
         }
     }
 
@@ -63,7 +64,19 @@ class WordsInCategoryFragment : Fragment() {
 //            categoriesViewModel.clearCategories()
         }
 
+
+
+
         return root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        wordsInCategoryViewModel.liveId.observe(viewLifecycleOwner, Observer { wordId ->
+            param1?.let { wordsInCategoryViewModel.saveWordToCategory(it,wordId) }
+        })
+
     }
 
     companion object {
@@ -77,11 +90,11 @@ class WordsInCategoryFragment : Fragment() {
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(param1: Long) =
             WordsInCategoryFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putLong(ARG_PARAM1, param1)
+
                 }
             }
     }
@@ -97,10 +110,16 @@ class WordsInCategoryFragment : Fragment() {
             return
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
+            data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
 ///////////////////получать нужную инфу из диалога где вводятся новые слова(с переводом) сохранять эти слова в базу и привязывать через кроссреф к текущей категории)
-                Log.e(TAG,"${it}    is here" )
-//                wordsInCategoryViewModel.saveWordToCategory(it)
+                Log.e(TAG,"$param1   ${it[1]}    is here" )
+
+                val array = mutableListOf<String?>()
+                array.add(param1.toString())
+                for(i in it){
+                    array.add(i)
+                }
+
             }
         }
     }

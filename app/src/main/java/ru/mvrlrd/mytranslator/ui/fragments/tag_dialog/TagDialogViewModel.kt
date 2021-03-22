@@ -10,7 +10,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.AddererWordToCategory
-import ru.mvrlrd.mytranslator.domain.use_cases.tags.*
+import ru.mvrlrd.mytranslator.domain.use_cases.categories.*
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class TagDialogViewModel(

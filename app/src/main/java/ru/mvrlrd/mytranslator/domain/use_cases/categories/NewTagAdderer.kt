@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.domain.use_cases.tags
+package ru.mvrlrd.mytranslator.domain.use_cases.categories
 
 import android.util.Log
 import ru.mvrlrd.mytranslator.Failure
@@ -10,7 +10,6 @@ class NewTagAdderer(private val searchResultRepository: IRepository) :
     UseCase<Long, Array<String>>() {
 
     override suspend fun run(params: Array<String>): Either<Failure, Long> {
-        Log.e("NewTagAdder", "i am in run hrer")
         return searchResultRepository.addNewTagToDb(params[0],params[1])
     }
 }

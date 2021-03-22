@@ -11,14 +11,12 @@ import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.AddererWordToCategory
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetAllCardsFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetterCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.SaveCardToFavorites
-import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
+private val TAG = "WordsInCategoryViewModel"
 
-private  val TAG = "WordsInCategoryViewModel"
 class WordsInCategoryViewModel(
     apiHelper: ApiHelper,
     dbHelper: DbHelper
@@ -35,61 +33,66 @@ class WordsInCategoryViewModel(
 
     private var _liveWordList = MutableLiveData<List<CardOfWord>>()
     val liveWordList: LiveData<List<CardOfWord>> = _liveWordList
-
-//    private var _liveId = MutableLiveData<Long>()
-//    val liveId: LiveData<Long> = _liveId
-
     var categoryId: Long = 0L
 
 
-
-    private fun saveWordToCategory(categoryId: Long, cardId: Long) {
+    fun saveWordToDb(str : String) {
         viewModelScope.launch {
-            addererWordToCategory(arrayOf(cardId, categoryId)){
+            saveCardToFavorites(mapStringToCardOfWord(str)) {
                 it.fold(
                     ::handleFailure,
-                    ::handleAddingToCategory
+                    ::handleAddingWordToDb
                 )
             }
         }
     }
 
-    private fun handleAddingToCategory(id: Long){
-        Log.e(TAG, "$id   word was added to Category" )
+    private fun handleAddingWordToDb(wordId: Long) {
+        Log.e(TAG, "new word #$wordId has been added to the database")
+        saveWordToCategory(categoryId, wordId)
+    }
+
+    private fun saveWordToCategory(categoryId: Long, cardId: Long) {
+        viewModelScope.launch {
+            addererWordToCategory(arrayOf(cardId, categoryId)) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleAddingWordToCategory
+                )
+            }
+        }
+    }
+
+    private fun handleAddingWordToCategory(wordId: Long) {
+        Log.e(TAG, "word #$wordId has been assigned with the category #$categoryId")
         getAllWordsOfCategory(categoryId)
     }
 
-    fun saveWordToDb(cardOfWord: CardOfWord) {
+
+    fun getAllWordsOfCategory(categoryId: Long) {
         viewModelScope.launch {
-            saveCardToFavorites(cardOfWord){
+            getterCardsOfCategory(categoryId) {
                 it.fold(
                     ::handleFailure,
-                    ::handleAddingWordToDb
+                    ::handleGettingAllWords
                 )
+            }
         }
     }
-}
-    private fun handleAddingWordToDb(wordId:Long){
-        Log.e(TAG, "$wordId   word was added to Db" )
-        saveWordToCategory(categoryId, wordId)
 
-//        _liveId.value = wordId
-    }
-
-fun getAllWordsOfCategory(categoryId : Long){
-    viewModelScope.launch {
-        getterCardsOfCategory(categoryId){it.fold(
-            ::handleFailure,
-            ::handleGettingAllWords
-        )}
-    }
-}
-
-    private fun handleGettingAllWords(categoryWithWords: CategoryWithWords){
+    private fun handleGettingAllWords(categoryWithWords: CategoryWithWords) {
         _liveWordList.value = categoryWithWords.cards
     }
 
-    fun clearLive(){
-//        _liveId.value = null
+    private fun mapStringToCardOfWord(nowItIsOnlyTitle: String): CardOfWord {
+        return CardOfWord(
+            0,
+            nowItIsOnlyTitle,
+            "",
+            "",
+            "",
+            "",
+            ""
+        )
     }
 }

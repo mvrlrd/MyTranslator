@@ -4,13 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
-import kotlinx.android.synthetic.main.item_category.view.*
 import kotlinx.android.synthetic.main.item_word.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
-import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.ui.fragments.categories.recycler.CategoriesAdapter
 import kotlin.properties.Delegates
 
 class WordsAdapter:

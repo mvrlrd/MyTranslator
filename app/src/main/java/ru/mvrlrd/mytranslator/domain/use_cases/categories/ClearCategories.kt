@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.domain.use_cases.tags
+package ru.mvrlrd.mytranslator.domain.use_cases.categories
 
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.domain.IRepository

@@ -1,6 +1,5 @@
-package ru.mvrlrd.mytranslator.domain.use_cases.tags
+package ru.mvrlrd.mytranslator.domain.use_cases.categories
 
-import android.util.Log
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.domain.IRepository

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
@@ -87,16 +88,21 @@ class WordsListViewModel(
         _liveWordList.value = categoryWithWords.cards
     }
 
+//    private fun mapStringToCardOfWord(nowItIsOnlyTitle: String): CardOfWord {
+//        return CardOfWord(
+//            0,
+//            nowItIsOnlyTitle,
+//            "захватывающий",
+//            "predictable",
+//            "gripin",
+//            "",
+//            ""
+//        )
+//    }
+
     private fun mapStringToCardOfWord(nowItIsOnlyTitle: String): CardOfWord {
-        return CardOfWord(
-            0,
-            nowItIsOnlyTitle,
-            "захватывающий",
-            "predictable",
-            "gripin",
-            "",
-            ""
-        )
+        return Gson().fromJson<CardOfWord>(nowItIsOnlyTitle, CardOfWord::class.java)
+
     }
     fun deleteWordFromCategory(cardId: Long){
         viewModelScope.launch {

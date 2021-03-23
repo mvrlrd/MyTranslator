@@ -78,8 +78,8 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
         fun bind(cardOfWord : CardOfWord) {
             itemView.wordTextView.text = cardOfWord.text
             itemView.translationTextView.text = cardOfWord.translation
-            itemView.transcriptionTextView2.text = "[${cardOfWord.transcription}]"
-            itemView.antonymTextView.text = cardOfWord.image_url
+            itemView.transcriptionTextView2.text = cardOfWord.transcription
+            itemView.antonymTextView.text = "antonym's not ready yet"
 
 
         }

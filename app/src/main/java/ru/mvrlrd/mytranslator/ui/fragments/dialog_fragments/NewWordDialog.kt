@@ -4,42 +4,29 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adding_word_fragment.*
-import kotlinx.android.synthetic.main.categories_fragment.*
-import kotlinx.android.synthetic.main.item_word.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.TranslationAdapter
-import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
-import java.lang.StringBuilder
+
+import kotlin.text.StringBuilder
 
 class NewWordDialog : DialogFragment(), IconsAdapter.IconAdapterListener, OnItemClickListener {
 
     private lateinit var translationAdapter: TranslationAdapter
     private val newWordViewModel: NewWordViewModel by inject()
-//    lateinit var transTextField: TextInputEditText
-// val liveWord2: LiveData<String> = MutableLiveData<String>()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,25 +40,16 @@ class NewWordDialog : DialogFragment(), IconsAdapter.IconAdapterListener, OnItem
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.adding_word_fragment, container, false)
-        val textField: TextInputEditText = root.findViewById(R.id.newWordEditText)
-
-
-
-//        newWordViewModel.loadDataFromWeb("true")
 
         root.findViewById<FloatingActionButton>(R.id.addNewWordFab)
             .setOnClickListener {
-                val str = StringBuilder()
-                str.append(textField.text.toString())
-                textField.text?.clear()
-                sendResult(str.toString())
+                sendResult(mapperAllStringsToOne())
                 dismiss()
             }
-//         transTextField = root.findViewById(R.id.newWordsTranscriptionEditText)
 
-val text : EditText = root.findViewById(R.id.newWordEditText)
 
-        text.addTextChangedListener{
+        val text: EditText = root.findViewById(R.id.newWordEditText)
+        text.addTextChangedListener {
             if (!it.isNullOrEmpty()) newWordViewModel.loadDataFromWeb(it.toString())
         }
 
@@ -83,33 +61,30 @@ val text : EditText = root.findViewById(R.id.newWordEditText)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        newWordViewModel.liveTranslationsList.observe(viewLifecycleOwner, Observer { listOfMeaning ->
-            if (!listOfMeaning.isNullOrEmpty()){
-                listOfMeaning[0].let {it.transcription.let {
-                    newWordsTranscriptionEditText.setText("[$it]")
+        newWordViewModel.liveTranslationsList.observe(
+            viewLifecycleOwner,
+            Observer { listOfMeaning ->
+                if (!listOfMeaning.isNullOrEmpty()) {
+                    listOfMeaning[0].let { meaningModelForRecycler ->
+                        meaningModelForRecycler.transcription.let {
+                            newWordsTranscriptionEditText.setText("[$it]")
+                        }
+                        meaningModelForRecycler.translation.let {
+                            newWordsTranslationEditText.setText(it)
+                        }
+                    }
                 }
+                val list = mutableListOf<String>()
+                listOfMeaning.map {
+                    it.translation?.let { it1 -> list.add(it1) }
                 }
-            }
-
-
-
-    val list = mutableListOf<String>()
-    listOfMeaning.map {
-        it.translation?.let { it1 -> list.add(it1) }
+                handleCategoryRecycler(list)
+            })
     }
-    handleCategoryRecycler(list)
-})
-
-
-        }
-
 
     private fun handleCategoryRecycler(translationList: List<String>) {
         translations_recycler.apply {
-            layoutManager =
-//                LinearLayoutManager(this.context)
-                GridLayoutManager(this.context, 3)
+            layoutManager = GridLayoutManager(this.context, 3)
             adapter = translationAdapter.apply { collection = translationList as MutableList<String> }
         }
 //        callback =
@@ -117,8 +92,19 @@ val text : EditText = root.findViewById(R.id.newWordEditText)
 //                translations_recycler.adapter as ItemTouchHelperAdapter
 //            )
 //        ItemTouchHelper(callback).attachToRecyclerView(translations_recycler)
+    }
+    private fun mapperAllStringsToOne():String{
+        val str2 = StringBuilder()
 
+        str2.append("{\"id\":\"0\",")
+        str2.append("\"text\":\"${newWordEditText.text.toString()}\",")
+        str2.append("\"translation\":\"${newWordsTranslationEditText.text.toString()}\",")
+        str2.append("\"image_url\":\"www.ru!\",")
+        str2.append("\"transcription\":\"${newWordsTranscriptionEditText.text.toString()}\",")
+        str2.append("\"partOfSpeech\":\"noun!\",")
+        str2.append("\"prefix\":\"the!\"}")
 
+        return str2.toString()
     }
 
     private fun sendResult(str: String) {

@@ -24,7 +24,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.TranslationAdapter
 import kotlin.text.StringBuilder
 
 private val TAG ="NewWordDialog"
-class NewWordDialog : DialogFragment(), OnItemClickListener {
+class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationListener {
 
     private lateinit var translationAdapter: TranslationAdapter
     private val newWordViewModel: NewWordViewModel by inject()
@@ -56,7 +56,7 @@ class NewWordDialog : DialogFragment(), OnItemClickListener {
         }
 
 
-        translationAdapter = TranslationAdapter(this as OnItemClickListener)
+        translationAdapter = TranslationAdapter(this as TranslationAdapter.OnClickTranslationListener)
         return root
     }
 
@@ -125,17 +125,12 @@ class NewWordDialog : DialogFragment(), OnItemClickListener {
 
 
 
-    override fun onItemClick(categoryId: Long) {
-        val text = newWordsTranslationEditText.text.toString()
-                newWordsTranslationEditText.setText(categoryId.toString())
-        Log.e(TAG, "on clicked $categoryId")
+
+    override fun onClickItem(translation: String) {
+//        val text = newWordsTranslationEditText.text.toString()
+                newWordsTranslationEditText.setText(translation.toString())
+        Log.e(TAG, "on clicked $translation")
             }
 
-    override fun onItemSwiped(categoryId: Long) {
-        TODO("Not yet implemented")
-    }
 
-    override fun onItemLongPressed(categoryId: Long) {
-        TODO("Not yet implemented")
-    }
 }

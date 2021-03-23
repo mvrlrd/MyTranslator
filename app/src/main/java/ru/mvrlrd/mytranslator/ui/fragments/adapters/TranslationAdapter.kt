@@ -8,13 +8,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_translations.view.*
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import java.util.*
 import kotlin.properties.Delegates
 
 private val TAG ="TranslationAdapter"
-class TranslationAdapter(private val onSwipeListener: OnItemClickListener):
+class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener):
     RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter
 {
     internal var collection: MutableList<String> by
@@ -33,7 +32,7 @@ class TranslationAdapter(private val onSwipeListener: OnItemClickListener):
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) {
         holder.bind(collection[position])
         holder.itemView.setOnClickListener {
-            onSwipeListener.onItemClick(position.toLong())
+            onSwipeListener.onClickItem(collection[position])
         }
 //
 //        holder.itemView.setOnLongClickListener {
@@ -63,10 +62,10 @@ class TranslationAdapter(private val onSwipeListener: OnItemClickListener):
     }
 
     override fun onItemDismiss(position: Int) {
-        onSwipeListener.onItemSwiped(position.toLong())
-        Log.e(TAG, "${collection[position]}    onItemDismissed()")
-        collection.removeAt(position)
-        notifyItemRemoved(position)
+//        onSwipeListener.onItemSwiped(position.toLong())
+//        Log.e(TAG, "${collection[position]}    onItemDismissed()")
+//        collection.removeAt(position)
+//        notifyItemRemoved(position)
     }
 
     class TranslationHolder(itemView: View) :
@@ -78,9 +77,11 @@ class TranslationAdapter(private val onSwipeListener: OnItemClickListener):
             itemView.translation_item_TextView.text = translation
 
 
-
-
         }
 
+    }
+
+    interface OnClickTranslationListener{
+        fun onClickItem(translation: String)
     }
 }

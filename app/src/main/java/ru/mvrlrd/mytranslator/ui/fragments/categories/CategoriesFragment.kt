@@ -11,17 +11,24 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.categories_fragment.*
+import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListFragment
+import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
+import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
@@ -32,7 +39,9 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
 
     private val categoriesViewModel : CategoriesViewModel by inject()
     private val newCategoryDialog : NewCategoryDialog by inject()
-    private val catAdapter: CategoriesAdapter by inject { parametersOf(this) }
+    private lateinit var catAdapter: CategoriesAdapter
+
+    private lateinit var callback: ItemTouchHelper.Callback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +58,8 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
             goToAddingNewCategoryDialogFragment()
 //            categoriesViewModel.clearCategories()
         }
+
+        catAdapter = CategoriesAdapter(this as OnItemClickListener)
         return root
     }
 
@@ -67,9 +78,17 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
 
     private fun handleCategoryRecycler(allCategories: List<Category>) {
         categories_recyclerview.apply {
-            layoutManager = GridLayoutManager(this.context, 3)
+            layoutManager =
+//                LinearLayoutManager(this.context)
+                GridLayoutManager(this.context, 3)
             adapter = catAdapter.apply { collection = allCategories as MutableList<Category> }
         }
+        callback =
+            SimpleItemTouchHelperCallback(
+                categories_recyclerview.adapter as ItemTouchHelperAdapter
+            )
+        ItemTouchHelper(callback).attachToRecyclerView(categories_recyclerview)
+
         categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) gotoAddingCategoryFragmentFab.hide()
@@ -105,10 +124,18 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(categoryId: Long) {
-//        categoriesViewModel.deleteCategory(categoryId)
-      launchDialogFragment(categoryId)
-
+        launchDialogFragment(categoryId)
     }
+
+    override fun onItemSwiped(categoryId: Long) {
+        categoriesViewModel.deleteCategory(categoryId)
+    }
+
+    override fun onItemLongPressed(categoryId: Long) {
+        Log.e(TAG, "onLongPressed")
+    }
+
+
 
     private fun launchDialogFragment(categoryId: Long) =
         requireActivity()

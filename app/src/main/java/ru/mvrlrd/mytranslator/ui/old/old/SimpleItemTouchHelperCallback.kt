@@ -28,7 +28,9 @@ class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter)
         return if (recyclerView.layoutManager is GridLayoutManager) {
             val dragFlags =
                 ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
-            val swipeFlags = 0
+            val swipeFlags =
+//                0
+                ItemTouchHelper.UP or ItemTouchHelper.DOWN or ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
             makeMovementFlags(
                 dragFlags,
                 swipeFlags
@@ -53,7 +55,6 @@ class SimpleItemTouchHelperCallback(private val adapter: ItemTouchHelperAdapter)
         if (source.itemViewType != target.itemViewType) {
             return false
         }
-
         // Notify the adapter of the move
         adapter.onItemMove(source.adapterPosition, target.adapterPosition)
         return true

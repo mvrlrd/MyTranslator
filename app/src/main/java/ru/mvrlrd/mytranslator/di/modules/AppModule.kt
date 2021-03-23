@@ -52,7 +52,7 @@ val appFragments = module {
     single { TagDialogFragment() }
 
     factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
-    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener) }
+//    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener) }
     single { WordsAdapter() }
 }
 

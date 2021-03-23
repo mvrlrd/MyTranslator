@@ -50,7 +50,6 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         tagDialogFragment.setTargetFragment(this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
-
     }
 
     override fun onCreateView(
@@ -103,7 +102,6 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
         viewModel.deleteCardFromFavorites(meaningModelForRecycler)
-
         vibrate(vibrator)
 
     }

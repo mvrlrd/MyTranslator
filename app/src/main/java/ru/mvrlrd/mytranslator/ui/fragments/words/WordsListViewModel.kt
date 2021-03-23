@@ -12,6 +12,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.AddererWordToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetterCardsOfCategory
+import ru.mvrlrd.mytranslator.domain.use_cases.cards.RemoverWordFromCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.SaveCardToFavorites
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
@@ -29,6 +30,8 @@ class WordsListViewModel(
         AddererWordToCategory(searchResultRepository)
     private val saveCardToFavorites: SaveCardToFavorites =
         SaveCardToFavorites(searchResultRepository)
+
+    private val removerWordFromCategory: RemoverWordFromCategory = RemoverWordFromCategory(searchResultRepository)
 
 
     private var _liveWordList = MutableLiveData<List<CardOfWord>>()
@@ -94,5 +97,18 @@ class WordsListViewModel(
             "",
             ""
         )
+    }
+    fun deleteWordFromCategory(cardId: Long){
+        viewModelScope.launch {
+            removerWordFromCategory(arrayOf(cardId, categoryId)){
+                it.fold(
+                    ::handleFailure,
+                    ::handleDeletingWordFromCat
+                )
+            }
+        }
+    }
+    private fun handleDeletingWordFromCat(numOfDeletedWord : Int){
+        Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
     }
 }

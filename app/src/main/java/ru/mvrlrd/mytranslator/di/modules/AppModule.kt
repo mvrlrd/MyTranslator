@@ -53,7 +53,7 @@ val appFragments = module {
 
     factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
 //    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener) }
-    single { WordsAdapter() }
+//    single { WordsAdapter() }
 }
 
 val appToolModule = module {

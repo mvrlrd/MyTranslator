@@ -16,7 +16,4 @@
         android:focusable="true"
         android:background="@drawable/categories_item_selector"/>
 
-
-
-
 </LinearLayout>

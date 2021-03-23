@@ -6,41 +6,40 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_word.view.*
+import kotlinx.android.synthetic.main.item_translations.view.*
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import java.util.*
 import kotlin.properties.Delegates
 
-private val TAG = "WordsAdapter"
-class WordsAdapter(private val onSwipeListener: OnItemClickListener):
-    RecyclerView.Adapter<WordsAdapter.WordHolder>(), ItemTouchHelperAdapter
+private val TAG ="TranslationAdapter"
+class TranslationAdapter(private val onSwipeListener: OnItemClickListener):
+    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter
 {
-    internal var collection: MutableList<CardOfWord> by
+    internal var collection: MutableList<String> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TranslationHolder {
         val view: View = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_word, parent, false)
-        return WordHolder(
+            .inflate(R.layout.item_translations, parent, false)
+        return TranslationHolder(
             view
         )
 //        TranslationHolder(parent.inflate(R.layout.recycler_item))
     }
 
 
-    override fun onBindViewHolder(holder: WordHolder, position: Int) {
+    override fun onBindViewHolder(holder: TranslationHolder, position: Int) {
         holder.bind(collection[position])
-        holder.itemView.setOnClickListener {
-            onSwipeListener.onItemClick(collection[position].id)
-        }
-
-        holder.itemView.setOnLongClickListener {
-            onSwipeListener.onItemLongPressed(collection[position].id)
-            true
-        }
+//        holder.itemView.setOnClickListener {
+//            onSwipeListener.onItemClick(collection[position].id)
+//        }
+//
+//        holder.itemView.setOnLongClickListener {
+//            onSwipeListener.onItemLongPressed(collection[position].id)
+//            true
+//        }
     }
 
 
@@ -64,22 +63,21 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
     }
 
     override fun onItemDismiss(position: Int) {
-        onSwipeListener.onItemSwiped(collection[position].id)
-        Log.e(TAG, "${collection[position].text}    onItemDismissed()")
+        onSwipeListener.onItemSwiped(position.toLong())
+        Log.e(TAG, "${collection[position]}    onItemDismissed()")
         collection.removeAt(position)
         notifyItemRemoved(position)
     }
 
-    class WordHolder(itemView: View) :
+    class TranslationHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
 
         @SuppressLint("SetTextI18n")
-        fun bind(cardOfWord : CardOfWord) {
-            itemView.wordTextView.text = cardOfWord.text
-            itemView.translationTextView.text = cardOfWord.translation
-            itemView.transcriptionTextView2.text = "[${cardOfWord.transcription}]"
-            itemView.antonymTextView.text = cardOfWord.image_url
+        fun bind(translation : String) {
+            itemView.translation_item_TextView.text = translation
+
+
 
 
         }

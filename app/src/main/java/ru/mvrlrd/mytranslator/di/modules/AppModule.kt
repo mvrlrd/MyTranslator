@@ -18,6 +18,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListViewModel
 import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
@@ -33,14 +34,14 @@ val appSources = module {
         ).fallbackToDestructiveMigration().build()
     }
     single { get<AppSearchingHistoryDataBase>().historyDao() }
-    single { SearchResultIRepository(get(),get()) }
+    single { SearchResultIRepository(get(), get()) }
 }
 
-val appViewModules = module{
+val appViewModules = module {
     viewModel { FavoritesViewModel(get(), get()) }
-    viewModel { CategoriesViewModel(get(),get()) }
-    single { WordsListViewModel(get(),get()) }
-
+    viewModel { CategoriesViewModel(get(), get()) }
+    single { WordsListViewModel(get(), get()) }
+    viewModel { NewWordViewModel(get(), get()) }
     single { TagDialogViewModel(get(), get()) }
     single { TranslationViewModel(get(), get()) }
 

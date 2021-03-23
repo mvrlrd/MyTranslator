@@ -17,7 +17,26 @@
         android:hint="new word"
         android:inputType="text"/>
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/newWordsTranscriptionEditText"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:ems="10"
+        android:hint="it is transcription here"
+        android:inputType="text"/>
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/newWordsTranslationEditText"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:ems="10"
+        android:hint="it is translation here"
+        android:inputType="text"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/translations_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        />
 
 
 
@@ -28,14 +47,6 @@
         android:layout_weight="1"
         android:orientation="vertical">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/translations_recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

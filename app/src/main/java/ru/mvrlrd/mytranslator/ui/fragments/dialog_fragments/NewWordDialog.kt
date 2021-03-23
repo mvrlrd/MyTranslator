@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments
 
-
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle

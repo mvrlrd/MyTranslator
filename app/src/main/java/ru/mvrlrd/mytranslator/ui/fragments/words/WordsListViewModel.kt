@@ -91,9 +91,9 @@ class WordsListViewModel(
         return CardOfWord(
             0,
             nowItIsOnlyTitle,
-            "",
-            "",
-            "",
+            "захватывающий",
+            "predictable",
+            "gripin",
             "",
             ""
         )

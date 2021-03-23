@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -73,8 +74,13 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
 
+        @SuppressLint("SetTextI18n")
         fun bind(cardOfWord : CardOfWord) {
             itemView.wordTextView.text = cardOfWord.text
+            itemView.translationTextView.text = cardOfWord.translation
+            itemView.transcriptionTextView2.text = "[${cardOfWord.transcription}]"
+            itemView.antonymTextView.text = cardOfWord.image_url
+
 
         }
 

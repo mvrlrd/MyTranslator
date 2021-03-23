@@ -17,8 +17,8 @@ import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.AddingCategoryFragment
-import ru.mvrlrd.mytranslator.ui.fragments.words.WordsInCategoryViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
+import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListViewModel
 import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogViewModel
@@ -39,7 +39,7 @@ val appSources = module {
 val appViewModules = module{
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { CategoriesViewModel(get(),get()) }
-    single { WordsInCategoryViewModel(get(),get()) }
+    single { WordsListViewModel(get(),get()) }
 
     single { TagDialogViewModel(get(), get()) }
     single { TranslationViewModel(get(), get()) }
@@ -47,7 +47,7 @@ val appViewModules = module{
 }
 
 val appFragments = module {
-    single { AddingCategoryFragment() }
+    single { NewCategoryDialog() }
     single { NewWordDialog() }
     single { TagDialogFragment() }
 

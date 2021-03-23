@@ -25,18 +25,18 @@ private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "WordsInCategoryFragment"
 
 
-class WordsInCategoryFragment : Fragment() {
+class WordsListFragment : Fragment() {
     private var param: Long? = null
     private val wordsAdapter: WordsAdapter by inject()
     private val newWord: NewWordDialog by inject()
-    private val wordsInCategoryViewModel: WordsInCategoryViewModel by inject()
+    private val wordsListViewModel: WordsListViewModel by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             param = it.getLong(ARG_PARAM1)
         }
-        param?.let { wordsInCategoryViewModel.getAllWordsOfCategory(it) }
+        param?.let { wordsListViewModel.getAllWordsOfCategory(it) }
     }
 
     override fun onCreateView(
@@ -48,7 +48,7 @@ class WordsInCategoryFragment : Fragment() {
             this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
-        wordsInCategoryViewModel.categoryId = param!!
+        wordsListViewModel.categoryId = param!!
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
             val bundle = Bundle()
@@ -62,7 +62,7 @@ class WordsInCategoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        wordsInCategoryViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
+        wordsListViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
             param?.let { handleRecycler(wordList) }
         })
     }
@@ -77,7 +77,7 @@ class WordsInCategoryFragment : Fragment() {
     companion object {
         @JvmStatic
         fun newInstance(param1: Long) =
-            WordsInCategoryFragment().apply {
+            WordsListFragment().apply {
                 arguments = Bundle().apply {
                     putLong(ARG_PARAM1, param1)
                 }
@@ -92,7 +92,7 @@ class WordsInCategoryFragment : Fragment() {
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
             data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                        wordsInCategoryViewModel.saveWordToDb(it)
+                wordsListViewModel.saveWordToDb(it)
             }
         }
     }

@@ -19,12 +19,14 @@ import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 
-private val TAG = "AddingCategoryFragment"
-class AddingCategoryFragment : DialogFragment(), IconsAdapter.IconAdapterListener {
+
+class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
     private var iconId: String =""
     private var lastRequest: ()-> Unit = {}
+
+    private val TAG = "AddingCategoryFragment"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

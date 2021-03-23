@@ -17,7 +17,7 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private val TAG = "WordsInCategoryViewModel"
 
-class WordsInCategoryViewModel(
+class WordsListViewModel(
     apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {

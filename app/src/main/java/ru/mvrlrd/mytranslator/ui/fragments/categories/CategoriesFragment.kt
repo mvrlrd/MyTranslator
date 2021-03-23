@@ -20,8 +20,8 @@ import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.AddingCategoryFragment
-import ru.mvrlrd.mytranslator.ui.fragments.words.WordsInCategoryFragment
+import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
+import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListFragment
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
@@ -31,7 +31,7 @@ private const val TAG = "CategoryFragment"
 class CategoriesFragment : Fragment(), OnItemClickListener {
 
     private val categoriesViewModel : CategoriesViewModel by inject()
-    private val addCategoryFragment : AddingCategoryFragment by inject()
+    private val newCategoryDialog : NewCategoryDialog by inject()
     private val catAdapter: CategoriesAdapter by inject { parametersOf(this) }
 
     override fun onCreateView(
@@ -39,7 +39,7 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        addCategoryFragment.setTargetFragment(
+        newCategoryDialog.setTargetFragment(
             this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
@@ -79,7 +79,7 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
     }
 
     private fun goToAddingNewCategoryDialogFragment() {
-        addCategoryFragment.show(parentFragmentManager, "tagDialog")
+        newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 
     override fun onResume() {
@@ -105,8 +105,8 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(categoryId: Long) {
-        categoriesViewModel.deleteCategory(categoryId)
-//      launchDialogFragment(categoryId)
+//        categoriesViewModel.deleteCategory(categoryId)
+      launchDialogFragment(categoryId)
 
     }
 
@@ -115,7 +115,7 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
             .supportFragmentManager
             .beginTransaction()
             .replace(
-                (requireView().parent as ViewGroup).id, WordsInCategoryFragment.newInstance(
+                (requireView().parent as ViewGroup).id, WordsListFragment.newInstance(
                     categoryId
                 )
             )

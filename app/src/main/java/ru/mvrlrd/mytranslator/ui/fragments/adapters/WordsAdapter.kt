@@ -79,7 +79,7 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
             itemView.wordTextView.text = cardOfWord.text
             itemView.translationTextView.text = cardOfWord.translation
             itemView.transcriptionTextView2.text = cardOfWord.transcription
-            itemView.antonymTextView.text = "antonym's not ready yet"
+            itemView.antonymTextView.text = "antonym not ready yet"
 
 
         }

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,7 +23,8 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.TranslationAdapter
 
 import kotlin.text.StringBuilder
 
-class NewWordDialog : DialogFragment(), IconsAdapter.IconAdapterListener, OnItemClickListener {
+private val TAG ="NewWordDialog"
+class NewWordDialog : DialogFragment(), OnItemClickListener {
 
     private lateinit var translationAdapter: TranslationAdapter
     private val newWordViewModel: NewWordViewModel by inject()
@@ -121,13 +123,13 @@ class NewWordDialog : DialogFragment(), IconsAdapter.IconAdapterListener, OnItem
         newWordEditText.text?.clear()
     }
 
-    override fun onIconClicked(id: Int) {
-        TODO("Not yet implemented")
-    }
+
 
     override fun onItemClick(categoryId: Long) {
-        TODO("Not yet implemented")
-    }
+        val text = newWordsTranslationEditText.text.toString()
+                newWordsTranslationEditText.setText(categoryId.toString())
+        Log.e(TAG, "on clicked $categoryId")
+            }
 
     override fun onItemSwiped(categoryId: Long) {
         TODO("Not yet implemented")

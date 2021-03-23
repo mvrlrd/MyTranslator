@@ -103,7 +103,6 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
     override fun onItemSwiped(meaningModelForRecycler: MeaningModelForRecycler) {
         viewModel.deleteCardFromFavorites(meaningModelForRecycler)
         vibrate(vibrator)
-
     }
 
 

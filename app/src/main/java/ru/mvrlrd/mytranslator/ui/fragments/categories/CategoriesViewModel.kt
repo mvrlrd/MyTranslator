@@ -23,6 +23,7 @@ class CategoriesViewModel(
     private val categoriesLoader: TagsLoader = TagsLoader(searchResultRepository)
     private val clearerCategories: ClearCategories = ClearCategories(searchResultRepository)
     private val newCategoryAdderer: NewTagAdderer = NewTagAdderer(searchResultRepository)
+    private val removerCategoryFromDb: RemoverCategoryFromDb = RemoverCategoryFromDb(searchResultRepository)
     private var _allCategoryList = MutableLiveData<List<Category>>()
     val liveAllCategoriesList: LiveData<List<Category>> = _allCategoryList
 
@@ -35,7 +36,7 @@ class CategoriesViewModel(
                     newCategoryAdderer(arrayOf(name, icon)) {
                         it.fold(
                             ::handleFailure,
-                            ::handleAdding
+                            ::handleAddingCategory
                         )
                     }
                 }
@@ -46,7 +47,7 @@ class CategoriesViewModel(
         }
     }
 
-    private fun handleAdding(quantity: Long) {
+    private fun handleAddingCategory(quantity: Long) {
         Log.e(TAG, "$quantity      added")
         refreshCategoriesScreen()
     }
@@ -79,8 +80,20 @@ class CategoriesViewModel(
     }
 
     private fun handleClearingCategories(numOfDeleted: Int) {
-        Log.e(TAG, "$numOfDeleted were deleted from db")
+        Log.e(TAG, "$numOfDeleted items were deleted from db")
         refreshCategoriesScreen()
+    }
+
+    fun deleteCategory(categoryId: Long){
+        viewModelScope.launch {
+            removerCategoryFromDb(categoryId){it.fold(
+                ::handleFailure,
+                ::handleDeletingCategory
+            )}
+        }
+    }
+    private fun handleDeletingCategory(numOfDeleted : Int){
+        Log.e(TAG, "$numOfDeleted item was deleted from db")
     }
 }
 

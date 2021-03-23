@@ -25,8 +25,6 @@ interface HistoryDao {
     @Query("SELECT * FROM searching_history WHERE text=:word")
     suspend fun getCertainWord(word: String): CardOfWord
 
-
-
  //categories
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertNewTagToDb(category: Category): Long
@@ -40,14 +38,7 @@ interface HistoryDao {
     @Query("DELETE FROM group_tags WHERE categoryId =:catId")
     suspend fun deleteCategory(catId: Long): Int
 
-
-
-
-// word from category and vice versa
-    @Transaction
-    @Query("SELECT * FROM searching_history WHERE id = :id")
-    suspend fun getTagsOfCard(id: Long): CardWithTag
-
+// crossref
     @Transaction
     @Query("SELECT * FROM group_tags WHERE categoryId = :categoryId")
     suspend fun getCardsOfCategory(categoryId: Long): CategoryWithWords
@@ -55,16 +46,20 @@ interface HistoryDao {
     @Query("DELETE  FROM cardtagcrossref WHERE id =:id AND categoryId =:categoryId")
     suspend fun removeAssignedTag(id : Long, categoryId : Long) : Int
 
-    @Transaction
-    @Query("SELECT * FROM searching_history WHERE id = :categoryId")
-    suspend fun getCardsOfTag(categoryId: Long): List<CardWithTag>
-
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCardTagCrossRef(cardTagCrossRef: CardTagCrossRef):Long
 
     @Query("SELECT * FROM cardtagcrossref")
     suspend fun getAllCrossRef(): List<CardTagCrossRef>
+
+    //garbage
+    @Transaction
+    @Query("SELECT * FROM searching_history WHERE id = :id")
+    suspend fun getTagsOfCard(id: Long): CardWithTag
+
+    @Transaction
+    @Query("SELECT * FROM searching_history WHERE id = :categoryId")
+    suspend fun getCardsOfTag(categoryId: Long): List<CardWithTag>
 
 
 }

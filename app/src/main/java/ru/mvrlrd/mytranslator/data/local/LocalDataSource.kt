@@ -8,23 +8,22 @@ import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.functional.Either
 
 interface LocalDataSource {
-    suspend fun getAllCardsFromDb() : Either<Failure, List<CardOfWord>>
+    //words
+    suspend fun saveCardToDb(cardOfWord: CardOfWord): Either<Failure, Long>
+    suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>
+    suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>>
 
-    suspend fun saveCardToDb(cardOfWord : CardOfWord) : Either<Failure, Long>
-
-    suspend fun deleteCardFromDb(id : Long) : Either<Failure, Int>
-
-    suspend fun getAllTags() : Either<Failure, List<Category>>
-
-    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Long>
-
-    suspend fun deleteTagFromCard(cardId : Long, tagId : Long) : Either<Failure, Int>
-
-    suspend fun insertNewTagToDb(name: String, icon : String):Either<Failure,Long>
-
-    suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag>
-
+    //category
+    suspend fun insertNewTagToDb(name: String, icon: String): Either<Failure, Long>
+    suspend fun deleteCategory(categoryId: Long): Either<Failure, Int>
     suspend fun clearCategories(): Either<Failure, Int>
+    suspend fun getAllTags(): Either<Failure, List<Category>>
 
-    suspend fun getCardsOfCategory(categoryId:Long):Either<Failure,CategoryWithWords>
+    //crossref
+    suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long>
+    suspend fun deleteTagFromCard(cardId: Long, tagId: Long): Either<Failure, Int>
+    suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords>
+
+    //garbage
+    suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag>
 }

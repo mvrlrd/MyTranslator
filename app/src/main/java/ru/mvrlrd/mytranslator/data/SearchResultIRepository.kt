@@ -16,14 +16,12 @@ class SearchResultIRepository(
     private val localDataSource: LocalDataSource
 ) : IRepository {
 
+    //words
+            //remote
     override suspend fun getSearchResult(wordForTranslation: String): Either<Failure, ListSearchResult?> {
         return remoteDataSource.getData(wordForTranslation)
     }
-
-    override suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>> {
-        return localDataSource.getAllCardsFromDb()
-    }
-
+            //local
     override suspend fun saveCardToDb(cardOfWord: CardOfWord): Either<Failure, Long> {
         return localDataSource.saveCardToDb(cardOfWord)
     }
@@ -32,14 +30,29 @@ class SearchResultIRepository(
         return localDataSource.deleteCardFromDb(id)
     }
 
-    override suspend fun getAllTags(): Either<Failure, List<Category>> {
-        return localDataSource.getAllTags()
+    override suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>> {
+        return localDataSource.getAllCardsFromDb()
     }
+
+    //category
 
     override suspend fun addNewTagToDb(name: String, icon : String): Either<Failure, Long> {
         return localDataSource.insertNewTagToDb(name, icon)
     }
 
+    override suspend fun deleteCategory(categoryId: Long): Either<Failure, Int> {
+        return localDataSource.deleteCategory(categoryId)
+    }
+
+    override suspend fun clearCategoriesFromDb(): Either<Failure, Int> {
+        return localDataSource.clearCategories()
+    }
+
+    override suspend fun getAllTags(): Either<Failure, List<Category>> {
+        return localDataSource.getAllTags()
+    }
+
+    //crossref
     override suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long> {
         return localDataSource.assignTagToCard(cardId, tagId)
     }
@@ -48,15 +61,12 @@ class SearchResultIRepository(
         return localDataSource.deleteTagFromCard(cardId, tagId)
     }
 
-    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag> {
-        return localDataSource.getTagsOfCurrentCard(cardId)
-    }
-
-    override suspend fun clearCategoriesFromDb(): Either<Failure, Int> {
-        return localDataSource.clearCategories()
-    }
-
     override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords> {
         return localDataSource.getCardsOfCategory(categoryId)
+    }
+
+    //garbage
+    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag> {
+        return localDataSource.getTagsOfCurrentCard(cardId)
     }
 }

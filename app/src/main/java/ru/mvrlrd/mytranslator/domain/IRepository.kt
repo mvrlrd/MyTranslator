@@ -13,26 +13,29 @@ interface IRepository {
         wordForTranslation: String
     ): Either<Failure, ListSearchResult?>
 
+//word
+    suspend fun saveCardToDb(cardOfWord: CardOfWord): Either<Failure, Long>
 
-    suspend fun getAllCardsFromDb() : Either<Failure, List<CardOfWord>>
+    suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>
 
-    suspend fun saveCardToDb(cardOfWord: CardOfWord) : Either<Failure, Long>
+    suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>>
 
-    suspend fun deleteCardFromDb(id : Long) : Either<Failure, Int>
+//category
+    suspend fun addNewTagToDb(name: String, icon: String): Either<Failure, Long>
 
-    suspend fun getAllTags() : Either<Failure, List<Category>>
-
-    suspend fun addNewTagToDb(name: String, icon : String): Either<Failure, Long>
-
-    suspend fun assignTagToCard(cardId : Long, tagId : Long) : Either<Failure, Long>
-
-    suspend fun deleteTagFromCard(cardId : Long, tagId : Long): Either<Failure, Int>
-
-    suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag>
+    suspend fun deleteCategory(categoryId: Long): Either<Failure, Int>
 
     suspend fun clearCategoriesFromDb(): Either<Failure, Int>
 
+    suspend fun getAllTags(): Either<Failure, List<Category>>
+
+//crossref
+    suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long>
+
+    suspend fun deleteTagFromCard(cardId: Long, tagId: Long): Either<Failure, Int>
 
     suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords>
 
+    //garbage
+    suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag>
 }

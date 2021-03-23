@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:backgroundTint="@color/colorAccent"
-        app:srcCompat="@android:drawable/ic_input_add"/>
+        app:backgroundTint="@android:color/holo_purple"
+        app:srcCompat="@android:drawable/ic_media_next"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

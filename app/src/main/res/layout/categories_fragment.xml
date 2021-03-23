@@ -34,7 +34,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:backgroundTint="@android:color/holo_purple"
-        app:srcCompat="@android:drawable/ic_input_add"/>
+        app:srcCompat="@android:drawable/ic_media_next"/>
 
 
 

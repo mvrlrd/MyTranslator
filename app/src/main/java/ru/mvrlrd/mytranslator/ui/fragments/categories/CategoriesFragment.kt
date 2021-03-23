@@ -105,6 +105,12 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemClick(categoryId: Long) {
+        categoriesViewModel.deleteCategory(categoryId)
+//      launchDialogFragment(categoryId)
+
+    }
+
+    private fun launchDialogFragment(categoryId: Long) =
         requireActivity()
             .supportFragmentManager
             .beginTransaction()
@@ -115,6 +121,4 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
             )
             .addToBackStack(null)
             .commit()
-
-    }
 }

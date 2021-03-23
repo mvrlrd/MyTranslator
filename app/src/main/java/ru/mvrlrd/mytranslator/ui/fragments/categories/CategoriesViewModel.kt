@@ -78,7 +78,6 @@ class CategoriesViewModel(
 
         }
     }
-
     private fun handleClearingCategories(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted items were deleted from db")
         refreshCategoriesScreen()
@@ -94,6 +93,7 @@ class CategoriesViewModel(
     }
     private fun handleDeletingCategory(numOfDeleted : Int){
         Log.e(TAG, "$numOfDeleted item was deleted from db")
+        refreshCategoriesScreen()
     }
 }
 

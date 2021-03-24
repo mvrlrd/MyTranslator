@@ -19,8 +19,6 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adding_word_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
-import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.TranslationAdapter
 
 import kotlin.text.StringBuilder
@@ -65,6 +63,9 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        observeForChangesInLiveData()
+    }
+    private fun observeForChangesInLiveData() {
         newWordViewModel.liveTranslationsList.observe(
             viewLifecycleOwner,
             Observer { listOfMeaning ->
@@ -78,24 +79,28 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
                         }
                     }
                 }
-                val list = mutableListOf<String>()
+                val setOfUniqueTranslations = mutableSetOf<String>()
                 listOfMeaning.map {
-                    it.translation?.let { it1 -> list.add(it1) }
+                    it.translation?.let { translation -> setOfUniqueTranslations.add(translation) }
                 }
-                handleCategoryRecycler(list)
+                handleCategoryRecycler(setOfUniqueTranslations)
             })
     }
 
-    private fun handleCategoryRecycler(translationList: List<String>) {
-        translations_recycler.apply {
-            layoutManager = GridLayoutManager(this.context, 3)
-            adapter = translationAdapter.apply { collection = translationList as MutableList<String> }
-        }
+    private fun handleCategoryRecycler(translationList: Set<String>) {
+        if (!translationList.isNullOrEmpty()) {
+            val list : List<String> = translationList.toList()
+            translations_recycler.apply {
+                layoutManager = GridLayoutManager(this.context, 3)
+                adapter =
+                    translationAdapter.apply { collection = list as MutableList<String> }
+            }
 //        callback =
 //            SimpleItemTouchHelperCallback(
 //                translations_recycler.adapter as ItemTouchHelperAdapter
 //            )
 //        ItemTouchHelper(callback).attachToRecyclerView(translations_recycler)
+        }
     }
     private fun mapperAllStringsToOne():String{
         val str2 = StringBuilder()

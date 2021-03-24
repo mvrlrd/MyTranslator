@@ -48,6 +48,7 @@ class NewWordViewModel (
         val filteredResponseList: List<SearchResultResponse>? =
             response?.filter { it.text == queryName }
         _liveTranslationsList.value = filteredResponseList?.map { resp ->
+
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
                     0,

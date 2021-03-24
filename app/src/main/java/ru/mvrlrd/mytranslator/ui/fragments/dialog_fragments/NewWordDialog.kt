@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils.split
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -127,8 +128,13 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
 
 
     override fun onClickItem(translation: String) {
-//        val text = newWordsTranslationEditText.text.toString()
-                newWordsTranslationEditText.setText(translation.toString())
+        val str = StringBuilder()
+        val alreadyTranslationsHere = newWordsTranslationEditText.text.toString()
+        val arr = split(alreadyTranslationsHere,", ")
+        if (!arr.contains(translation)){
+            str.append("${alreadyTranslationsHere}, $translation")
+            newWordsTranslationEditText.setText(str)
+        }
         Log.e(TAG, "on clicked $translation")
             }
 

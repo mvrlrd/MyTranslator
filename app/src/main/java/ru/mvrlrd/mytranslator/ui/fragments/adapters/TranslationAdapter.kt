@@ -32,7 +32,9 @@ class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) {
         holder.bind(collection[position])
         holder.itemView.setOnClickListener {
-            onSwipeListener.onClickItem(collection[position])
+            onSwipeListener.onClickItem(collection[holder.adapterPosition])
+            collection.removeAt(holder.adapterPosition)
+            notifyItemRemoved(holder.adapterPosition)
         }
 //
 //        holder.itemView.setOnLongClickListener {

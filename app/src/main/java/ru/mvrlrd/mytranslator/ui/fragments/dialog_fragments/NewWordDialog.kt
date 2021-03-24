@@ -19,6 +19,7 @@ import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adding_word_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.TranslationAdapter
 
 import kotlin.text.StringBuilder
@@ -45,14 +46,23 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
 
         root.findViewById<FloatingActionButton>(R.id.addNewWordFab)
             .setOnClickListener {
-                sendResult(mapperAllStringsToOne())
-                dismiss()
+                if (!newWordEditText.text.isNullOrEmpty()){
+                    sendResult(mapperAllStringsToOne())
+                    dismiss()
+                }
+
             }
 
 
         val text: EditText = root.findViewById(R.id.newWordEditText)
         text.addTextChangedListener {
             if (!it.isNullOrEmpty()) newWordViewModel.loadDataFromWeb(it.toString())
+            else{
+                newWordsTranslationEditText.setText("")
+                newWordsTranscriptionEditText.setText("")
+                newWordViewModel.clearLiveTranslationList()
+            }
+
         }
 
 
@@ -63,37 +73,53 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observeForChangesInLiveData()
+
+            observeForChangesInLiveData()
+
+
     }
+    @SuppressLint("SetTextI18n")
     private fun observeForChangesInLiveData() {
+
         newWordViewModel.liveTranslationsList.observe(
             viewLifecycleOwner,
             Observer { listOfMeaning ->
-                if (!listOfMeaning.isNullOrEmpty()) {
-                    listOfMeaning[0].let { meaningModelForRecycler ->
-                        meaningModelForRecycler.transcription.let {
-                            newWordsTranscriptionEditText.setText("[$it]")
-                        }
-                        meaningModelForRecycler.translation.let {
-                            newWordsTranslationEditText.setText(it)
-                        }
-                    }
+                val listOfTranslations: List<String> = when (listOfMeaning.isNullOrEmpty()) {
+                    true -> { mutableListOf() }
+                    false -> {
+                        refreshTextFields(listOfMeaning[0])
+                        getListOfUniqueTranslations(listOfMeaning) }
                 }
-                val setOfUniqueTranslations = mutableSetOf<String>()
-                listOfMeaning.map {
-                    it.translation?.let { translation -> setOfUniqueTranslations.add(translation) }
-                }
-                handleCategoryRecycler(setOfUniqueTranslations)
+                handleCategoryRecycler(listOfTranslations)
             })
     }
 
-    private fun handleCategoryRecycler(translationList: Set<String>) {
-        if (!translationList.isNullOrEmpty()) {
-            val list : List<String> = translationList.toList()
+    private fun getListOfUniqueTranslations(listOfMeanings: List<MeaningModelForRecycler>): List<String> {
+
+        val setOfUniqueTranslations = mutableSetOf<String>()
+        listOfMeanings.map {
+            it.translation?.let { translation ->
+                setOfUniqueTranslations.add(translation)
+            }
+        }
+        return setOfUniqueTranslations.toList()
+    }
+    private fun refreshTextFields(meaningZero: MeaningModelForRecycler) {
+        meaningZero.let { it ->
+            it.transcription.let {transcription ->
+                newWordsTranscriptionEditText.setText(transcription)
+            }
+            it.translation.let {translation ->
+                newWordsTranslationEditText.setText(translation)
+            }
+        }
+    }
+
+    private fun handleCategoryRecycler(translationList: List<String>) {
             translations_recycler.apply {
                 layoutManager = GridLayoutManager(this.context, 3)
                 adapter =
-                    translationAdapter.apply { collection = list as MutableList<String> }
+                    translationAdapter.apply { collection = translationList as MutableList<String> }
             }
 //        callback =
 //            SimpleItemTouchHelperCallback(
@@ -101,17 +127,19 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
 //            )
 //        ItemTouchHelper(callback).attachToRecyclerView(translations_recycler)
         }
-    }
+
     private fun mapperAllStringsToOne():String{
         val str2 = StringBuilder()
 
-        str2.append("{\"id\":\"0\",")
-        str2.append("\"text\":\"${newWordEditText.changeSymbol()}\",")
-        str2.append("\"translation\":\"${newWordsTranslationEditText.changeSymbol()}\",")
-        str2.append("\"image_url\":\"www.ru!\",")
-        str2.append("\"transcription\":\"${newWordsTranscriptionEditText.changeSymbol()}\",")
-        str2.append("\"partOfSpeech\":\"noun!\",")
-        str2.append("\"prefix\":\"the!\"}")
+
+    str2.append("{\"id\":\"0\",")
+    str2.append("\"text\":\"${newWordEditText.changeSymbol()}\",")
+    str2.append("\"translation\":\"${newWordsTranslationEditText.changeSymbol()}\",")
+    str2.append("\"image_url\":\"www.ru!\",")
+    str2.append("\"transcription\":\"${newWordsTranscriptionEditText.changeSymbol()}\",")
+    str2.append("\"partOfSpeech\":\"noun!\",")
+    str2.append("\"prefix\":\"the!\"}")
+
         return str2.toString()
     }
     private fun TextInputEditText.changeSymbol():String =

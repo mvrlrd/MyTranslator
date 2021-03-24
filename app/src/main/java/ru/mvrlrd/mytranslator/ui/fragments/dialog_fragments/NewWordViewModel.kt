@@ -10,6 +10,7 @@ import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
+import ru.mvrlrd.mytranslator.data.network.response.SearchResultResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.SaveCardToFavorites
 import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
@@ -29,7 +30,10 @@ class NewWordViewModel (
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
 
+    private var queryName: String =""
+
     fun loadDataFromWeb(word: String) {
+        queryName = word
         viewModelScope.launch {
             searcherWithApi(word) {
                 it.fold(
@@ -41,9 +45,9 @@ class NewWordViewModel (
     }
 
     private fun handleLoadingData(response: ListSearchResult?) {
-        response?.printAllSearchResultResponse()
-
-        val list: List<MeaningModelForRecycler>? = response?.map { resp ->
+        val filteredResponseList: List<SearchResultResponse>? =
+            response?.filter { it.text == queryName }
+        _liveTranslationsList.value = filteredResponseList?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
                     0,
@@ -59,17 +63,7 @@ class NewWordViewModel (
                     it
                 )
             }
-        }?.flatMap {it!!.meanings  }
-
-        val list2: MutableList<MeaningModelForRecycler> = mutableListOf()
-        if (list != null) {
-            for (i in list){
-                if (i.text.equals(list[0].text, ignoreCase = true)) {
-                    list2.add(i)
-                }
-            }
-        }
-        _liveTranslationsList.value = list2
+        }?.flatMap { it!!.meanings }
     }
 
     fun saveCardToDb(meaningModelForRecycler: MeaningModelForRecycler) {

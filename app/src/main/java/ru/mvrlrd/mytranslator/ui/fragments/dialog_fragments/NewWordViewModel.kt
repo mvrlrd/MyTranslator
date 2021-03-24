@@ -15,6 +15,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
+import java.util.*
 
 class NewWordViewModel (
     apiHelper: ApiHelper,
@@ -40,7 +41,9 @@ class NewWordViewModel (
     }
 
     private fun handleLoadingData(response: ListSearchResult?) {
-        _liveTranslationsList.value = response?.map { resp ->
+        response?.printAllSearchResultResponse()
+
+        val list: List<MeaningModelForRecycler>? = response?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
                     0,
@@ -56,7 +59,17 @@ class NewWordViewModel (
                     it
                 )
             }
-        }?.flatMap { it!!.meanings }
+        }?.flatMap {it!!.meanings  }
+
+        val list2: MutableList<MeaningModelForRecycler> = mutableListOf()
+        if (list != null) {
+            for (i in list){
+                if (i.text.equals(list[0].text, ignoreCase = true)) {
+                    list2.add(i)
+                }
+            }
+        }
+        _liveTranslationsList.value = list2
     }
 
     fun saveCardToDb(meaningModelForRecycler: MeaningModelForRecycler) {

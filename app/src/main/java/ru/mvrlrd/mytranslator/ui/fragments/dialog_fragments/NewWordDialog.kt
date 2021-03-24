@@ -132,7 +132,11 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
         val alreadyTranslationsHere = newWordsTranslationEditText.text.toString()
         val arr = split(alreadyTranslationsHere,", ")
         if (!arr.contains(translation)){
-            str.append("${alreadyTranslationsHere}, $translation")
+            if (alreadyTranslationsHere.isEmpty()){
+                str.append(translation)
+            }else{
+                str.append("${alreadyTranslationsHere}, $translation")
+            }
             newWordsTranslationEditText.setText(str)
         }
         Log.e(TAG, "on clicked $translation")

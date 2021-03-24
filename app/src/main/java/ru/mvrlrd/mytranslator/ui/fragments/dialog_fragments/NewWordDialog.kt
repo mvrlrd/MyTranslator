@@ -15,6 +15,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adding_word_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
@@ -100,15 +101,16 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
         val str2 = StringBuilder()
 
         str2.append("{\"id\":\"0\",")
-        str2.append("\"text\":\"${newWordEditText.text.toString()}\",")
-        str2.append("\"translation\":\"${newWordsTranslationEditText.text.toString()}\",")
+        str2.append("\"text\":\"${newWordEditText.changeSymbol()}\",")
+        str2.append("\"translation\":\"${newWordsTranslationEditText.changeSymbol()}\",")
         str2.append("\"image_url\":\"www.ru!\",")
-        str2.append("\"transcription\":\"${newWordsTranscriptionEditText.text.toString()}\",")
+        str2.append("\"transcription\":\"${newWordsTranscriptionEditText.changeSymbol()}\",")
         str2.append("\"partOfSpeech\":\"noun!\",")
         str2.append("\"prefix\":\"the!\"}")
-
         return str2.toString()
     }
+    private fun TextInputEditText.changeSymbol():String =
+        this.text.toString().replace("\"","\\\"")
 
     private fun sendResult(str: String) {
         targetFragment ?: return

@@ -100,8 +100,8 @@ class WordsListViewModel(
 //        )
 //    }
 
-    private fun mapStringToCardOfWord(nowItIsOnlyTitle: String): CardOfWord {
-        return Gson().fromJson<CardOfWord>(nowItIsOnlyTitle, CardOfWord::class.java)
+    private fun mapStringToCardOfWord(jsonFromTextFields: String): CardOfWord {
+        return Gson().fromJson<CardOfWord>(jsonFromTextFields, CardOfWord::class.java)
 
     }
     fun deleteWordFromCategory(cardId: Long){

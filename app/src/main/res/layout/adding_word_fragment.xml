@@ -27,10 +27,10 @@
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/newWordsTranslationEditText"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="wrap_content"
         android:ems="10"
         android:hint="it is translation here"
-        android:inputType="text"/>
+        android:inputType="textMultiLine"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/translations_recycler"

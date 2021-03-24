@@ -33,14 +33,16 @@ class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener
         holder.bind(collection[position])
         holder.itemView.setOnClickListener {
             onSwipeListener.onClickItem(collection[holder.adapterPosition])
-            collection.removeAt(holder.adapterPosition)
-            notifyItemRemoved(holder.adapterPosition)
+//        TODO("bad solution for issue with shutting down when there is only one single item in translation_recycler." +
+//                " The strange thing is that having remove one by one items (from more than 1 item list) " +
+//                "the app doesn't shut down despite of anyway at some moment there is only one item remains")
+            if (collection.size == 1) {
+                collection = mutableListOf()
+            } else {
+                collection.removeAt(holder.adapterPosition)
+                notifyItemRemoved(holder.adapterPosition)
+            }
         }
-//
-//        holder.itemView.setOnLongClickListener {
-//            onSwipeListener.onItemLongPressed(collection[position].id)
-//            true
-//        }
     }
 
 

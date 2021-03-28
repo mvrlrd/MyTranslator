@@ -78,34 +78,40 @@ class IconsAdapter(private val listener: IconAdapterListener) :
             message = when (collection[position].isChecked) {
                 true -> {
                     holder.itemView.iconImageView.isSelected = false
-
 //                    holder.itemView.iconImageView.borderWidth =4
 //                    holder.itemView.iconImageView.borderColor =Color.BLACK
-
-                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
+//                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
                     "unselected"
                 }
                 false -> {
                     holder.itemView.iconImageView.isSelected = true
-
 //                    holder.itemView.iconImageView.borderWidth =10
 //                    holder.itemView.iconImageView.borderColor = Color.WHITE
-
                     letOnlyOneMarkerBe(position)
-                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
+                    Log.e(TAG, "pos ${position} , ad pos =${holder.adapterPosition} ")
+
+//                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
                     "selected"
 
                 }
             }
+
+            listener.onIconClicked(holder.itemView,collection[position].drawableId)
+
             collection[position].isChecked = !collection[position].isChecked
-            Log.e(
-                TAG,
-                "R.drawable.id #${collection[position].drawableId} now ${collection[position].isChecked} = $message  position in list #$position"
-            )
+//            if (holder.itemView.iconImageView.isSelected){
+//                holder.itemView.iconImageView.borderWidth =10
+//                holder.itemView.iconImageView.borderColor = Color.WHITE
+//            }else{
+//                holder.itemView.iconImageView.borderWidth =4
+//                holder.itemView.iconImageView.borderColor =Color.BLACK
+//            }
+            Log.e(TAG, "R.drawable.id #${collection[position].drawableId} now ${collection[position].isChecked} = $message  position in list #$position")
         }
     }
 
     private fun letOnlyOneMarkerBe(position: Int) {
+
         for (i in collection.indices) {
             if (i != position) {
                 collection[i].isChecked = false

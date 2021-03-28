@@ -130,20 +130,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         }
     }
 
-//    override fun onItemClick(categoryId: Long) {
-//        launchDialogFragment(categoryId)
-//    }
-    override fun onItemClick(itemView: View, id: Long) {
+    override fun onItemClick(id: Long) {
     val action = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment(id)
-
-
-
-//        val categoryWordListTransitionName = getString(R.string.category_word_list_transition_name)
-//        val extras = FragmentNavigatorExtras((itemView to categoryWordListTransitionName))
-//    val d = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment()
-
-//        val d = RecipesFragmentDirections.actionNavigationRecipesToNavigationDetail(recipeData)
-//
        findNavController().navigate(action)
     }
 
@@ -156,18 +144,4 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     override fun onItemLongPressed(categoryId: Long) {
         Log.e(TAG, "onLongPressed   $categoryId")
     }
-
-
-
-    private fun launchDialogFragment(categoryId: Long) =
-        requireActivity()
-            .supportFragmentManager
-            .beginTransaction()
-            .replace(
-                (requireView().parent as ViewGroup).id, WordsListFragment.newInstance(
-                    categoryId
-                )
-            )
-            .addToBackStack(null)
-            .commit()
 }

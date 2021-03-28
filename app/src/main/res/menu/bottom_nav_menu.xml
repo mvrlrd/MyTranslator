@@ -3,12 +3,17 @@
 
     <item
         android:id="@+id/navigation_categories"
-        android:icon="@drawable/g_translator_selector"
+        android:icon="@drawable/business_96"
         android:title="@string/categories" />
+
+    <item
+        android:id="@+id/navigation_learning"
+        android:icon="@drawable/favorites_selector"
+        android:title="@string/learning" />
 
     <item
         android:id="@+id/navigation_favorites"
         android:icon="@drawable/favorites_selector"
-        android:title="@string/learning" />
+        android:title="@string/favorites" />
 
 </menu>

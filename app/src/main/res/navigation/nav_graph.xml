@@ -15,7 +15,17 @@
         <action
             android:id="@+id/action_navigation_categories_to_wordsListFragment"
             app:destination="@id/wordsListFragment" />
+        <action
+            android:id="@+id/action_navigation_categories_to_navigation_learning"
+            app:destination="@id/navigation_learning" />
     </fragment>
+
+    <fragment
+        android:id="@+id/navigation_learning"
+        android:name="ru.mvrlrd.mytranslator.ui.fragments.learning.LearningFragment"
+        android:label="fragment_learning"
+        tools:layout="@layout/fragment_learning" />
+
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesFragment"

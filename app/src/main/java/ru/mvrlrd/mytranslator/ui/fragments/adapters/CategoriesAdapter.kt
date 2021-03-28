@@ -76,7 +76,7 @@ class CategoriesAdapter(
             itemView.categoryIcon.load(category.icon.toInt())
 
             itemView.setOnClickListener {
-                listener.onItemClick(itemView, category.categoryId)
+                listener.onItemClick(category.categoryId)
             }
 
             val categoryItemTransitionName =
@@ -94,7 +94,7 @@ class CategoriesAdapter(
     }
 
     interface RecipesAdapterListener {
-        fun onItemClick(recipeView: View, id: Long)
+        fun onItemClick(id: Long)
         fun onItemSwiped(categoryId: Long)
         fun onItemLongPressed(categoryId: Long)
 //        fun onItemSwiped(recipe : RecipeInformation)

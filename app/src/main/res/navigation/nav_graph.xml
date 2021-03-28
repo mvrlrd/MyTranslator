@@ -12,12 +12,25 @@
         <action
             android:id="@+id/action_translationFragment_to_favoritesFragment"
             app:destination="@id/navigation_favorites" />
+        <action
+            android:id="@+id/action_navigation_categories_to_wordsListFragment"
+            app:destination="@id/wordsListFragment" />
     </fragment>
     <fragment
         android:id="@+id/navigation_favorites"
         android:name="ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesFragment"
         android:label="fragment_favorites"
         tools:layout="@layout/fragment_favorites" />
+    <fragment
+        android:id="@+id/wordsListFragment"
+        android:name="ru.mvrlrd.mytranslator.ui.fragments.words.WordsListFragment"
+        android:label="words_in_category_fragment"
+        tools:layout="@layout/words_in_category_fragment" >
+        <argument
+            android:name="categoryId"
+            app:argType="long"
+             />
+    </fragment>
 
 
 </navigation>

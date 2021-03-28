@@ -13,6 +13,8 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -39,7 +41,7 @@ private const val TARGET_FRAGMENT_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "CategoryFragment"
 
-class CategoriesFragment : Fragment(), OnItemClickListener {
+class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener {
 
     private val categoriesViewModel : CategoriesViewModel by inject()
     private val newCategoryDialog : NewCategoryDialog by inject()
@@ -64,7 +66,7 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
 //            categoriesViewModel.clearCategories()
         }
 
-        catAdapter = CategoriesAdapter(this as OnItemClickListener)
+        catAdapter = CategoriesAdapter(this as CategoriesAdapter.RecipesAdapterListener)
         return root
     }
 
@@ -128,9 +130,23 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
         }
     }
 
-    override fun onItemClick(categoryId: Long) {
-        launchDialogFragment(categoryId)
+//    override fun onItemClick(categoryId: Long) {
+//        launchDialogFragment(categoryId)
+//    }
+    override fun onItemClick(itemView: View, id: Long) {
+    val action = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment(id)
+
+
+
+//        val categoryWordListTransitionName = getString(R.string.category_word_list_transition_name)
+//        val extras = FragmentNavigatorExtras((itemView to categoryWordListTransitionName))
+//    val d = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment()
+
+//        val d = RecipesFragmentDirections.actionNavigationRecipesToNavigationDetail(recipeData)
+//
+       findNavController().navigate(action)
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(categoryId: Long) {
         categoriesViewModel.deleteCategory(categoryId)
@@ -138,7 +154,7 @@ class CategoriesFragment : Fragment(), OnItemClickListener {
     }
 
     override fun onItemLongPressed(categoryId: Long) {
-        Log.e(TAG, "onLongPressed")
+        Log.e(TAG, "onLongPressed   $categoryId")
     }
 
 

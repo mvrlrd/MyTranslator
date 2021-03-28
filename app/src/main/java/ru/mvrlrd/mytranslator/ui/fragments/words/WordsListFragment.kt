@@ -37,7 +37,7 @@ private const val TAG = "WordsInCategoryFragment"
 
 
 class WordsListFragment : Fragment(), OnItemClickListener {
-    private var param: Long? = null
+
     private lateinit var wordsAdapter: WordsAdapter
     private val newWord: NewWordDialog by inject()
     private val wordsListViewModel: WordsListViewModel by inject()
@@ -47,10 +47,8 @@ class WordsListFragment : Fragment(), OnItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param = it.getLong(ARG_PARAM1)
-        }
-        param?.let { wordsListViewModel.getAllWordsOfCategory(it) }
+
+
     }
 
     override fun onCreateView(
@@ -62,12 +60,15 @@ class WordsListFragment : Fragment(), OnItemClickListener {
             this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
-        wordsListViewModel.categoryId = param!!
+        val id = arguments?.get("categoryId")
+        id?.let {
+            wordsListViewModel.categoryId = id as Long
+            wordsListViewModel.getAllWordsOfCategory(it as Long) }
+
+
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
+
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
-            val bundle = Bundle()
-            bundle.putLong("id", param!!)
-            newWord.arguments = bundle
             newWord.show(parentFragmentManager, "addNewWordDialog")
 //            categoriesViewModel.clearCategories()
         }
@@ -77,9 +78,15 @@ class WordsListFragment : Fragment(), OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         wordsListViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
-            param?.let { handleRecycler(wordList) }
+            id?.let { handleRecycler(wordList) }
         })
+
+
+
     }
 
     private fun handleRecycler(wordList: List<CardOfWord>) {

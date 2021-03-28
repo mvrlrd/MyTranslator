@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
 
 private val TAG = "CategoriesAdapter"
 class CategoriesAdapter(
-    private val onSwipeListener: OnItemClickListener
+    private val onSwipeListener: RecipesAdapterListener
     ) : RecyclerView.Adapter<CategoriesAdapter.CategoryHolder>(), ItemTouchHelperAdapter {
 
     internal var collection: MutableList<Category> by
@@ -25,16 +25,16 @@ class CategoriesAdapter(
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_category, parent, false)
         return CategoryHolder(
-            view
+           onSwipeListener,  view
         )
     }
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         holder.bind(collection[position])
 
-        holder.itemView.setOnClickListener {
-            onSwipeListener.onItemClick(collection[position].categoryId)
-        }
+//        holder.itemView.setOnClickListener {
+//            onSwipeListener.onItemClick(collection[position].categoryId)
+//        }
 
         holder.itemView.setOnLongClickListener {
             onSwipeListener.onItemLongPressed(collection[position].categoryId)
@@ -67,13 +67,21 @@ class CategoriesAdapter(
         notifyItemRemoved(position)
     }
 
-    class CategoryHolder(itemView: View) :
+    class CategoryHolder(private val listener: RecipesAdapterListener, itemView: View) :
         RecyclerView.ViewHolder(itemView)
                 , ItemTouchHelperViewHolder {
 
         fun bind(category: Category) {
             itemView.textViewItem.text = category.name
             itemView.categoryIcon.load(category.icon.toInt())
+
+            itemView.setOnClickListener {
+                listener.onItemClick(itemView, category.categoryId)
+            }
+
+            val categoryItemTransitionName =
+                itemView.resources.getString(R.string.word_list_transition_name, category.categoryId)
+            itemView.transitionName = categoryItemTransitionName
         }
 
         override fun onItemSelected() {
@@ -83,6 +91,14 @@ class CategoriesAdapter(
         override fun onItemClear() {
 
         }
+    }
+
+    interface RecipesAdapterListener {
+        fun onItemClick(recipeView: View, id: Long)
+        fun onItemSwiped(categoryId: Long)
+        fun onItemLongPressed(categoryId: Long)
+//        fun onItemSwiped(recipe : RecipeInformation)
+//        fun onFavouriteIconClick(recipeData: RecipeInformation)
     }
 
 }

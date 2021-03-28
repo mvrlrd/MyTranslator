@@ -47,6 +47,8 @@ class NewWordViewModel (
     private fun handleLoadingData(response: ListSearchResult?) {
         val filteredResponseList: List<SearchResultResponse>? =
             response?.filter { it.text == queryName }
+        Log.e(TAG, "${filteredResponseList?.size}   sizeeeeeeee" )
+
         _liveTranslationsList.value = filteredResponseList?.map { resp ->
 
             resp.meanings?.map { meaningsResponse ->

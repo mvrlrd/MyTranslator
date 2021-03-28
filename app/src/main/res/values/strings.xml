@@ -7,4 +7,7 @@
     <string name="favorites">favorites</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="category_word_list_transition_name">word_list</string>
+    <string name="word_list_transition_name">word_st_%1$d</string>
 </resources>

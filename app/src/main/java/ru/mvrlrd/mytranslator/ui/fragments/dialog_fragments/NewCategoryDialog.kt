@@ -2,6 +2,7 @@ package ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,7 +14,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.adding_category_fragment.*
+import kotlinx.android.synthetic.main.item_icon.*
+import kotlinx.android.synthetic.main.item_icon.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
@@ -28,9 +32,12 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val TAG = "AddingCategoryFragment"
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light)
+
+
     }
 
     override fun onCreateView(
@@ -38,6 +45,11 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.adding_category_fragment, container, false)
+//         val cirk  = root.findViewById<CircularImageView>(R.id.iconImageView)
+//             cirk.apply {
+//            circleColor = Color.WHITE
+//        }
+
         val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField: TextInputEditText = root.findViewById(R.id.newCategoryEditText)
         addNewButton.isClickable = true
@@ -73,6 +85,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         icons_of_categories_recyclerview.apply {
             layoutManager = GridLayoutManager(this.context, 3)
             adapter = iconsAdapter
+
         }
         icons_of_categories_recyclerview.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
@@ -111,12 +124,17 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
-    override fun onIconClicked(id: Int) {
+    override fun onIconClicked(view: View, id: Int) {
         iconId = if (iconId == id.toString()){
             ""
         }else{
             id.toString()
+
+
         }
+
+
+
 //        Log.e(TAG, " icon id = ${iconId} ")
     }
 }

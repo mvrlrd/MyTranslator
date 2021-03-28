@@ -31,16 +31,6 @@ class CategoriesAdapter(
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         holder.bind(collection[position])
-
-//        holder.itemView.setOnClickListener {
-//            onSwipeListener.onItemClick(collection[position].categoryId)
-//        }
-
-        holder.itemView.setOnLongClickListener {
-            onSwipeListener.onItemLongPressed(collection[position].categoryId)
-            Log.e(TAG, "on long pressed ")
-            true
-        }
     }
 
     override fun getItemCount() = collection.size
@@ -77,6 +67,11 @@ class CategoriesAdapter(
 
             itemView.setOnClickListener {
                 listener.onItemClick(category.categoryId)
+            }
+
+            itemView.setOnLongClickListener {
+                listener.onItemLongPressed(category.categoryId)
+                true
             }
 
             val categoryItemTransitionName =

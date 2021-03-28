@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -77,14 +78,23 @@ class IconsAdapter(private val listener: IconAdapterListener) :
             message = when (collection[position].isChecked) {
                 true -> {
                     holder.itemView.iconImageView.isSelected = false
-                    listener.onIconClicked(collection[position].drawableId)
+
+//                    holder.itemView.iconImageView.borderWidth =4
+//                    holder.itemView.iconImageView.borderColor =Color.BLACK
+
+                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
                     "unselected"
                 }
                 false -> {
                     holder.itemView.iconImageView.isSelected = true
+
+//                    holder.itemView.iconImageView.borderWidth =10
+//                    holder.itemView.iconImageView.borderColor = Color.WHITE
+
                     letOnlyOneMarkerBe(position)
-                    listener.onIconClicked(collection[position].drawableId)
+                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
                     "selected"
+
                 }
             }
             collection[position].isChecked = !collection[position].isChecked
@@ -118,6 +128,6 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     }
 
     interface IconAdapterListener {
-        fun onIconClicked(id: Int)
+        fun onIconClicked(view: View,id: Int)
     }
 }

@@ -24,8 +24,8 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
     }
 
     //category
-    override suspend fun insertNewTagToDb(name: String, icon: String): Either<Failure, Long> {
-        return Either.Right(historyDao.insertNewTagToDb(Category(0, name = name, icon = icon)))
+    override suspend fun insertNewTagToDb(category: Category): Either<Failure, Long> {
+        return Either.Right(historyDao.insertNewTagToDb(category))
     }
 
     override suspend fun deleteCategory(categoryId: Long): Either<Failure, Int> {
@@ -34,6 +34,9 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
 
     override suspend fun clearCategories(): Either<Failure, Int> {
         return Either.Right(historyDao.clearCategories())
+    }
+    override suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>> {
+        return Either.Right(historyDao.getAllCategoriesForLearning())
     }
 
     override suspend fun getAllTags(): Either<Failure, List<Category>> {

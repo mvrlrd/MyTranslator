@@ -37,12 +37,12 @@ class TagDialogViewModel(
     }
 
     fun loadTagToDataBase(tagText: String) {
-        val groupTag = Category(0, tagText, "false")
+        val groupTag = Category(0, tagText, "false",false)
         when {
             _allTagList.value.isNullOrEmpty()
                     || !_allTagList.value!!.contains(groupTag) -> {
                 viewModelScope.launch {
-                    newTagAdderer(arrayOf(tagText,"sdf"))
+                    newTagAdderer(groupTag)
                     getAllTags()
                 }
             }

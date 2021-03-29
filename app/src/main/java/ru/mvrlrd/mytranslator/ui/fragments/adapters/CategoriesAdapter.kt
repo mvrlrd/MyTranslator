@@ -64,13 +64,16 @@ class CategoriesAdapter(
         fun bind(category: Category) {
             itemView.textViewItem.text = category.name
             itemView.categoryIcon.load(category.icon.toInt())
+            itemView.categoryIcon.isSelected = category.isChecked
 
             itemView.setOnClickListener {
-                listener.onItemClick(category.categoryId)
+                listener.onItemClick( category.categoryId)
             }
 
             itemView.setOnLongClickListener {
-                listener.onItemLongPressed(category.categoryId)
+                itemView.categoryIcon.isSelected = !itemView.categoryIcon.isSelected
+                category.isChecked = !category.isChecked
+                listener.onItemLongPressed(itemView.categoryIcon,category)
                 true
             }
 
@@ -91,7 +94,7 @@ class CategoriesAdapter(
     interface RecipesAdapterListener {
         fun onItemClick(id: Long)
         fun onItemSwiped(categoryId: Long)
-        fun onItemLongPressed(categoryId: Long)
+        fun onItemLongPressed(v:View,category: Category)
 //        fun onItemSwiped(recipe : RecipeInformation)
 //        fun onFavouriteIconClick(recipeData: RecipeInformation)
     }

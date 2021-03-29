@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.categories_fragment.*
 import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
@@ -47,6 +49,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     private val newCategoryDialog : NewCategoryDialog by inject()
     private lateinit var catAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
+    var forLearningList = mutableListOf<Long>()
 
     private lateinit var callback: ItemTouchHelper.Callback
 
@@ -65,6 +68,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
             goToAddingNewCategoryDialogFragment()
 //            categoriesViewModel.clearCategories()
         }
+
+
 
         catAdapter = CategoriesAdapter(this as CategoriesAdapter.RecipesAdapterListener)
         return root
@@ -141,7 +146,13 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         vibrate(vibrator)
     }
 
-    override fun onItemLongPressed(categoryId: Long) {
-        Log.e(TAG, "onLongPressed   $categoryId")
+    override fun onItemLongPressed(v:View,category: Category) {
+            categoriesViewModel.updateCategory(category)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        Log.e(TAG, "selected  ")
+        return super.onOptionsItemSelected(item)
+
     }
 }

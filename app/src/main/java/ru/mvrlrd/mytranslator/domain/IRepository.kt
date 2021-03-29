@@ -21,11 +21,13 @@ interface IRepository {
     suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>>
 
 //category
-    suspend fun addNewTagToDb(name: String, icon: String): Either<Failure, Long>
+    suspend fun addNewTagToDb(category: Category): Either<Failure, Long>
 
     suspend fun deleteCategory(categoryId: Long): Either<Failure, Int>
 
     suspend fun clearCategoriesFromDb(): Either<Failure, Int>
+
+    suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>>
 
     suspend fun getAllTags(): Either<Failure, List<Category>>
 

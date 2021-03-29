@@ -36,8 +36,8 @@ class SearchResultIRepository(
 
     //category
 
-    override suspend fun addNewTagToDb(name: String, icon : String): Either<Failure, Long> {
-        return localDataSource.insertNewTagToDb(name, icon)
+    override suspend fun addNewTagToDb(category: Category): Either<Failure, Long> {
+        return localDataSource.insertNewTagToDb(category)
     }
 
     override suspend fun deleteCategory(categoryId: Long): Either<Failure, Int> {
@@ -47,7 +47,9 @@ class SearchResultIRepository(
     override suspend fun clearCategoriesFromDb(): Either<Failure, Int> {
         return localDataSource.clearCategories()
     }
-
+    override suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>> {
+        return localDataSource.getAllCategoriesForLearning()
+    }
     override suspend fun getAllTags(): Either<Failure, List<Category>> {
         return localDataSource.getAllTags()
     }

@@ -35,6 +35,9 @@ interface HistoryDao {
     @Query("SELECT * FROM group_tags")
     suspend fun getAllTags(): List<Category>
 
+    @Query("SELECT * FROM group_tags WHERE isChecked")
+    suspend fun getAllCategoriesForLearning(): List<Category>
+
     @Query("DELETE FROM group_tags WHERE categoryId =:catId")
     suspend fun deleteCategory(catId: Long): Int
 

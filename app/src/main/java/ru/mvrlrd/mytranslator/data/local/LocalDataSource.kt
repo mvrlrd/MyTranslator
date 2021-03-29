@@ -14,9 +14,10 @@ interface LocalDataSource {
     suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>>
 
     //category
-    suspend fun insertNewTagToDb(name: String, icon: String): Either<Failure, Long>
+    suspend fun insertNewTagToDb(category: Category): Either<Failure, Long>
     suspend fun deleteCategory(categoryId: Long): Either<Failure, Int>
     suspend fun clearCategories(): Either<Failure, Int>
+    suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>>
     suspend fun getAllTags(): Either<Failure, List<Category>>
 
     //crossref

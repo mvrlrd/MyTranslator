@@ -19,6 +19,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListViewModel
 import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
@@ -40,6 +41,7 @@ val appSources = module {
 val appViewModules = module {
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { CategoriesViewModel(get(), get()) }
+    viewModel { LearningViewModel(get(),get()) }
     single { WordsListViewModel(get(), get()) }
     viewModel { NewWordViewModel(get(), get()) }
     single { TagDialogViewModel(get(), get()) }

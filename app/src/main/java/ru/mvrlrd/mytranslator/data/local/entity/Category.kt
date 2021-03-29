@@ -1,6 +1,7 @@
 package ru.mvrlrd.mytranslator.data.local.entity
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
@@ -11,9 +12,15 @@ data class Category(
     val categoryId: Long,
     @SerializedName("name")
     val name: String,
-    val icon: String
+    val icon: String,
+
+    var isChecked : Boolean
+
+
 
 ) {
+
+
     override fun equals(other: Any?): Boolean {
         return if (other !is Category){
             false

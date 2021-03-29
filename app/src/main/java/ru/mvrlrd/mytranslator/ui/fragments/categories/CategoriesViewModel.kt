@@ -1,6 +1,7 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -24,16 +25,18 @@ class CategoriesViewModel(
     private val clearerCategories: ClearCategories = ClearCategories(searchResultRepository)
     private val newCategoryAdderer: NewTagAdderer = NewTagAdderer(searchResultRepository)
     private val removerCategoryFromDb: RemoverCategoryFromDb = RemoverCategoryFromDb(searchResultRepository)
-    private var _allCategoryList = MutableLiveData<List<Category>>()
+
+     var _allCategoryList = MutableLiveData<List<Category>>()
     val liveAllCategoriesList: LiveData<List<Category>> = _allCategoryList
 
+
     fun addNewCategory(name: String, icon: String) {
-        val groupTag = Category(0, name, icon)
+        val groupTag = Category(0, name, icon, false)
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {
                 viewModelScope.launch {
-                    newCategoryAdderer(arrayOf(name, icon)) {
+                    newCategoryAdderer(groupTag) {
                         it.fold(
                             ::handleFailure,
                             ::handleAddingCategory
@@ -50,6 +53,12 @@ class CategoriesViewModel(
     private fun handleAddingCategory(quantity: Long) {
         Log.e(TAG, "$quantity      added")
         refreshCategoriesScreen()
+    }
+
+    fun updateCategory(category: Category){
+        viewModelScope.launch {
+            newCategoryAdderer(category)
+        }
     }
 
     fun refreshCategoriesScreen() {
@@ -95,6 +104,9 @@ class CategoriesViewModel(
         Log.e(TAG, "$numOfDeleted item was deleted from db")
         refreshCategoriesScreen()
     }
+
+
+
 }
 
 

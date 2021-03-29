@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import kotlinx.android.synthetic.main.item_word.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
@@ -80,6 +81,7 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
             itemView.translationTextView.text = cardOfWord.translation
             itemView.transcriptionTextView2.text = cardOfWord.transcription
             itemView.antonymTextView.text = ""
+
 
 
         }

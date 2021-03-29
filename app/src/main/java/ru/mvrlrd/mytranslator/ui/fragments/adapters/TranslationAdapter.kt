@@ -6,7 +6,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import coil.api.load
 import kotlinx.android.synthetic.main.item_translations.view.*
+import kotlinx.android.synthetic.main.item_word.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import java.util.*
@@ -79,6 +81,7 @@ class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener
         @SuppressLint("SetTextI18n")
         fun bind(translation : String) {
             itemView.translation_item_TextView.text = translation
+
 
 
         }

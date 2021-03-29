@@ -8,38 +8,41 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.LinearLayoutManager
+import kotlinx.android.synthetic.main.categories_fragment.*
+import kotlinx.android.synthetic.main.fragment_learning.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.LearningAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
+import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+
 
 private val TAG = "LearningFragment"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [LearningFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class LearningFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+
+class LearningFragment : Fragment(), LearningAdapter.LearningAdapterListener {
+
 
 
     private val learningViewModel : LearningViewModel by inject()
+    private lateinit var learningAdapter:LearningAdapter
 
-lateinit var lis:List<Category>
+    private lateinit var callback: ItemTouchHelper.Callback
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
 
-        learningViewModel.getCategories()
 
 
 
@@ -50,31 +53,68 @@ lateinit var lis:List<Category>
         savedInstanceState: Bundle?
     ): View? {
 
-        learningViewModel.liveLearningCategoriesList.observe(viewLifecycleOwner, Observer { list->
-            Log.e(TAG,list.toString())
-         })
+
+
+
+        learningAdapter = LearningAdapter(this as LearningAdapter.LearningAdapterListener)
+
+
 
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_learning, container, false)
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment LearningFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LearningFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onResume() {
+        super.onResume()
+        learningViewModel.getCategories()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+learningViewModel.liveLearningCategoriesList.observe(viewLifecycleOwner, Observer {
+    cat ->  learningViewModel.getAllWordsOfCategory1(cat)
+
+//    Log.e(TAG,cat.toString())
+
+
+})
+
+        learningViewModel.liveWordsList.observe(
+            viewLifecycleOwner,
+            Observer { words ->
+                Log.e(TAG,words.toString())
+                handleCategoryRecycler(words as MutableList<CardOfWord>)
+            })
+        //for the first loading
+        if (learningViewModel.liveWordsList.value != null) {
+            handleCategoryRecycler(learningViewModel.liveWordsList.value!!)
+        }
+    }
+
+    private fun handleCategoryRecycler(allWords: List<CardOfWord>) {
+        learning_recyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this.context)
+            adapter = learningAdapter.apply { collection = allWords.shuffled() as MutableList<CardOfWord> }
+        }
+        callback =
+            SimpleItemTouchHelperCallback(
+                learning_recyclerview.adapter as ItemTouchHelperAdapter
+            )
+        ItemTouchHelper(callback).attachToRecyclerView(learning_recyclerview)
+    }
+
+
+    override fun onItemClick(id: Long) {
+
+    }
+
+    override fun onItemSwiped(categoryId: Long) {
+
+    }
+
+    override fun onItemLongPressed(v: View, category: Category) {
+
     }
 }

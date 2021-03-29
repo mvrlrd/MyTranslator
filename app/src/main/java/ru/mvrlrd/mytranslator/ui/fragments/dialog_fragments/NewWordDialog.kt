@@ -10,10 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
+import coil.api.load
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adding_word_fragment.*
@@ -43,6 +45,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.adding_word_fragment, container, false)
+
 
         root.findViewById<FloatingActionButton>(R.id.addNewWordFab)
             .setOnClickListener {
@@ -87,6 +90,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
                 val listOfTranslations: List<String> = when (listOfMeaning.isNullOrEmpty()) {
                     true -> { mutableListOf() }
                     false -> {
+
                         refreshTextFields(listOfMeaning[0])
                         getListOfUniqueTranslations(listOfMeaning) }
                 }
@@ -111,6 +115,10 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
             }
             it.translation.let {translation ->
                 newWordsTranslationEditText.setText(translation)
+            }
+            it.image_url.let{imageUrl->
+                Log.e(TAG,"http:${imageUrl}   imaaaaaaaage")
+//                newWordImageView.load("http:${imageUrl}")
             }
         }
     }

@@ -33,6 +33,7 @@ private val onSwipeListener: LearningAdapterListener
     }
 
     override fun onBindViewHolder(holder: LearningCardsHolder, position: Int) {
+
         holder.bind(collection[position])
     }
 
@@ -65,9 +66,21 @@ private val onSwipeListener: LearningAdapterListener
         , ItemTouchHelperViewHolder {
 
         fun bind(cardOfWord: CardOfWord) {
-            itemView.learningImageView.load("http://d2zkmv5t5kao9.cloudfront.net/images/1eed02c00bf04a4af44e9a66bcf2e2d6.png?w=640&h=480")
+
+            itemView.learningImageView.load("https:${cardOfWord.image_url}")
             itemView.learningTextView.text = cardOfWord.text
+            itemView.learningTextView2.visibility = View.GONE
             itemView.learningTextView2.text = cardOfWord.translation
+            itemView.setOnClickListener {
+                if (itemView.learningTextView2.visibility == View.VISIBLE){
+                    itemView.learningTextView2.visibility = View.GONE
+                }else{
+                    itemView.learningTextView2.visibility = View.VISIBLE
+                }
+
+                listener.onItemClick(cardOfWord.id)
+            }
+
         }
 
         override fun onItemSelected() {

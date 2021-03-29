@@ -98,6 +98,10 @@ learningViewModel.liveLearningCategoriesList.observe(viewLifecycleOwner, Observe
                 LinearLayoutManager(this.context)
             adapter = learningAdapter.apply { collection = allWords.shuffled() as MutableList<CardOfWord> }
         }
+
+
+
+
         callback =
             SimpleItemTouchHelperCallback(
                 learning_recyclerview.adapter as ItemTouchHelperAdapter

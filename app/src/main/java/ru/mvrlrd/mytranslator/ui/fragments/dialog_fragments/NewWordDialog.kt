@@ -32,7 +32,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
     private lateinit var translationAdapter: TranslationAdapter
     private val newWordViewModel: NewWordViewModel by inject()
 
-
+    private var imageUrl :String? = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,9 +116,9 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
             it.translation.let {translation ->
                 newWordsTranslationEditText.setText(translation)
             }
-            it.image_url.let{imageUrl->
-                Log.e(TAG,"http:${imageUrl}   imaaaaaaaage")
-//                newWordImageView.load("http:${imageUrl}")
+            it.image_url.let{it->
+                imageUrl = it
+//                newWordImageView.load("https:${imageUrl}")
             }
         }
     }
@@ -129,6 +129,9 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
                 adapter =
                     translationAdapter.apply { collection = translationList as MutableList<String> }
             }
+//        translations_recycler.layoutManager = object : LinearLayoutManager(context) {
+//            override fun canScrollVertically(): Boolean = false
+//        }
 //        callback =
 //            SimpleItemTouchHelperCallback(
 //                translations_recycler.adapter as ItemTouchHelperAdapter
@@ -143,7 +146,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
     str2.append("{\"id\":\"0\",")
     str2.append("\"text\":\"${newWordEditText.changeSymbol()}\",")
     str2.append("\"translation\":\"${newWordsTranslationEditText.changeSymbol()}\",")
-    str2.append("\"image_url\":\"www.ru!\",")
+    str2.append("\"image_url\":\"$imageUrl\",")
     str2.append("\"transcription\":\"${newWordsTranscriptionEditText.changeSymbol()}\",")
     str2.append("\"partOfSpeech\":\"noun!\",")
     str2.append("\"prefix\":\"the!\"}")

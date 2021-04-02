@@ -13,10 +13,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetterCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.categories.GetterLearningCategories
-import ru.mvrlrd.mytranslator.domain.use_cases.categories.TagsLoader
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
-import java.util.*
-
 
 private val TAG ="LearningViewModel"
 class LearningViewModel(

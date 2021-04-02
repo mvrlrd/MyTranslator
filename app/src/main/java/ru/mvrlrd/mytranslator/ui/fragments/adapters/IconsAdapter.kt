@@ -78,7 +78,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
             message = when (collection[position].isChecked) {
                 true -> {
                     holder.itemView.iconImageView.isSelected = false
-//                    holder.itemView.iconImageView.borderWidth =4
+//                    holder.itemView.iconImageView.borderWidth = 6
 //                    holder.itemView.iconImageView.borderColor =Color.BLACK
 //                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
                     "unselected"

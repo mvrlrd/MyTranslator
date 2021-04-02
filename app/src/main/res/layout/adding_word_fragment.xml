@@ -65,7 +65,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:backgroundTint="@android:color/holo_purple"
-            app:srcCompat="@android:drawable/ic_input_add" />
+
+            android:src="@drawable/add_basket_96"/>
 
 
 
@@ -75,3 +76,5 @@
 
 
 </LinearLayout>
+
+<!--    app:srcCompat="@android:drawable/ic_input_add"-->

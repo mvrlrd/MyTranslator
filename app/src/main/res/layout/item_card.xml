@@ -60,7 +60,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/addressbook_96"
+            android:src="@drawable/checkmark_96"
             android:layout_gravity="center"/>
 
     </FrameLayout>
@@ -74,7 +74,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/cafe_96"
+            android:src="@drawable/delete_96"
             android:layout_gravity="center"/>
 
     </FrameLayout>
@@ -88,7 +88,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/business_96"
+            android:src="@drawable/thick_arrow_pointing_up_96"
             android:layout_gravity="center"/>
 
     </FrameLayout>
@@ -102,7 +102,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/large_tree_96"
+            android:src="@drawable/thick_arrow_pointing_down_96"
             android:layout_gravity="center"/>
 
     </FrameLayout>

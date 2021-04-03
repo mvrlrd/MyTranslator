@@ -11,19 +11,21 @@
     app:cardCornerRadius="8dp"
     app:cardBackgroundColor="@android:color/background_dark">
 
-    <ImageView
-        android:id="@+id/main_image_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_gravity="top"
         android:padding="16dp"
         android:background="@drawable/gradation_black">
+
+        <ImageView
+            android:id="@+id/main_image_view"
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:scaleType="centerCrop"/>
 
         <TextView
             android:id="@+id/item_card_word"

@@ -35,7 +35,7 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
         fun bind(cardOfWord: CardOfWord) {
             itemView.main_image_view.load("https:${cardOfWord.image_url}")
             itemView.item_card_word.text = cardOfWord.text
-            itemView.item_card_transcription.text = cardOfWord.transcription
+            itemView.item_card_transcription.text = ("[${cardOfWord.transcription}]")
             itemView.item_card_translation.text = cardOfWord.translation
         }
     }

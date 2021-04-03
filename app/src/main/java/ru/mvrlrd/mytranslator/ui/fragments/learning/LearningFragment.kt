@@ -25,6 +25,8 @@ class LearningFragment : Fragment(), CardStackListener {
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
     private val learningViewModel: LearningViewModel by inject()
+
+    private var pos : Int? = null
     private var swipeDirection: Direction? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,20 +46,36 @@ class LearningFragment : Fragment(), CardStackListener {
         return inflater.inflate(R.layout.fragment_learning, container, false)
     }
 
-    override fun onCardDragging(direction: Direction?, ratio: Float) {
 
-        Log.e(TAG, "onCardDragging")
+
+
+    override fun onCardAppeared(view: View?, position: Int) {
+        Log.e(TAG, "1   ${csadapter.collection[position].text}")
     }
 
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+
+        Log.e(TAG, "2")
+    }
+
+    override fun onCardDisappeared(view: View?, position: Int) {
+        pos = position
+        Log.e(TAG, "3 ${csadapter.collection[position].text}")
+    }
     override fun onCardSwiped(direction: Direction?) {
         swipeDirection = direction
         when(swipeDirection){
-            Direction.Left -> {Log.e(TAG, "onCardSwiped to the left")}
-            Direction.Right -> {Log.e(TAG, "onCardSwiped to the right")}
-            else -> {Log.e(TAG, "onCardSwiped up or down")}
+            Direction.Left -> {
+                csadapter.collection[pos!!].progress=0
+                Log.e(TAG, "onCardSwiped to the left")}
+            Direction.Right -> {
+                csadapter.collection[pos!!].progress+=25
+                Log.e(TAG, "onCardSwiped to the right")}
+            else -> {Log.e(TAG, "4 up or down")}
         }
 
     }
+
 
     override fun onCardRewound() {
         Log.e(TAG, "onCardRewound")
@@ -67,14 +85,9 @@ class LearningFragment : Fragment(), CardStackListener {
         Log.e(TAG, "onCardCanceled")
     }
 
-    override fun onCardAppeared(view: View?, position: Int) {
-        Log.e(TAG, "onCardAppeared   ${csadapter.collection[position].text}")
-    }
 
-    override fun onCardDisappeared(view: View?, position: Int) {
 
-        Log.e(TAG, "onCardDisappeared ${csadapter.collection[position].text}")
-    }
+
 
     override fun onResume() {
         super.onResume()

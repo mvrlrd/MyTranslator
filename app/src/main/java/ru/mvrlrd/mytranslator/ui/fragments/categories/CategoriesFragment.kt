@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -37,9 +38,12 @@ import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListFragment
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
+import java.io.File
+import java.io.InputStream
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
+private const val CHOOSE_FILE_REQUEST_CODE = 111
 private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "CategoryFragment"
 
@@ -65,8 +69,18 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
         val but: FloatingActionButton = root.findViewById(R.id.gotoAddingCategoryFragmentFab)
         but.setOnClickListener {
-            goToAddingNewCategoryDialogFragment()
-//            categoriesViewModel.clearCategories()
+
+            val intent = Intent()
+                .setType("text/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+
+            startActivityForResult(Intent.createChooser(intent, "Select file"), 111)
+
+
+//            goToAddingNewCategoryDialogFragment()
+
+
         }
 
 
@@ -122,17 +136,30 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
-            Log.e(
-                TAG,
-                "resultCode = $requestCode doesn't equal to Activity.Result_OK"
-            )
+            Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
             data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
                 categoriesViewModel.addNewCategory(it[0], it[1])
             }
-        }
+        } else          // Selected a file to load
+            if ((requestCode == CHOOSE_FILE_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
+                val selectedFilename = data?.data //The uri with the location of the file
+                if (selectedFilename != null) {
+// читает файл!!!!
+
+                    context?.contentResolver?.openInputStream(selectedFilename)?.bufferedReader()
+                        ?.forEachLine {
+                            val toast = Toast.makeText(this.context, it, Toast.LENGTH_SHORT)
+                            toast.show()
+                        }
+                } else {
+                    val msg = "Null filename data received!"
+                    val toast = Toast.makeText(this.context, msg, Toast.LENGTH_LONG)
+                    toast.show()
+                }
+            }
     }
 
     override fun onItemClick(id: Long) {

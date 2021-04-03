@@ -25,6 +25,7 @@ class LearningFragment : Fragment(), CardStackListener {
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
     private val learningViewModel: LearningViewModel by inject()
+    private var swipeDirection: Direction? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,10 +50,11 @@ class LearningFragment : Fragment(), CardStackListener {
     }
 
     override fun onCardSwiped(direction: Direction?) {
-        if (direction==Direction.Left){
-            Log.e(TAG, "onCardSwiped to the left")
-        }else{
-            Log.e(TAG, "onCardSwiped to the right")
+        swipeDirection = direction
+        when(swipeDirection){
+            Direction.Left -> {Log.e(TAG, "onCardSwiped to the left")}
+            Direction.Right -> {Log.e(TAG, "onCardSwiped to the right")}
+            else -> {Log.e(TAG, "onCardSwiped up or down")}
         }
 
     }
@@ -66,11 +68,12 @@ class LearningFragment : Fragment(), CardStackListener {
     }
 
     override fun onCardAppeared(view: View?, position: Int) {
-        Log.e(TAG, "onCardAppeared")
+        Log.e(TAG, "onCardAppeared   ${csadapter.collection[position].text}")
     }
 
     override fun onCardDisappeared(view: View?, position: Int) {
-        Log.e(TAG, "onCardDisappeared")
+
+        Log.e(TAG, "onCardDisappeared ${csadapter.collection[position].text}")
     }
 
     override fun onResume() {

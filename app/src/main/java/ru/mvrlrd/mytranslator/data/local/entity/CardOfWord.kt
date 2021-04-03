@@ -4,6 +4,7 @@ package ru.mvrlrd.mytranslator.data.local.entity
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
@@ -16,7 +17,8 @@ data class CardOfWord (
     @ColumnInfo val image_url: String?,
     @ColumnInfo val transcription: String?,
     @ColumnInfo val partOfSpeech: String?,
-    @ColumnInfo val prefix: String?
+    @ColumnInfo val prefix: String?,
+    @ColumnInfo var progress : Int
 ):Parcelable{
 //    @Ignore
 //    constructor(text:String?,translation: String? ): this(0,text,translation)

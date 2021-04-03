@@ -80,7 +80,8 @@ class NewWordViewModel (
                         item.image_url,
                         item.transcription,
                         item.partOfSpeech,
-                        item.prefix
+                        item.prefix,
+                        0
                     )
                 )
                 {

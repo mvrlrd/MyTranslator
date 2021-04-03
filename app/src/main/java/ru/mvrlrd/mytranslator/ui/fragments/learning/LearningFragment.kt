@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
+import com.yuyakaido.android.cardstackview.Direction
 import kotlinx.android.synthetic.main.fragment_learning.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
@@ -19,7 +20,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
 
 private val TAG = "LearningFragment"
 
-class LearningFragment : Fragment() {
+class LearningFragment : Fragment(), CardStackListener {
 
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
@@ -27,7 +28,11 @@ class LearningFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        manager = CardStackLayoutManager(this.context, CardStackListener.DEFAULT)
+        manager = CardStackLayoutManager(this.context,
+//            CardStackListener.DEFAULT
+            this)
+            manager.setCanScrollVertical(false)
+            manager.setSwipeThreshold(0.8f)
         csadapter = CardStackAdapter()
     }
 
@@ -36,6 +41,36 @@ class LearningFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_learning, container, false)
+    }
+
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+
+        Log.e(TAG, "onCardDragging")
+    }
+
+    override fun onCardSwiped(direction: Direction?) {
+        if (direction==Direction.Left){
+            Log.e(TAG, "onCardSwiped to the left")
+        }else{
+            Log.e(TAG, "onCardSwiped to the right")
+        }
+
+    }
+
+    override fun onCardRewound() {
+        Log.e(TAG, "onCardRewound")
+    }
+
+    override fun onCardCanceled() {
+        Log.e(TAG, "onCardCanceled")
+    }
+
+    override fun onCardAppeared(view: View?, position: Int) {
+        Log.e(TAG, "onCardAppeared")
+    }
+
+    override fun onCardDisappeared(view: View?, position: Int) {
+        Log.e(TAG, "onCardDisappeared")
     }
 
     override fun onResume() {

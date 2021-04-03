@@ -9,7 +9,7 @@
     app:cardUseCompatPadding="true"
     app:cardPreventCornerOverlap="false"
     app:cardCornerRadius="8dp"
-    app:cardBackgroundColor="@android:color/background_dark">
+    app:cardBackgroundColor="@android:color/tertiary_text_light">
 
 
 
@@ -21,11 +21,22 @@
         android:padding="16dp"
         android:background="@drawable/gradation_black">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="250dp"
+            android:layout_height="150dp"
+            android:background="?attr/selectableItemBackground"
+            android:foreground="?attr/selectableItemBackground"
+            app:cardUseCompatPadding="true"
+            app:cardPreventCornerOverlap="false"
+            app:cardCornerRadius="8dp"
+            app:cardBackgroundColor="@android:color/tertiary_text_light">
         <ImageView
             android:id="@+id/main_image_view"
             android:layout_width="250dp"
             android:layout_height="150dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop"
+            />
+        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/item_card_word"

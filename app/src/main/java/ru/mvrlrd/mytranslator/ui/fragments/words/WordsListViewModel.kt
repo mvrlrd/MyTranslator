@@ -41,15 +41,21 @@ class WordsListViewModel(
 
 
     fun saveWordToDb(str : String) {
-        viewModelScope.launch {
-            saveCardToFavorites(mapStringToCardOfWord(str)) {
-                it.fold(
-                    ::handleFailure,
-                    ::handleAddingWordToDb
-                )
+    val card = Gson().fromJson(str, CardOfWord::class.java)
+        if (checkIfWordIsInCategory(card) == false) {
+            viewModelScope.launch {
+                saveCardToFavorites(card) {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleAddingWordToDb
+                    )
+                }
             }
         }
     }
+//    private fun mapStringToCardOfWord(jsonString: String): CardOfWord {
+//        return Gson().fromJson(jsonString, CardOfWord::class.java)
+//    }
 
     private fun handleAddingWordToDb(wordId: Long) {
         Log.e(TAG, "new word #$wordId has been added to the database")
@@ -88,22 +94,9 @@ class WordsListViewModel(
         _liveWordList.value = categoryWithWords.cards
     }
 
-//    private fun mapStringToCardOfWord(nowItIsOnlyTitle: String): CardOfWord {
-//        return CardOfWord(
-//            0,
-//            nowItIsOnlyTitle,
-//            "захватывающий",
-//            "predictable",
-//            "gripin",
-//            "",
-//            ""
-//        )
-//    }
 
-    private fun mapStringToCardOfWord(jsonString: String): CardOfWord {
-        return Gson().fromJson<CardOfWord>(jsonString, CardOfWord::class.java)
 
-    }
+
     fun deleteWordFromCategory(cardId: Long){
         viewModelScope.launch {
             removerWordFromCategory(arrayOf(cardId, categoryId)){
@@ -116,5 +109,10 @@ class WordsListViewModel(
     }
     private fun handleDeletingWordFromCat(numOfDeletedWord : Int){
         Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
+    }
+
+    private fun checkIfWordIsInCategory(card: CardOfWord):Boolean? {
+        return liveWordList.value?.contains(card)
+
     }
 }

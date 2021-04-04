@@ -19,6 +19,10 @@ class DbHelper(private val historyDao: HistoryDao) : LocalDataSource {
         return Either.Right(historyDao.delete(id))
     }
 
+    override suspend fun clearAllCardsFromDb(): Either<Failure, Int> {
+        return Either.Right(historyDao.clear())
+    }
+
     override suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>> {
         return Either.Right(historyDao.getAll())
     }

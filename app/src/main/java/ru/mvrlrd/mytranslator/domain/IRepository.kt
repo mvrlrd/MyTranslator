@@ -18,6 +18,8 @@ interface IRepository {
 
     suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>
 
+    suspend fun clearAllWordsFromDb(): Either<Failure, Int>
+
     suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>>
 
 //category

@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
@@ -58,8 +59,13 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
     ): View? {
         _adapter =
             TranslationAdapter(this as OnSwipeListener)
+        val root = inflater.inflate(R.layout.fragment_favorites, container, false)
+
+        root.findViewById<FloatingActionButton>(R.id.cleanFavoritesFab).setOnClickListener {
+            viewModel.clearAllWordsFromDb()
+        }
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_favorites, container, false)
+        return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

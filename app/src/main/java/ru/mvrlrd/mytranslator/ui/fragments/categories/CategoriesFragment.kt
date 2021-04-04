@@ -53,7 +53,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     private val newCategoryDialog : NewCategoryDialog by inject()
     private lateinit var catAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
-    var forLearningList = mutableListOf<Long>()
+
 
     private lateinit var callback: ItemTouchHelper.Callback
 
@@ -69,13 +69,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
         val but: FloatingActionButton = root.findViewById(R.id.gotoAddingCategoryFragmentFab)
         but.setOnClickListener {
-
-
-
-
             goToAddingNewCategoryDialogFragment()
-
-
         }
 
 

@@ -11,6 +11,7 @@ interface LocalDataSource {
     //words
     suspend fun saveCardToDb(cardOfWord: CardOfWord): Either<Failure, Long>
     suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>
+    suspend fun clearAllCardsFromDb():Either<Failure, Int>
     suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>>
 
     //category

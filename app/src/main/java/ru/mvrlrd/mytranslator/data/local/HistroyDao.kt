@@ -14,7 +14,7 @@ interface HistoryDao {
     suspend fun insert(word: CardOfWord?): Long
 
     @Query("DELETE FROM searching_history")
-    suspend fun clear()
+    suspend fun clear(): Int
 
     @Query("DELETE FROM searching_history WHERE id =:id")
     suspend fun delete(id: Long): Int

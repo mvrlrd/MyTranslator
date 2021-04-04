@@ -13,18 +13,11 @@ data class Category(
     @SerializedName("name")
     val name: String,
     val icon: String,
-
-    var isChecked : Boolean
-
-
-
+    var isChecked: Boolean
 ) {
-
-
     override fun equals(other: Any?): Boolean {
-        return if (other !is Category){
+        return if (other !is Category) {
             false
-        }else this.name == other.name
+        } else this.name == other.name
     }
-
 }

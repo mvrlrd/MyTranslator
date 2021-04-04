@@ -46,6 +46,16 @@ class WordsListFragment : Fragment(), OnItemClickListener {
     private val vibrator: Vibrator by inject()
     private lateinit var callback: ItemTouchHelper.Callback
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val id = arguments?.get("categoryId")
+        id?.let {
+            wordsListViewModel.getAllWordsOfCategory(it as Long)
+            wordsListViewModel.categoryId = id as Long
+            }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -55,12 +65,9 @@ class WordsListFragment : Fragment(), OnItemClickListener {
             this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
-        val id = arguments?.get("categoryId")
-        id?.let {
-            wordsListViewModel.categoryId = id as Long
-            wordsListViewModel.getAllWordsOfCategory(it as Long) }
-
-
+        wordsListViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
+            handleRecycler(wordList)
+        })
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
 
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
@@ -83,10 +90,6 @@ class WordsListFragment : Fragment(), OnItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
 
-
-        wordsListViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
-            handleRecycler(wordList)
-        })
 
 
 

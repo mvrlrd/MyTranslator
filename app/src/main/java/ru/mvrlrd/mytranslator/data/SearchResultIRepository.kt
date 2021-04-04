@@ -30,6 +30,10 @@ class SearchResultIRepository(
         return localDataSource.deleteCardFromDb(id)
     }
 
+    override suspend fun clearAllWordsFromDb(): Either<Failure, Int> {
+        return localDataSource.clearAllCardsFromDb()
+    }
+
     override suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>> {
         return localDataSource.getAllCardsFromDb()
     }

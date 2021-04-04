@@ -66,15 +66,16 @@ class CategoriesAdapter(
             itemView.categoryIcon.load(category.icon.toInt())
             itemView.categoryIcon.isSelected = category.isChecked
 
-            itemView.setOnClickListener {
+            itemView.setOnLongClickListener {
                 listener.onItemClick( category.categoryId)
+                true
             }
 
-            itemView.setOnLongClickListener {
+            itemView.setOnClickListener {
                 itemView.categoryIcon.isSelected = !itemView.categoryIcon.isSelected
                 category.isChecked = !category.isChecked
                 listener.onItemLongPressed(itemView.categoryIcon,category)
-                true
+
             }
 
             val categoryItemTransitionName =

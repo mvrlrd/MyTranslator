@@ -3,11 +3,13 @@ package ru.mvrlrd.mytranslator.ui.old.old.favorites
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.domain.use_cases.cards.CleanerWordsDb
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.DeleteCardFromFavorites
 import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetAllCardsFromDb
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
@@ -22,6 +24,9 @@ class FavoritesViewModel(
     private val deleteCardFromFavorites: DeleteCardFromFavorites =
         DeleteCardFromFavorites(searchResultRepository)
     private val getAllCardsFromDb: GetAllCardsFromDb = GetAllCardsFromDb(searchResultRepository)
+    private val cleanerAllWords: CleanerWordsDb = CleanerWordsDb(searchResultRepository)
+
+
     var liveHistory: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
 
     init {
@@ -66,6 +71,22 @@ class FavoritesViewModel(
 
     private fun handleDeleting(quantity: Int) {
         Log.d(TAG, "$quantity item was deleted from the database")
+    }
+
+    fun clearAllWordsFromDb(){
+        viewModelScope.launch {
+            cleanerAllWords(Unit){
+                it.fold(
+                    ::handleFailure,
+                    ::handleCleaningWords
+                )
+            }
+        }
+    }
+
+    private fun handleCleaningWords(num: Int){
+        liveHistory.value = mutableListOf()
+        Log.e(TAG, "$num items were deleted from words db")
     }
 
     companion object {

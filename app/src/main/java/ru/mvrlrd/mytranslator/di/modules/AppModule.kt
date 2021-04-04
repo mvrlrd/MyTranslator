@@ -42,7 +42,7 @@ val appViewModules = module {
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { CategoriesViewModel(get(), get()) }
     viewModel { LearningViewModel(get(),get()) }
-    single { WordsListViewModel(get(), get()) }
+    viewModel { WordsListViewModel(get(), get()) }
     viewModel { NewWordViewModel(get(), get()) }
     single { TagDialogViewModel(get(), get()) }
     single { TranslationViewModel(get(), get()) }

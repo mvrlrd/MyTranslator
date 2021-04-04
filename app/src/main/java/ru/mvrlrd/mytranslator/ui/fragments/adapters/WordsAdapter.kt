@@ -1,6 +1,7 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
 import android.annotation.SuppressLint
+import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -79,11 +80,18 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
         fun bind(cardOfWord : CardOfWord) {
             itemView.wordTextView.text = cardOfWord.text
             itemView.translationTextView.text = cardOfWord.translation
-            itemView.transcriptionTextView2.text = cardOfWord.transcription
+            itemView.transcriptionTextView2.let{it.text = hideEmptyView(it, "[${cardOfWord.transcription}]") }
+
             itemView.antonymTextView.text = ""
+        }
 
-
-
+        private fun hideEmptyView(view : View, str: String?): String?{
+            if (str!="[_]"){
+                view.visibility = View.VISIBLE
+            }else{
+                view.visibility = View.GONE
+            }
+            return str
         }
 
     }

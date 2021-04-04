@@ -30,4 +30,20 @@
         app:backgroundTint="@android:color/holo_purple"
         app:srcCompat="@android:drawable/ic_input_add"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/addListOfWordsFab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:clickable="true"
+        android:foregroundGravity="center"
+        app:backgroundTint="@android:color/holo_purple"
+        app:layout_anchorGravity="top|end"
+        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.704"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/stat_notify_sdcard" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

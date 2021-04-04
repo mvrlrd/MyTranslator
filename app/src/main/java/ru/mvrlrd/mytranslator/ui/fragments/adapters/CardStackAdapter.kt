@@ -34,10 +34,24 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(cardOfWord: CardOfWord) {
-            itemView.main_image_view.load("https:${cardOfWord.image_url}")
+            if (cardOfWord.image_url !="_"){
+                itemView.main_image_view.load("https:${cardOfWord.image_url}")
+            }
+
             itemView.item_card_word.text = cardOfWord.text
-            itemView.item_card_transcription.text = ("[${cardOfWord.transcription}]")
-            itemView.item_card_translation.text = cardOfWord.translation
+            itemView.item_card_transcription.let {
+                it.text = hideEmptyView(it, "[${cardOfWord.transcription}]")
+                itemView.item_card_translation.text = cardOfWord.translation
+            }
+        }
+
+        private fun hideEmptyView(view: View, str: String?): String? {
+            if (str != "[_]") {
+                view.visibility = View.VISIBLE
+            } else {
+                view.visibility = View.GONE
+            }
+            return str
         }
     }
 }

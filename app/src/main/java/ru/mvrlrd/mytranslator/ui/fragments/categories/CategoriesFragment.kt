@@ -70,15 +70,10 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         val but: FloatingActionButton = root.findViewById(R.id.gotoAddingCategoryFragmentFab)
         but.setOnClickListener {
 
-            val intent = Intent()
-                .setType("text/*")
-                .setAction(Intent.ACTION_GET_CONTENT)
 
 
-            startActivityForResult(Intent.createChooser(intent, "Select file"), 111)
 
-
-//            goToAddingNewCategoryDialogFragment()
+            goToAddingNewCategoryDialogFragment()
 
 
         }
@@ -143,23 +138,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
             data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
                 categoriesViewModel.addNewCategory(it[0], it[1])
             }
-        } else          // Selected a file to load
-            if ((requestCode == CHOOSE_FILE_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-                val selectedFilename = data?.data //The uri with the location of the file
-                if (selectedFilename != null) {
-// читает файл!!!!
-
-                    context?.contentResolver?.openInputStream(selectedFilename)?.bufferedReader()
-                        ?.forEachLine {
-                            val toast = Toast.makeText(this.context, it, Toast.LENGTH_SHORT)
-                            toast.show()
-                        }
-                } else {
-                    val msg = "Null filename data received!"
-                    val toast = Toast.makeText(this.context, msg, Toast.LENGTH_LONG)
-                    toast.show()
-                }
-            }
+        }
     }
 
     override fun onItemClick(id: Long) {

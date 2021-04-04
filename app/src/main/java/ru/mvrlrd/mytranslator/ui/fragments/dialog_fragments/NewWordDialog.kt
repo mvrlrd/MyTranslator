@@ -32,7 +32,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
     private lateinit var translationAdapter: TranslationAdapter
     private val newWordViewModel: NewWordViewModel by inject()
 
-    private var imageUrl :String? = ""
+    private var imageUrl :String? = "_"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -118,7 +118,6 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
             }
             it.image_url.let{it->
                 imageUrl = it
-//                newWordImageView.load("https:${imageUrl}")
             }
         }
     }

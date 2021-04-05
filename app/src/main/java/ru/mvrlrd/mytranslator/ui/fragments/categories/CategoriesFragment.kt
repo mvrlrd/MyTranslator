@@ -135,9 +135,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         }
     }
 
-    override fun onItemClick(id: Long) {
-    val action = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment(id)
-       findNavController().navigate(action)
+    override fun onItemClick(v:View,category: Category) {
+        categoriesViewModel.updateCategory(category)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -146,8 +145,10 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         vibrate(vibrator)
     }
 
-    override fun onItemLongPressed(v:View,category: Category) {
-            categoriesViewModel.updateCategory(category)
+    override fun onItemLongPressed(id: Long) {
+        val action = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment(id)
+        findNavController().navigate(action)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

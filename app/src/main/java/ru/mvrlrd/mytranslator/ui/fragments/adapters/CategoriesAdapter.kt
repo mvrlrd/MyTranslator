@@ -66,16 +66,18 @@ class CategoriesAdapter(
             itemView.categoryIcon.load(category.icon.toInt())
             itemView.categoryIcon.isSelected = category.isChecked
 
-            itemView.setOnLongClickListener {
-                listener.onItemClick( category.categoryId)
-                true
-            }
-
             itemView.setOnClickListener {
                 itemView.categoryIcon.isSelected = !itemView.categoryIcon.isSelected
                 category.isChecked = !category.isChecked
-                listener.onItemLongPressed(itemView.categoryIcon,category)
 
+                listener.onItemClick(itemView.categoryIcon, category)
+
+            }
+
+            itemView.setOnLongClickListener {
+
+                listener.onItemLongPressed(category.categoryId)
+                true
             }
 
             val categoryItemTransitionName =
@@ -93,9 +95,9 @@ class CategoriesAdapter(
     }
 
     interface RecipesAdapterListener {
-        fun onItemClick(id: Long)
+        fun onItemClick(v:View,category: Category)
         fun onItemSwiped(categoryId: Long)
-        fun onItemLongPressed(v:View,category: Category)
+        fun onItemLongPressed(id: Long)
 //        fun onItemSwiped(recipe : RecipeInformation)
 //        fun onFavouriteIconClick(recipeData: RecipeInformation)
     }

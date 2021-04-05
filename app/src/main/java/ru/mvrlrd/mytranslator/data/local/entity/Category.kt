@@ -20,4 +20,18 @@ data class Category(
             false
         } else this.name == other.name
     }
+
+    override fun toString(): String {
+        return "$name $icon"
+
+
+    }
+//    override fun toString(): String {
+//        return "{\"categoryId\":\"$categoryId\"," +
+//                "\"name\":\"$name\"," +
+//                "\"icon\":\"$icon\","+
+//                "\"isChecked\":\"$isChecked\"}"
+//    }
 }
+
+

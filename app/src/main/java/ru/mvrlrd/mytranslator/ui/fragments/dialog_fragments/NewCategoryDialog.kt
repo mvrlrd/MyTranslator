@@ -31,12 +31,23 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
     private var lastRequest: ()-> Unit = {}
 
     private val TAG = "AddingCategoryFragment"
+    private var currentIcon = ""
+    private var currentTitle = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light)
-
+        if (arguments != null) {
+            val mArgs = arguments
+            var myDay= mArgs?.getString("current state")
+            if (myDay != null) {
+                Log.e(TAG, myDay)
+                val arr = myDay.split(" ")
+                currentIcon = arr[1]
+                currentTitle = arr[0]
+            }
+        }
 
     }
 
@@ -45,13 +56,12 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.adding_category_fragment, container, false)
-//         val cirk  = root.findViewById<CircularImageView>(R.id.iconImageView)
-//             cirk.apply {
-//            circleColor = Color.WHITE
-//        }
 
         val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField: TextInputEditText = root.findViewById(R.id.newCategoryEditText)
+
+
+
         addNewButton.isClickable = true
         addNewButton.setOnClickListener {
             val name = nameTextField.text.toString()
@@ -69,7 +79,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
             } else {
                 nameTextField.text?.clear()
                 sendResult(name, iconId)
-                iconId = ""
+//                iconId = ""
                 dismiss()
             }
         }
@@ -110,6 +120,14 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         return "icon shouldn't be empty"
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (targetRequestCode == 111) {
+            newCategoryEditText.setText(currentTitle)
+            Log.e(TAG,"on resume $iconId")
+        }
+    }
+
     private fun showSnackBar(message: String, action: () -> Unit){
         Snackbar.make(
             this.place_for_snack_dialog_fragment,
@@ -129,8 +147,6 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
             ""
         }else{
             id.toString()
-
-
         }
 
 

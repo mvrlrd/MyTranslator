@@ -30,8 +30,8 @@ class CategoriesViewModel(
     val liveAllCategoriesList: LiveData<List<Category>> = _allCategoryList
 
 
-    fun addNewCategory(name: String, icon: String) {
-        val groupTag = Category(0, name, icon, false)
+    fun addNewCategory(id: Long,name: String, icon: String) {
+        val groupTag = Category(id, name, icon, false)
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {

@@ -54,6 +54,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     private lateinit var catAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
 
+    var editableId = -1L
+
 
     private lateinit var callback: ItemTouchHelper.Callback
 
@@ -62,14 +64,11 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         savedInstanceState: Bundle?
     ): View? {
 
-        newCategoryDialog.setTargetFragment(
-            this,
-            TARGET_FRAGMENT_REQUEST_CODE
-        )
+
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
         val but: FloatingActionButton = root.findViewById(R.id.gotoAddingCategoryFragmentFab)
         but.setOnClickListener {
-            goToAddingNewCategoryDialogFragment()
+            openDialogToAddNew()
         }
 
 
@@ -112,7 +111,17 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         })
     }
 
-    private fun goToAddingNewCategoryDialogFragment() {
+    private fun openDialogToAddNew() {
+        newCategoryDialog.setTargetFragment(this, TARGET_FRAGMENT_REQUEST_CODE)
+        newCategoryDialog.show(parentFragmentManager, "tagDialog")
+    }
+
+    private fun openDialogToEditCurrent(currentCategory: Category) {
+        editableId = currentCategory.categoryId
+        val bundle = Bundle()
+        bundle.putString("current state",currentCategory.toString())
+        newCategoryDialog.arguments = bundle
+        newCategoryDialog.setTargetFragment(this, CHOOSE_FILE_REQUEST_CODE)
         newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 
@@ -130,13 +139,19 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
         }
         if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
             data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
-                categoriesViewModel.addNewCategory(it[0], it[1])
+                categoriesViewModel.addNewCategory(0,it[0], it[1])
+            }
+        }
+        if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
+            data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
+                categoriesViewModel.addNewCategory(editableId, it[0], it[1])
             }
         }
     }
 
     override fun onItemClick(v:View,category: Category) {
-        categoriesViewModel.updateCategory(category)
+        openDialogToEditCurrent(category)
+//        categoriesViewModel.updateCategory(category)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

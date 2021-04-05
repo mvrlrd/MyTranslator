@@ -48,27 +48,29 @@ class LearningFragment : Fragment(), CardStackListener {
 
 
     override fun onCardAppeared(view: View?, position: Int) {
-        Log.e(TAG, "1   ${csadapter.collection[position].text}")
+//        Log.e(TAG, "1   ${csadapter.collection[position].text}")
     }
 
     override fun onCardDragging(direction: Direction?, ratio: Float) {
 
-        Log.e(TAG, "2")
+//        Log.e(TAG, "2")
     }
 
     override fun onCardDisappeared(view: View?, position: Int) {
         pos = position
-        Log.e(TAG, "3 ${csadapter.collection[position].text}")
+//        Log.e(TAG, "3 ${csadapter.collection[position].text}")
     }
     override fun onCardSwiped(direction: Direction?) {
         swipeDirection = direction
         when(swipeDirection){
             Direction.Left -> {
-                csadapter.collection[pos!!].progress=0
-                Log.e(TAG, "onCardSwiped to the left")}
+//                csadapter.collection[pos!!].progress=0
+//                Log.e(TAG, "onCardSwiped to the left")
+            }
             Direction.Right -> {
-                csadapter.collection[pos!!].progress+=25
-                Log.e(TAG, "onCardSwiped to the right")}
+//                csadapter.collection[pos!!].progress+=25
+//                Log.e(TAG, "onCardSwiped to the right")
+            }
             else -> {Log.e(TAG, "4 up or down")}
         }
 
@@ -76,11 +78,11 @@ class LearningFragment : Fragment(), CardStackListener {
 
 
     override fun onCardRewound() {
-        Log.e(TAG, "onCardRewound")
+//        Log.e(TAG, "onCardRewound")
     }
 
     override fun onCardCanceled() {
-        Log.e(TAG, "onCardCanceled")
+//        Log.e(TAG, "onCardCanceled")
     }
 
 

@@ -47,7 +47,7 @@ private const val CHOOSE_FILE_REQUEST_CODE = 111
 private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "CategoryFragment"
 
-class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener {
+class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListener {
 
     private val categoriesViewModel : CategoriesViewModel by inject()
     private val newCategoryDialog : NewCategoryDialog by inject()
@@ -73,7 +73,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
 
 
 
-        catAdapter = CategoriesAdapter(this as CategoriesAdapter.RecipesAdapterListener)
+        catAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
         return root
     }
 
@@ -150,8 +150,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     }
 
     override fun onItemClick(v:View,category: Category) {
-        openDialogToEditCurrent(category)
-//        categoriesViewModel.updateCategory(category)
+//        openDialogToEditCurrent(category)
+        categoriesViewModel.updateCategory(category)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -167,7 +167,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.RecipesAdapterListener 
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.e(TAG, "selected  ")
+//        Log.e(TAG, "selected  ")
         return super.onOptionsItemSelected(item)
 
     }

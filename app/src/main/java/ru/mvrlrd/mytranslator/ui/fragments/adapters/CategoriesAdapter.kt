@@ -15,7 +15,7 @@ import kotlin.properties.Delegates
 
 private val TAG = "CategoriesAdapter"
 class CategoriesAdapter(
-    private val onSwipeListener: RecipesAdapterListener
+    private val onSwipeListener: CategoriesAdapterListener
     ) : RecyclerView.Adapter<CategoriesAdapter.CategoryHolder>(), ItemTouchHelperAdapter {
 
     internal var collection: MutableList<Category> by
@@ -57,7 +57,7 @@ class CategoriesAdapter(
         notifyItemRemoved(position)
     }
 
-    class CategoryHolder(private val listener: RecipesAdapterListener, itemView: View) :
+    class CategoryHolder(private val listener: CategoriesAdapterListener, itemView: View) :
         RecyclerView.ViewHolder(itemView)
                 , ItemTouchHelperViewHolder {
 
@@ -94,7 +94,7 @@ class CategoriesAdapter(
         }
     }
 
-    interface RecipesAdapterListener {
+    interface CategoriesAdapterListener {
         fun onItemClick(v:View,category: Category)
         fun onItemSwiped(categoryId: Long)
         fun onItemLongPressed(id: Long)

@@ -11,16 +11,15 @@ import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.categories_fragment.*
@@ -40,6 +39,8 @@ import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 import java.io.File
 import java.io.InputStream
+import kotlin.math.max
+import kotlin.math.min
 
 
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
@@ -66,11 +67,11 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
 
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
-        val but: FloatingActionButton = root.findViewById(R.id.gotoAddingCategoryFragmentFab)
-        but.setOnClickListener {
+
+        val btn : Button = root.findViewById(R.id.addNewCatButton)
+        btn.setOnClickListener{
             openDialogToAddNew()
         }
-
 
 
         catAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
@@ -93,20 +94,24 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private fun handleCategoryRecycler(allCategories: List<Category>) {
         categories_recyclerview.apply {
             layoutManager =
-//                LinearLayoutManager(this.context)
-                GridLayoutManager(this.context, 3)
+                LinearLayoutManager(this.context)
+//                GridLayoutManager(this.context, 3)
             adapter = catAdapter.apply { collection = allCategories as MutableList<Category> }
-        }
+        }.addItemDecoration(DividerItemDecoration(context,LinearLayout.VERTICAL))
+
         callback =
             SimpleItemTouchHelperCallback(
                 categories_recyclerview.adapter as ItemTouchHelperAdapter
             )
         ItemTouchHelper(callback).attachToRecyclerView(categories_recyclerview)
 
+        var mScrollY = 0F
         categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) gotoAddingCategoryFragmentFab.hide()
-                else if (dy < 0) gotoAddingCategoryFragmentFab.show()
+            override fun onScrolled(rcv: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(rcv, dx, dy)
+                mScrollY += dy.toFloat()
+                mScrollY = max(mScrollY, 0F)
+                addNewCatLayout.translationY = min(-mScrollY, 0F)
             }
         })
     }

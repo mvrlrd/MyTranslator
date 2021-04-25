@@ -94,6 +94,12 @@ class CategoriesAdapter(
         }
     }
 
+//    interface ListItem{
+//
+//        fun getTypeOfItem()
+//
+//    }
+
     interface CategoriesAdapterListener {
         fun onItemClick(v:View,category: Category)
         fun onItemSwiped(categoryId: Long)

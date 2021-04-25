@@ -27,10 +27,13 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+if (collection.isNotEmpty()) {
+    var circ = position % collection.size
+    Log.e(TAG, "pos = $position ${collection[circ].text}   circ =$circ      adPos = ${holder.adapterPosition}")
+    holder.bind(collection[circ])
+}else{
 
-        var circ = position%collection.size
-        Log.e(TAG, "pos = $position ${collection[circ].text}   circ =$circ      adPos = ${holder.adapterPosition}")
-        holder.bind(collection[circ])
+}
     }
 
     override fun getItemCount() = Int.MAX_VALUE

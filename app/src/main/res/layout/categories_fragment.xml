@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,11 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".ui.fragments.categories.CategoriesFragment">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_add_category_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_recyclerview"
@@ -21,22 +18,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/gotoAddingCategoryFragmentFab"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/addNewCatLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:clickable="true"
-        app:layout_anchorGravity="top|end"
-        app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-        android:foregroundGravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:backgroundTint="@android:color/holo_purple"
-        app:srcCompat="@android:drawable/ic_input_add"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/addNewCatButton"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:text="add new category"
+            />
+
+    </LinearLayout>
+
+
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container_add_category_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -7,13 +7,13 @@ import coil.api.load
 import kotlinx.android.synthetic.main.item_category.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperViewHolder
 import java.util.*
 import kotlin.properties.Delegates
 
-private val TAG = "CategoriesAdapter"
+private const val TAG = "CategoriesAdapter"
+
 class CategoriesAdapter(
     private val onSwipeListener: CategoriesAdapterListener
     ) : RecyclerView.Adapter<CategoriesAdapter.CategoryHolder>(), ItemTouchHelperAdapter {

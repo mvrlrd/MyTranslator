@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,14 +24,14 @@ import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 
-
+private const val TAG = "AddingCategoryFragment"
 class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
     private var iconId: String =""
     private var lastRequest: ()-> Unit = {}
 
-    private val TAG = "AddingCategoryFragment"
+
     private var currentIcon = ""
     private var currentTitle = ""
 
@@ -40,7 +41,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light)
         if (arguments != null) {
             val mArgs = arguments
-            var myDay= mArgs?.getString("current state")
+            val myDay= mArgs?.getString("current state")
             if (myDay != null) {
                 Log.e(TAG, myDay)
                 val arr = myDay.split(" ")
@@ -57,13 +58,16 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
     ): View? {
         val root = inflater.inflate(R.layout.adding_category_fragment, container, false)
 
-        val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
+//        val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField: TextInputEditText = root.findViewById(R.id.newCategoryEditText)
 
 
 
-        addNewButton.isClickable = true
-        addNewButton.setOnClickListener {
+//        addNewButton.isClickable = true
+
+        val commitAddingButton = root.findViewById<Button>(R.id.commitAddingNewCategoryButton)
+
+        commitAddingButton.setOnClickListener {
             val name = nameTextField.text.toString()
             var message = ""
             when {
@@ -97,13 +101,13 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
             adapter = iconsAdapter
 
         }
-        icons_of_categories_recyclerview.addOnScrollListener(object :
-            RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) addNewCategoryFab.hide()
-                else if (dy < 0) addNewCategoryFab.show()
-            }
-        })
+//        icons_of_categories_recyclerview.addOnScrollListener(object :
+//            RecyclerView.OnScrollListener() {
+//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+////                if (dy > 0) addNewCategoryFab.hide()
+////                else if (dy < 0) addNewCategoryFab.show()
+////            }
+//        })
     }
 
     private fun emptyName(): String{

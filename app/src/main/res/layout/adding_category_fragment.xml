@@ -17,10 +17,6 @@
         android:hint="category's name"
         android:inputType="text"/>
 
-
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/place_for_snack_dialog_fragment"
         android:layout_width="match_parent"
@@ -35,23 +31,26 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingBottom="90dp"
+            android:clipToPadding="false"
+            />
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/addNewCategoryFab"
+        <Button
+            android:id="@+id/commitAddingNewCategoryButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:clickable="true"
-            app:layout_anchorGravity="top|end"
-            app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+            android:layout_marginBottom="30dp"
+android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="Add Category"
             android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:backgroundTint="@android:color/holo_purple"
-            android:src="@drawable/add_basket_96" />
+            android:background="@drawable/my_button"
+            />
+
 
 
 

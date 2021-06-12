@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
@@ -16,10 +17,11 @@ import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesFragmentDirections
 
 private val TAG = "LearningFragment"
 
-class LearningFragment : Fragment() {
+class LearningFragment : Fragment(),LearningProcess {
 
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
@@ -30,7 +32,7 @@ class LearningFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        csadapter = CardStackAdapter()
+        csadapter = CardStackAdapter(this as LearningProcess)
         manager = CardStackLayoutManager(this.context,
 //            CardStackListener.DEFAULT
             csadapter as CardStackListener)
@@ -84,4 +86,11 @@ class LearningFragment : Fragment() {
                 csadapter.apply { collection = allWords.shuffled() as MutableList<CardOfWord> }
         }
     }
+
+    override fun finishLearningProcess() {
+        val action = LearningFragmentDirections.actionNavigationLearningToNavigationCategories()
+        findNavController().navigate(action)
+    }
+
+
 }

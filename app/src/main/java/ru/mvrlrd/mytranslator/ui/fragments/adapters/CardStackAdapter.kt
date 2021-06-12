@@ -12,10 +12,11 @@ import com.yuyakaido.android.cardstackview.Direction
 import kotlinx.android.synthetic.main.item_card.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningProcess
 import kotlin.properties.Delegates
 
 private val TAG ="CardStackAdapter"
-class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), CardStackListener {
+class CardStackAdapter(private val learningProcessHandler: LearningProcess) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), CardStackListener {
 
     internal var collection: MutableList<CardOfWord> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
@@ -91,7 +92,7 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), Ca
     private fun removeLearnedItem(){
         collection.removeAt(currentCardPosition)
         if (collection.isEmpty()){
-
+            learningProcessHandler.finishLearningProcess()
         }
         if (collection.isNotEmpty()){
             notifyDataSetChanged()

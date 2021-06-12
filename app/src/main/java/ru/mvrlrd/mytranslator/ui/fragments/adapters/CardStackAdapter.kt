@@ -4,20 +4,23 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ColorLong
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.yuyakaido.android.cardstackview.CardStackListener
+import com.yuyakaido.android.cardstackview.Direction
 import kotlinx.android.synthetic.main.item_card.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import kotlin.properties.Delegates
-import kotlin.random.Random
 
 private val TAG ="CardStackAdapter"
-class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
+class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), CardStackListener {
 
     internal var collection: MutableList<CardOfWord> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
+
+    var currentCardPosition = 0
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -28,22 +31,73 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-if (collection.isNotEmpty()) {
-    var circ = position % collection.size
-    var rand = shuffleCards(collection.size-1)
+        if (collection.isNotEmpty()) {
+            var circ = 0
+            collection.size.let {
+                circ = position % it
+            }
+//    Log.e(TAG, "${collection[circ].text}   circ= $circ   pos= $position")
+            holder.bind(collection[circ])
+        } else {
 
-    Log.e(TAG, "pos = $position ${collection[rand].text}   rand =$rand   circ=$circ     adPos = ${holder.adapterPosition}")
-    holder.bind(collection[rand])
-}else{
-
-}
+        }
     }
-    fun shuffleCards(quantityOfCards: Int): Int{
+    private fun shuffleCards(quantityOfCards: Int): Int{
         return (0..quantityOfCards).random()
     }
 
     override fun getItemCount() = Int.MAX_VALUE
 
+
+    override fun onCardAppeared(view: View?, position: Int) {
+        if (collection.isNotEmpty()) {
+            var circ = 0
+            collection.size.let {
+                circ = position % it
+                currentCardPosition = circ
+            }
+            Log.e(TAG, "onCardAppeared      ${collection[circ].text}  circ=$circ   current=$currentCardPosition   pos=$position")
+        }
+    }
+    override fun onCardDragging(direction: Direction?, ratio: Float) {
+//        Log.e(TAG, "onCardDragging")
+    }
+
+    override fun onCardRewound() {
+//        Log.e(TAG, "onCardRewound")
+    }
+
+    override fun onCardCanceled() {
+//        Log.e(TAG, "onCardCanceled")
+    }
+
+    override fun onCardDisappeared(view: View?, position: Int) {
+//        Log.e(TAG, "onCardDisappeared")
+    }
+
+    override fun onCardSwiped(direction: Direction?) {
+        when (direction) {
+            Direction.Left -> {
+                collection[currentCardPosition].progress += 25
+                if (collection[currentCardPosition].progress == 100) {
+                    removeLearnedItem()
+                }
+            }
+            Direction.Right -> {
+                collection[currentCardPosition].progress = 0
+            }
+        }
+    }
+    private fun removeLearnedItem(){
+        collection.removeAt(currentCardPosition)
+        if (collection.isEmpty()){
+
+        }
+        if (collection.isNotEmpty()){
+            notifyDataSetChanged()
+        }
+
+    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 

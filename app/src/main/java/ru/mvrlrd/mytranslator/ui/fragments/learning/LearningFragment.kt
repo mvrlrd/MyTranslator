@@ -14,11 +14,12 @@ import kotlinx.android.synthetic.main.fragment_learning.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
 
 private val TAG = "LearningFragment"
 
-class LearningFragment : Fragment(), CardStackListener {
+class LearningFragment : Fragment() {
 
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
@@ -29,12 +30,13 @@ class LearningFragment : Fragment(), CardStackListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        csadapter = CardStackAdapter()
         manager = CardStackLayoutManager(this.context,
 //            CardStackListener.DEFAULT
-            this)
+            csadapter as CardStackListener)
             manager.setCanScrollVertical(false)
             manager.setSwipeThreshold(0.8f)
-        csadapter = CardStackAdapter()
+
     }
 
     override fun onCreateView(
@@ -47,43 +49,6 @@ class LearningFragment : Fragment(), CardStackListener {
 
 
 
-    override fun onCardAppeared(view: View?, position: Int) {
-//        Log.e(TAG, "1   ${csadapter.collection[position].text}")
-    }
-
-    override fun onCardDragging(direction: Direction?, ratio: Float) {
-
-//        Log.e(TAG, "2")
-    }
-
-    override fun onCardDisappeared(view: View?, position: Int) {
-        pos = position
-//        Log.e(TAG, "3 ${csadapter.collection[position].text}")
-    }
-    override fun onCardSwiped(direction: Direction?) {
-        swipeDirection = direction
-        when(swipeDirection){
-            Direction.Left -> {
-//                csadapter.collection[pos!!].progress=0
-//                Log.e(TAG, "onCardSwiped to the left")
-            }
-            Direction.Right -> {
-//                csadapter.collection[pos!!].progress+=25
-//                Log.e(TAG, "onCardSwiped to the right")
-            }
-            else -> {Log.e(TAG, "4 up or down")}
-        }
-
-    }
-
-
-    override fun onCardRewound() {
-//        Log.e(TAG, "onCardRewound")
-    }
-
-    override fun onCardCanceled() {
-//        Log.e(TAG, "onCardCanceled")
-    }
 
 
 

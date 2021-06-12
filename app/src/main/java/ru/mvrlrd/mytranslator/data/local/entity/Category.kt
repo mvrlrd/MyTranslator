@@ -1,10 +1,13 @@
 package ru.mvrlrd.mytranslator.data.local.entity
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import kotlinx.android.parcel.Parcelize
 
+@Parcelize
 @Entity(tableName = "group_tags")
 data class Category(
     @PrimaryKey(autoGenerate = true)
@@ -14,7 +17,7 @@ data class Category(
     val name: String,
     val icon: String,
     var isChecked: Boolean
-) {
+) : Parcelable {
     override fun equals(other: Any?): Boolean {
         return if (other !is Category) {
             false

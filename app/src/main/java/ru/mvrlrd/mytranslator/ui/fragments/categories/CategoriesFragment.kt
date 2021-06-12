@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
-
 import android.app.Activity
 import android.content.Intent
 import android.os.Build
@@ -13,32 +12,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.*
-import com.google.android.material.floatingactionbutton.FloatingActionButton
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.categories_fragment.*
-import kotlinx.android.synthetic.main.translation_fragment.*
 import org.koin.android.ext.android.inject
-import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
-import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListFragment
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
-import java.io.File
-import java.io.InputStream
 import kotlin.math.max
 import kotlin.math.min
 

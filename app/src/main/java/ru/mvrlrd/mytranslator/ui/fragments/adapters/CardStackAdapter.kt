@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.item_card.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 private val TAG ="CardStackAdapter"
 class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
@@ -29,11 +30,16 @@ class CardStackAdapter : RecyclerView.Adapter<CardStackAdapter.ViewHolder>() {
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 if (collection.isNotEmpty()) {
     var circ = position % collection.size
-    Log.e(TAG, "pos = $position ${collection[circ].text}   circ =$circ      adPos = ${holder.adapterPosition}")
-    holder.bind(collection[circ])
+    var rand = shuffleCards(collection.size-1)
+
+    Log.e(TAG, "pos = $position ${collection[rand].text}   rand =$rand   circ=$circ     adPos = ${holder.adapterPosition}")
+    holder.bind(collection[rand])
 }else{
 
 }
+    }
+    fun shuffleCards(quantityOfCards: Int): Int{
+        return (0..quantityOfCards).random()
     }
 
     override fun getItemCount() = Int.MAX_VALUE

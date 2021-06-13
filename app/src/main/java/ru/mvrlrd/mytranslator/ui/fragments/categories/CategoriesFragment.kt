@@ -48,7 +48,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
-        val goToDialogToAddNewCategoryButton: Button = root.findViewById(R.id.go_to_dialog_to_add_new_category_button)
+        val goToDialogToAddNewCategoryButton: Button =
+            root.findViewById(R.id.go_to_dialog_to_add_new_category_button)
         goToDialogToAddNewCategoryButton.setOnClickListener {
             openDialogToAddNewCategory()
         }
@@ -88,25 +89,31 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         findNavController().navigate(action)
     }
 
+    //испаравить этот метод
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-                data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
-                    categoriesViewModel.addCategory(it)
+            when (requestCode) {
+                TARGET_FRAGMENT_REQUEST_CODE -> {
+                    addCategory(0, data)
+                }
+                CHOOSE_FILE_REQUEST_CODE -> {
+                    addCategory(editableId, data)
                 }
             }
-            if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
-                data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
-                    categoriesViewModel.addCategory(editableId, it)
-                }
-            }
-        }else {
+        } else {
             Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return
-
         }
     }
+
+
+    private fun addCategory(catId: Long, data: Intent?) {
+        data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
+            categoriesViewModel.addCategory(catId, it)
+        }
+    }
+
 
 
     

@@ -4,10 +4,9 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
-import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardsFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfDb
@@ -15,16 +14,15 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class FavoritesViewModel(
-    apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
 
-    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+    private val localIRepository = LocalIRepository( dbHelper)
     private val removerCardFromDb: RemoverCardFromDb =
-        RemoverCardFromDb(searchResultRepository)
-    private val loaderCardsOfDb: LoaderCardsOfDb = LoaderCardsOfDb(searchResultRepository)
+        RemoverCardFromDb(localIRepository)
+    private val loaderCardsOfDb: LoaderCardsOfDb = LoaderCardsOfDb(localIRepository)
     private val removerAllOfCardsFromDb: RemoverCardsFromDb =
-        RemoverCardsFromDb(searchResultRepository)
+        RemoverCardsFromDb(localIRepository)
     var liveMeaningsForRecycler: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
 
     init {

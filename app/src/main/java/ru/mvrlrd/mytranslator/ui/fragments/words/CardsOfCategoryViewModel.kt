@@ -7,11 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.google.gson.Gson
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
-import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.binders.BinderCardToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
@@ -21,19 +20,18 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 private const val TAG = "WordsInCategoryViewModel"
 
 class WordsListViewModel(
-    apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
 
-    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+    private val localIRepository = LocalIRepository( dbHelper)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =
-        LoaderCardsOfCategory(searchResultRepository)
+        LoaderCardsOfCategory(localIRepository)
     private val binderCardToCategory: BinderCardToCategory =
-        BinderCardToCategory(searchResultRepository)
+        BinderCardToCategory(localIRepository)
     private val inserterCardToDb: InserterCardToDb =
-        InserterCardToDb(searchResultRepository)
+        InserterCardToDb(localIRepository)
     private val removerCardFromCategory: RemoverCardFromCategory =
-        RemoverCardFromCategory(searchResultRepository)
+        RemoverCardFromCategory(localIRepository)
     private var _cards = MutableLiveData<List<Card>>()
     val liveCards: LiveData<List<Card>> = _cards
     var categoryId: Long = 0L

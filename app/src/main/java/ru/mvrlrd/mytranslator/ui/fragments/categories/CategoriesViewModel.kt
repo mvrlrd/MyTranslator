@@ -5,10 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
@@ -18,18 +17,18 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 private const val TAG = "CatViewModel"
 
 class CategoriesViewModel(
-    apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
-    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+
+    private val localIRepository = LocalIRepository( dbHelper)
     private val inserterCategoryToBd: InserterCategoryToBd =
-        InserterCategoryToBd(searchResultRepository)
+        InserterCategoryToBd(localIRepository)
     private val loaderCategoriesOfDb: LoaderCategoriesOfDb =
-        LoaderCategoriesOfDb(searchResultRepository)
+        LoaderCategoriesOfDb(localIRepository)
     private val removerCategoriesFromDb: RemoverCategoriesFromDb =
-        RemoverCategoriesFromDb(searchResultRepository)
+        RemoverCategoriesFromDb(localIRepository)
     private val removerCategoryFromDb: RemoverCategoryFromDb =
-        RemoverCategoryFromDb(searchResultRepository)
+        RemoverCategoryFromDb(localIRepository)
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
 

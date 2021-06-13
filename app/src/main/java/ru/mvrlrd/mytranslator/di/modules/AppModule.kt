@@ -7,7 +7,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
-import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
@@ -30,15 +29,14 @@ val appSources = module {
         ).fallbackToDestructiveMigration().build()
     }
     single { get<AppSearchingHistoryDataBase>().allDatabasesDao() }
-    single { SearchResultIRepository(get(), get()) }
 }
 
 val appViewModules = module {
-    viewModel { FavoritesViewModel(get(), get()) }
-    viewModel { CategoriesViewModel(get(), get()) }
-    viewModel { LearningViewModel(get(), get()) }
-    viewModel { WordsListViewModel(get(), get()) }
-    viewModel { NewWordViewModel(get(), get()) }
+    viewModel { FavoritesViewModel(get()) }
+    viewModel { CategoriesViewModel(get()) }
+    viewModel { LearningViewModel(get()) }
+    viewModel { WordsListViewModel(get()) }
+    viewModel { NewWordViewModel(get(),get()) }
 }
 
 val appFragments = module {

@@ -5,21 +5,13 @@ import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
-import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
+import ru.mvrlrd.mytranslator.domain.ILocalRepository
 import ru.mvrlrd.mytranslator.domain.IRepository
 import ru.mvrlrd.mytranslator.functional.Either
 
-class SearchResultIRepository(
-    private val remoteDataSource: RemoteDataSource,
-    private val localDataSource: LocalDataSource
-) : IRepository {
-
-    //words
-    //remote
-    override suspend fun getSearchResult(wordForTranslation: String): Either<Failure, ListSearchResult?> {
-        return remoteDataSource.getData(wordForTranslation)
-    }
+class LocalIRepository (private val localDataSource: LocalDataSource
+) : ILocalRepository {
 
     //local
     override suspend fun saveCardToDb(card: Card): Either<Failure, Long> {

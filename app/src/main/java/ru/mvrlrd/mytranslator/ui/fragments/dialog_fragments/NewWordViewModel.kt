@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.LocalIRepository
+import ru.mvrlrd.mytranslator.data.RemoteIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
@@ -22,9 +23,10 @@ class NewWordViewModel (
     dbHelper: DbHelper
 ) : BaseViewModel() {
 
-    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+    private val localRepository = LocalIRepository( dbHelper)
+    private val searchResultRepository = RemoteIRepository(apiHelper)
     private val getSearchResult: GetSearchResult = GetSearchResult(searchResultRepository)
-    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(searchResultRepository)
+    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localRepository)
     private var _liveTranslations = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslations: LiveData<List<MeaningModelForRecycler>> = _liveTranslations
     private var queryName: String = ""

@@ -43,6 +43,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     var editableId = -1L
     private lateinit var callback: ItemTouchHelper.Callback
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

@@ -5,7 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.SearchResultIRepository
+import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
@@ -18,15 +18,14 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 private const val TAG = "LearningViewModel"
 
 class LearningViewModel(
-    apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
 
-    private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
+    private val localIRepository = LocalIRepository( dbHelper)
     private val loaderChosenCategoriesForLearning: LoaderChosenCategoriesForLearning =
-        LoaderChosenCategoriesForLearning(searchResultRepository)
+        LoaderChosenCategoriesForLearning(localIRepository)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =
-        LoaderCardsOfCategory(searchResultRepository)
+        LoaderCardsOfCategory(localIRepository)
     private var _categoriesForLearning = MutableLiveData<List<Category>>()
     val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
 

@@ -117,7 +117,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     private fun handleRecycler(allCategories: List<Category>) {
         initRecycler(allCategories)
-        initCallbackRecycler()
+        attachCallbackToRecycler()
         keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling()
     }
 
@@ -158,7 +158,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         })
     }
 
-    private fun initCallbackRecycler() {
+    private fun attachCallbackToRecycler() {
         callback =
             SimpleItemTouchHelperCallback(
                 categories_recyclerview.adapter as ItemTouchHelperAdapter

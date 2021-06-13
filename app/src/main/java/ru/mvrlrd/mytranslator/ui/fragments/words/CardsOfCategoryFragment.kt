@@ -63,24 +63,16 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
             handleRecycler(cards)
         })
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
-        root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
-            newWordDialog.show(parentFragmentManager, "addNewWordDialog")
-//            categoriesViewModel.clearCategories()
-        }
-        root.findViewById<FloatingActionButton>(R.id.addListOfWordsFab).setOnClickListener {
-            val intent = Intent()
-                .setType("text/*")
-                .setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSE_FILE_REQUEST_CODE)
-        }
+        initFloatingButtons(root)
         cardsOfCategoryAdapter = CardsOfCategoryAdapter(this as OnItemClickListener)
         return root
     }
 
+
     private fun handleRecycler(cards: List<Card>) {
         initRecycler(cards)
-        attachCallbackRecycler()
-        addOnscrollListenerRecycler()
+        attachCallbackToRecycler()
+        addOnscrollListenerToRecycler()
     }
 
 
@@ -90,9 +82,8 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
             when (requestCode) {
                 NEW_WORD_DIALOG_REQUEST_CODE -> {
                     data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                        cardsOfCategoryViewModel.mapJsonToCard(it)
+                        cardsOfCategoryViewModel.saveCardToDb(it)
                     }
-                    Log.e(TAG, "${data?.getStringExtra(EXTRA_GREETING_MESSAGE)}       added}")
                 }
                 CHOOSE_FILE_REQUEST_CODE -> {
                     val selectedFilename = data?.data //The uri with the location of the file
@@ -116,32 +107,13 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
         }
     }
 
-
-    private fun mapperAllStringsToOne(oneString: String): String {
-        val arr = oneString.split(";")
-        val str2 = StringBuilder()
-        if (arr.size == 2) {
-            str2.append("{\"id\":\"0\",")
-            str2.append("\"text\":\"${arr[0].changeSymbol()}\",")
-            str2.append("\"translation\":\"${arr[1].changeSymbol()}\",")
-            str2.append("\"image_url\":\"_\",")
-            str2.append("\"transcription\":\"_\",")
-            str2.append("\"partOfSpeech\":\"_\",")
-            str2.append("\"prefix\":\"_\"}")
-        }
-        return str2.toString()
-    }
-
-    private fun String.changeSymbol(): String =
-        this.replace("\"", "\\\"")
-
     override fun onItemClick(categoryId: Long) {
         Log.e(TAG, "onShortPressed")
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    override fun onItemSwiped(wordId: Long) {
-        cardsOfCategoryViewModel.deleteWordFromCategory(wordId)
+    override fun onItemSwiped(cardId: Long) {
+        cardsOfCategoryViewModel.deleteWordFromCategory(cardId)
         vibrate(vibrator)
     }
 
@@ -156,14 +128,14 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
             adapter = cardsOfCategoryAdapter.apply { collection = cards as MutableList<Card> }
         }
     }
-    private fun attachCallbackRecycler(){
+    private fun attachCallbackToRecycler(){
         callback =
             SimpleItemTouchHelperCallback(
                 words_recycler.adapter as ItemTouchHelperAdapter
             )
         ItemTouchHelper(callback).attachToRecyclerView(words_recycler)
     }
-    private fun addOnscrollListenerRecycler(){
+    private fun addOnscrollListenerToRecycler(){
         words_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
@@ -175,5 +147,18 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
                 }
             }
         })
+    }
+
+    fun initFloatingButtons(root: View){
+        root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
+            newWordDialog.show(parentFragmentManager, "addNewWordDialog")
+//            categoriesViewModel.clearCategories()
+        }
+        root.findViewById<FloatingActionButton>(R.id.addListOfWordsFab).setOnClickListener {
+            val intent = Intent()
+                .setType("text/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+            startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSE_FILE_REQUEST_CODE)
+        }
     }
 }

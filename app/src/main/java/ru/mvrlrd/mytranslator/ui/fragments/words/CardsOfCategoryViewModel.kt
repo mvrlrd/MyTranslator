@@ -17,7 +17,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-private const val TAG = "WordsInCategoryViewModel"
+private const val TAG = "CardsOfCategoryViewModel"
 
 class CardsOfCategoryViewModel(
     dbHelper: DbHelper
@@ -36,7 +36,9 @@ class CardsOfCategoryViewModel(
     val liveCards: LiveData<List<Card>> = _cards
     var categoryId: Long = 0L
 
-    fun saveCardToDb(card: Card) {
+    fun saveCardToDb(jsonString: String) {
+        val card = mapJsonToCard(jsonString)
+        if(!checkIfWordIsInCategory(card)!!) {
             viewModelScope.launch {
                 inserterCardToDb(card) {
                     it.fold(
@@ -45,36 +47,30 @@ class CardsOfCategoryViewModel(
                     )
                 }
             }
+        }
     }
     private fun handleSaveCardToDb(wordId: Long) {
 //        Log.e(TAG, "new word #$wordId has been added to the database")
-        saveWordToCategory(categoryId, wordId)
-    }
-     @SuppressLint("LongLogTag")
-     fun mapJsonToCard(jsonString: String) {
-        val card = Gson().fromJson(jsonString, Card::class.java)
-        if(!checkIfWordIsInCategory(card)!!){
-            Log.e(TAG, "word is not in Category000000000000")
-            saveCardToDb(card)
-        }
+        bindCardToCategory(categoryId, wordId)
     }
 
+    private fun mapJsonToCard(jsonString: String): Card {
+        return Gson().fromJson(jsonString, Card::class.java)
+    }
 
-
-
-    private fun saveWordToCategory(categoryId: Long, cardId: Long) {
+    private fun bindCardToCategory(categoryId: Long, cardId: Long) {
         viewModelScope.launch {
             binderCardToCategory(arrayOf(cardId, categoryId)) {
                 it.fold(
                     ::handleFailure,
-                    ::handleAddingWordToCategory
+                    ::handleBindCardToCategory
                 )
             }
         }
     }
 
     @SuppressLint("LongLogTag")
-    private fun handleAddingWordToCategory(wordId: Long) {
+    private fun handleBindCardToCategory(wordId: Long) {
         Log.e(TAG, "word #$wordId has been assigned with the category #$categoryId")
         getAllWordsOfCategory(categoryId)
     }
@@ -84,13 +80,13 @@ class CardsOfCategoryViewModel(
             loaderCardsOfCategory(categoryId) {
                 it.fold(
                     ::handleFailure,
-                    ::handleGettingAllWords
+                    ::handleGetAllWordsOfCategory
                 )
             }
         }
     }
 
-    private fun handleGettingAllWords(categoryWithCards: CategoryWithCards) {
+    private fun handleGetAllWordsOfCategory(categoryWithCards: CategoryWithCards) {
         _cards.value = categoryWithCards.cards
     }
 
@@ -99,14 +95,14 @@ class CardsOfCategoryViewModel(
             removerCardFromCategory(arrayOf(cardId, categoryId)) {
                 it.fold(
                     ::handleFailure,
-                    ::handleDeletingWordFromCat
+                    ::handleDeleteWordFromCategory
                 )
             }
         }
     }
 
     @SuppressLint("LongLogTag")
-    private fun handleDeletingWordFromCat(numOfDeletedWord: Int) {
+    private fun handleDeleteWordFromCategory(numOfDeletedWord: Int) {
         Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
     }
 
@@ -115,4 +111,27 @@ class CardsOfCategoryViewModel(
         Log.e(TAG, "i am in checkIfWordIsInCategorycheckIfWordIsInCategory ${liveCards.value?.contains(card)}")
         return liveCards.value?.contains(card)
     }
+
+
+
+
+
+//    private fun mapperAllStringsToOne(oneString: String): String {
+//        val arr = oneString.split(";")
+//        val str2 = StringBuilder()
+//        if (arr.size == 2) {
+//            str2.append("{\"id\":\"0\",")
+//            str2.append("\"word\":\"${arr[0].changeSymbol()}\",")
+//            str2.append("\"translation\":\"${arr[1].changeSymbol()}\",")
+//            str2.append("\"image_url\":\"_\",")
+//            str2.append("\"transcription\":\"_\",")
+//            str2.append("\"partOfSpeech\":\"_\",")
+//            str2.append("\"prefix\":\"_\",")
+//            str2.append("\"progress\":\"0\"}")
+//        }
+//        return str2.toString()
+//    }
+//
+//    private fun String.changeSymbol(): String =
+//        this.replace("\"", "\\\"")
 }

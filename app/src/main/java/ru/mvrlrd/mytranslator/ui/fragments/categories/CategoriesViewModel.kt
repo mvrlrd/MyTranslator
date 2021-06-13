@@ -31,7 +31,7 @@ class CategoriesViewModel(
 
 
     fun addNewCategory(id: Long,name: String, icon: String) {
-        val groupTag = Category(id, name, icon, false)
+        val groupTag = Category(id, name, icon, false,0.0)
         when {
             _allCategoryList.value.isNullOrEmpty()
                     || !_allCategoryList.value!!.contains(groupTag) -> {

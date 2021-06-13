@@ -37,7 +37,7 @@ class TagDialogViewModel(
     }
 
     fun loadTagToDataBase(tagText: String) {
-        val groupTag = Category(0, tagText, "false",false)
+        val groupTag = Category(0, tagText, "false",false,0.0)
         when {
             _allTagList.value.isNullOrEmpty()
                     || !_allTagList.value!!.contains(groupTag) -> {

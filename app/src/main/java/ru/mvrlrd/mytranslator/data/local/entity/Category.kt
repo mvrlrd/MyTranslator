@@ -16,7 +16,8 @@ data class Category(
     @SerializedName("name")
     val name: String,
     val icon: String,
-    var isChecked: Boolean
+    var isChecked: Boolean,
+    var averageProgress: Double
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         return if (other !is Category) {

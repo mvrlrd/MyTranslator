@@ -14,4 +14,8 @@ class CategoryWithWords(
         associateBy = Junction(CardTagCrossRef::class)
     )
     val cards : List<CardOfWord>
-)
+
+
+){
+    fun averageProgress() = cards.map{ it -> it.progress}.average()
+}

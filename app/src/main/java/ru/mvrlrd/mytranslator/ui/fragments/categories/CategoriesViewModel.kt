@@ -19,8 +19,8 @@ private const val TAG = "CatViewModel"
 class CategoriesViewModel(
     dbHelper: DbHelper
 ) : BaseViewModel() {
-
     private val localIRepository = LocalIRepository( dbHelper)
+//insert//delete//clear//
     private val inserterCategoryToBd: InserterCategoryToBd =
         InserterCategoryToBd(localIRepository)
     private val loaderCategoriesOfDb: LoaderCategoriesOfDb =
@@ -32,29 +32,42 @@ class CategoriesViewModel(
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
 
-    fun addNewCategory(id: Long, name: String, icon: String) {
-        val groupTag = Category(id, name, icon, false, 0.0)
-        when {
-            _allCategories.value.isNullOrEmpty()
-                    || !_allCategories.value!!.contains(groupTag) -> {
+    private fun insertCategory(newCategory: Category) {
+        if (_allCategories.value.isNullOrEmpty()
+            || !_allCategories.value!!.contains(newCategory))
+            {
                 viewModelScope.launch {
-                    inserterCategoryToBd(groupTag) {
+                    inserterCategoryToBd(newCategory) {
                         it.fold(
                             ::handleFailure,
-                            ::handleAddingCategory
+                            ::handleAddNewCategory
                         )
                     }
                 }
             }
-            _allCategories.value!!.contains(groupTag) -> {
+            else if(_allCategories.value!!.contains(newCategory)) {
+                Log.e(TAG, "${newCategory.name} already exists in Db")
+            //do toast that it is already exists
                 return
             }
         }
-    }
-
-    private fun handleAddingCategory(quantity: Long) {
-        Log.e(TAG, "$quantity      added")
+    private fun handleAddNewCategory(quantity: Long) {
+        Log.e(TAG, "$quantity item added to Db")
         refreshCategoriesScreen()
+    }
+    fun refreshCategoriesScreen() {
+        viewModelScope.launch {
+            loaderCategoriesOfDb(Unit) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleRefreshCategoriesScreen
+                )
+            }
+        }
+    }
+    private fun handleRefreshCategoriesScreen(loadedCategories: List<Category>) {
+        //liveAllCategories is observed by CategoriesFragment --loadedCategories--> CategoriesAdapter --> recyclerView refreshes
+        _allCategories.value = loadedCategories
     }
 
     fun updateCategory(category: Category) {
@@ -63,35 +76,20 @@ class CategoriesViewModel(
         }
     }
 
-    fun refreshCategoriesScreen() {
-        viewModelScope.launch {
-            loaderCategoriesOfDb(Unit) {
-                it.fold(
-                    ::handleFailure,
-                    ::refreshListOfCategories
-                )
-            }
-        }
-    }
-
-    private fun refreshListOfCategories(allCategoriesList: List<Category>) {
-        _allCategories.value = allCategoriesList
-    }
-
     fun clearCategories() {
         viewModelScope.launch {
             removerCategoriesFromDb(Unit) {
                 it.fold(
                     ::handleFailure,
-                    ::handleClearingCategories
+                    ::handleClearCategories
                 )
             }
 
         }
     }
 
-    private fun handleClearingCategories(numOfDeleted: Int) {
-        Log.e(TAG, "$numOfDeleted items were deleted from db")
+    private fun handleClearCategories(numOfDeleted: Int) {
+        Log.e(TAG, "$numOfDeleted items(all) were deleted from db")
         refreshCategoriesScreen()
     }
 
@@ -100,15 +98,27 @@ class CategoriesViewModel(
             removerCategoryFromDb(categoryId) {
                 it.fold(
                     ::handleFailure,
-                    ::handleDeletingCategory
+                    ::handleDeleteCategory
                 )
             }
         }
     }
 
-    private fun handleDeletingCategory(numOfDeleted: Int) {
-        Log.e(TAG, "$numOfDeleted item was deleted from db")
+    private fun handleDeleteCategory(oneItem: Int) {
+        Log.e(TAG, "$oneItem item was deleted from db")
         refreshCategoriesScreen()
+    }
+
+    fun addCategory(string: Array<String>){
+        val newCategory = Category( categoryId = 0, name = string[0], icon = string[1])
+        insertCategory(newCategory)
+    }
+    fun addCategory(category: Category){
+        insertCategory(category)
+    }
+    fun addCategory(editingCategoryId: Long, string: Array<String>){
+        val editingCategory = Category( categoryId = editingCategoryId, name = string[0], icon = string[1])
+        insertCategory(editingCategory)
     }
 }
 

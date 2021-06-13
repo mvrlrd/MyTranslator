@@ -38,22 +38,21 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     private val categoriesViewModel: CategoriesViewModel by inject()
     private val newCategoryDialog: NewCategoryDialog by inject()
-    private lateinit var catAdapter: CategoriesAdapter
+    private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
     var editableId = -1L
     private lateinit var callback: ItemTouchHelper.Callback
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
-        val btn: Button = root.findViewById(R.id.addNewCatButton)
-        btn.setOnClickListener {
-            openDialogToAddNew()
+        val goToDialogToAddNewCategoryButton: Button = root.findViewById(R.id.go_to_dialog_to_add_new_category_button)
+        goToDialogToAddNewCategoryButton.setOnClickListener {
+            openDialogToAddNewCategory()
         }
-        catAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
+        categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
         return root
     }
 
@@ -62,76 +61,18 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         categoriesViewModel.liveAllCategories.observe(
             viewLifecycleOwner,
             Observer { categories ->
-                handleCategoryRecycler(categories as MutableList<Category>)
+                handleRecycler(categories as MutableList<Category>)
             })
-        //for the first loading
-        if (categoriesViewModel.liveAllCategories.value != null) {
-            handleCategoryRecycler(categoriesViewModel.liveAllCategories.value!!)
-        }
-    }
-
-    private fun handleCategoryRecycler(allCategories: List<Category>) {
-        categories_recyclerview.apply {
-            layoutManager =
-                LinearLayoutManager(this.context)
-//                GridLayoutManager(this.context, 3)
-            adapter = catAdapter.apply { collection = allCategories as MutableList<Category> }
-        }.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-        callback =
-            SimpleItemTouchHelperCallback(
-                categories_recyclerview.adapter as ItemTouchHelperAdapter
-            )
-        ItemTouchHelper(callback).attachToRecyclerView(categories_recyclerview)
-        var mScrollY = 0F
-        categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(rcv: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(rcv, dx, dy)
-                mScrollY += dy.toFloat()
-                mScrollY = max(mScrollY, 0F)
-                addNewCatLayout.translationY = min(-mScrollY, 0F)
-            }
-        })
-    }
-
-    private fun openDialogToAddNew() {
-        newCategoryDialog.setTargetFragment(this, TARGET_FRAGMENT_REQUEST_CODE)
-        newCategoryDialog.show(parentFragmentManager, "tagDialog")
-    }
-
-    private fun openDialogToEditCurrent(currentCategory: Category) {
-        editableId = currentCategory.categoryId
-        val bundle = Bundle()
-        bundle.putString("current state", currentCategory.toString())
-        newCategoryDialog.arguments = bundle
-        newCategoryDialog.setTargetFragment(this, CHOOSE_FILE_REQUEST_CODE)
-        newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.e("category", "onResume")
+//        Log.e("category", "onResume")
         categoriesViewModel.refreshCategoriesScreen()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
-            return
-        }
-        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-            data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
-                categoriesViewModel.addNewCategory(0, it[0], it[1])
-            }
-        }
-        if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
-            data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
-                categoriesViewModel.addNewCategory(editableId, it[0], it[1])
-            }
-        }
-    }
-
-    override fun onItemClick(v: View, category: Category) {
+    //update category in Bd by clicking category item, because its isChecked parameter was changed
+    override fun onItemClick(category: Category) {
 //        openDialogToEditCurrent(category)
         categoriesViewModel.updateCategory(category)
     }
@@ -147,8 +88,77 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         findNavController().navigate(action)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        Log.e(TAG, "selected  ")
-        return super.onOptionsItemSelected(item)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
+                data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
+                    categoriesViewModel.addCategory(it)
+                }
+            }
+            if (requestCode == CHOOSE_FILE_REQUEST_CODE) {
+                data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
+                    categoriesViewModel.addCategory(editableId, it)
+                }
+            }
+        }else {
+            Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
+            return
+
+        }
+    }
+
+
+    
+
+    private fun handleRecycler(allCategories: List<Category>) {
+        initRecycler(allCategories)
+        initCallbackRecycler()
+        keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling()
+    }
+
+    private fun openDialogToAddNewCategory() {
+        newCategoryDialog.setTargetFragment(this, TARGET_FRAGMENT_REQUEST_CODE)
+        newCategoryDialog.show(parentFragmentManager, "tagDialog")
+    }
+
+    private fun openDialogToEditCurrent(currentCategory: Category) {
+        editableId = currentCategory.categoryId
+        val bundle = Bundle()
+        bundle.putString("current state", currentCategory.toString())
+        newCategoryDialog.arguments = bundle
+        newCategoryDialog.setTargetFragment(this, CHOOSE_FILE_REQUEST_CODE)
+        newCategoryDialog.show(parentFragmentManager, "tagDialog")
+    }
+
+
+    private fun initRecycler(allCategories: List<Category>) =
+        categories_recyclerview.apply {
+            layoutManager =
+                LinearLayoutManager(this.context)
+            adapter =
+                categoriesAdapter.apply { collection = allCategories as MutableList<Category> }
+        }.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+
+
+    //keep a distance between header("add new category") and the recycler items while scrolling
+    private fun keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling() {
+        var mScrollY = 0F
+        categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(rcv: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(rcv, dx, dy)
+                mScrollY += dy.toFloat()
+                mScrollY = max(mScrollY, 0F)
+                addNewCatLayout.translationY = min(-mScrollY, 0F)
+            }
+        })
+    }
+
+    private fun initCallbackRecycler() {
+        callback =
+            SimpleItemTouchHelperCallback(
+                categories_recyclerview.adapter as ItemTouchHelperAdapter
+            )
+        ItemTouchHelper(callback).attachToRecyclerView(categories_recyclerview)
     }
 }

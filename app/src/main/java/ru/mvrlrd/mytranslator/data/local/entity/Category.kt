@@ -11,12 +11,12 @@ import kotlinx.android.parcel.Parcelize
 data class Category(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")
-    val categoryId: Long,
+    val categoryId: Long = 0,
     @SerializedName("name")
     val name: String,
     val icon: String,
-    var isChecked: Boolean,
-    var averageProgress: Double
+    var isChecked: Boolean = false,
+    var averageProgress: Double = 0.0
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
         return if (other !is Category) {

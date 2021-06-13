@@ -2,6 +2,7 @@ package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
 import android.util.Log
 import android.view.*
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.item_category.view.*
@@ -63,15 +64,10 @@ class CategoriesAdapter(
 
         fun bind(category: Category) {
             itemView.textViewItem.text = category.name
-            itemView.categoryIcon.load(category.icon.toInt())
-            itemView.categoryIcon.isSelected = category.isChecked
-
+            itemView.category_icon_image_view.load(category.icon.toInt())
+            itemView.category_icon_image_view.isSelected = category.isChecked
             itemView.setOnClickListener {
-                itemView.categoryIcon.isSelected = !itemView.categoryIcon.isSelected
-                category.isChecked = !category.isChecked
-
-                listener.onItemClick(itemView.categoryIcon, category)
-
+                checkUncheckItem(itemView.category_icon_image_view,category)
             }
 
             itemView.setOnLongClickListener {
@@ -83,6 +79,12 @@ class CategoriesAdapter(
             val categoryItemTransitionName =
                 itemView.resources.getString(R.string.word_list_transition_name, category.categoryId)
             itemView.transitionName = categoryItemTransitionName
+        }
+
+        private fun checkUncheckItem(v: ImageView, category: Category){
+            category.isChecked = !category.isChecked
+            v.isSelected = category.isChecked
+            listener.onItemClick(category)
         }
 
         override fun onItemSelected() {
@@ -101,7 +103,7 @@ class CategoriesAdapter(
 //    }
 
     interface CategoriesAdapterListener {
-        fun onItemClick(v:View,category: Category)
+        fun onItemClick(category: Category)
         fun onItemSwiped(categoryId: Long)
         fun onItemLongPressed(id: Long)
 //        fun onItemSwiped(recipe : RecipeInformation)

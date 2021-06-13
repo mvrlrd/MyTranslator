@@ -27,7 +27,7 @@
         android:orientation="horizontal"
         >
         <Button
-            android:id="@+id/addNewCatButton"
+            android:id="@+id/go_to_dialog_to_add_new_category_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
             android:text="add new category"

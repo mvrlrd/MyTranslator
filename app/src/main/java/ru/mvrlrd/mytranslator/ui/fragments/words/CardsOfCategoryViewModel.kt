@@ -19,7 +19,7 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "WordsInCategoryViewModel"
 
-class WordsListViewModel(
+class CardsOfCategoryViewModel(
     dbHelper: DbHelper
 ) : BaseViewModel() {
 
@@ -36,28 +36,31 @@ class WordsListViewModel(
     val liveCards: LiveData<List<Card>> = _cards
     var categoryId: Long = 0L
 
-    fun saveWordToDb(str: String) {
-        val card = Gson().fromJson(str, Card::class.java)
-        if (checkIfWordIsInCategory(card) == false) {
+    fun saveCardToDb(card: Card) {
             viewModelScope.launch {
                 inserterCardToDb(card) {
                     it.fold(
                         ::handleFailure,
-                        ::handleAddingWordToDb
+                        ::handleSaveCardToDb
                     )
                 }
             }
-        }
     }
-//    private fun mapStringToCardOfWord(jsonString: String): CardOfWord {
-//        return Gson().fromJson(jsonString, CardOfWord::class.java)
-//    }
-
-    @SuppressLint("LongLogTag")
-    private fun handleAddingWordToDb(wordId: Long) {
-        Log.e(TAG, "new word #$wordId has been added to the database")
+    private fun handleSaveCardToDb(wordId: Long) {
+//        Log.e(TAG, "new word #$wordId has been added to the database")
         saveWordToCategory(categoryId, wordId)
     }
+     @SuppressLint("LongLogTag")
+     fun mapJsonToCard(jsonString: String) {
+        val card = Gson().fromJson(jsonString, Card::class.java)
+        if(!checkIfWordIsInCategory(card)!!){
+            Log.e(TAG, "word is not in Category000000000000")
+            saveCardToDb(card)
+        }
+    }
+
+
+
 
     private fun saveWordToCategory(categoryId: Long, cardId: Long) {
         viewModelScope.launch {
@@ -107,8 +110,9 @@ class WordsListViewModel(
         Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
     }
 
+    @SuppressLint("LongLogTag")
     private fun checkIfWordIsInCategory(card: Card): Boolean? {
+        Log.e(TAG, "i am in checkIfWordIsInCategorycheckIfWordIsInCategory ${liveCards.value?.contains(card)}")
         return liveCards.value?.contains(card)
-
     }
 }

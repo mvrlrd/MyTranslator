@@ -15,7 +15,7 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningViewModel
-import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListViewModel
+import ru.mvrlrd.mytranslator.ui.fragments.words.CardsOfCategoryViewModel
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 
 val appSources = module {
@@ -35,7 +35,7 @@ val appViewModules = module {
     viewModel { FavoritesViewModel(get()) }
     viewModel { CategoriesViewModel(get()) }
     viewModel { LearningViewModel(get()) }
-    viewModel { WordsListViewModel(get()) }
+    viewModel { CardsOfCategoryViewModel(get()) }
     viewModel { NewWordViewModel(get(),get()) }
 }
 

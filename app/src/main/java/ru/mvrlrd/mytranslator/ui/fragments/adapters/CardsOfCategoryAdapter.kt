@@ -16,8 +16,8 @@ import kotlin.properties.Delegates
 
 private const val TAG = "WordsAdapter"
 
-class WordsAdapter(private val onSwipeListener: OnItemClickListener) :
-    RecyclerView.Adapter<WordsAdapter.WordHolder>(), ItemTouchHelperAdapter {
+class CardsOfCategoryAdapter(private val onSwipeListener: OnItemClickListener) :
+    RecyclerView.Adapter<CardsOfCategoryAdapter.WordHolder>(), ItemTouchHelperAdapter {
     internal var collection: MutableList<Card> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 

@@ -38,7 +38,7 @@
         tools:layout="@layout/fragment_favorites" />
     <fragment
         android:id="@+id/wordsListFragment"
-        android:name="ru.mvrlrd.mytranslator.ui.fragments.words.WordsListFragment"
+        android:name="ru.mvrlrd.mytranslator.ui.fragments.words.CardsOfCategoryFragment"
         android:label="words_in_category_fragment"
         tools:layout="@layout/words_in_category_fragment" >
         <argument

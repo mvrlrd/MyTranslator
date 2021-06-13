@@ -129,12 +129,13 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
     private fun mapperAllStringsToOne(): String {
         val str2 = StringBuilder()
         str2.append("{\"id\":\"0\",")
-        str2.append("\"text\":\"${newWordEditText.changeSymbol()}\",")
+        str2.append("\"word\":\"${newWordEditText.changeSymbol()}\",")
         str2.append("\"translation\":\"${newWordsTranslationEditText.changeSymbol()}\",")
         str2.append("\"image_url\":\"$imageUrl\",")
         str2.append("\"transcription\":\"${newWordsTranscriptionEditText.changeSymbol()}\",")
         str2.append("\"partOfSpeech\":\"noun!\",")
-        str2.append("\"prefix\":\"the!\"}")
+        str2.append("\"prefix\":\"the!\",")
+        str2.append("\"progress\":\"0\"}")
         return str2.toString()
     }
 

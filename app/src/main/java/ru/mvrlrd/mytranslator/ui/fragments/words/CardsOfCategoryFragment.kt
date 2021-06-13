@@ -24,20 +24,20 @@ import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
-import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardsOfCategoryAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
-private const val TARGET_FRAGMENT_REQUEST_CODE = 1
+private const val NEW_WORD_DIALOG_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
-private const val TAG = "WordsInCategoryFragment"
+private const val TAG = "CardsOfCategoryFragment"
 private const val CHOOSE_FILE_REQUEST_CODE = 111
 
-class WordsListFragment : Fragment(), OnItemClickListener {
+class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
 
-    private lateinit var wordsAdapter: WordsAdapter
-    private val newWord: NewWordDialog by inject()
-    private val wordsListViewModel: WordsListViewModel by inject()
+    private lateinit var cardsOfCategoryAdapter: CardsOfCategoryAdapter
+    private val newWordDialog: NewWordDialog by inject()
+    private val cardsOfCategoryViewModel: CardsOfCategoryViewModel by inject()
     private val vibrator: Vibrator by inject()
     private lateinit var callback: ItemTouchHelper.Callback
 
@@ -45,8 +45,8 @@ class WordsListFragment : Fragment(), OnItemClickListener {
         super.onCreate(savedInstanceState)
         val id = arguments?.get("categoryId")
         id?.let {
-            wordsListViewModel.getAllWordsOfCategory(it as Long)
-            wordsListViewModel.categoryId = id as Long
+            cardsOfCategoryViewModel.getAllWordsOfCategory(it as Long)
+            cardsOfCategoryViewModel.categoryId = id as Long
         }
     }
 
@@ -55,76 +55,67 @@ class WordsListFragment : Fragment(), OnItemClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        newWord.setTargetFragment(
+        newWordDialog.setTargetFragment(
             this,
-            TARGET_FRAGMENT_REQUEST_CODE
+            NEW_WORD_DIALOG_REQUEST_CODE
         )
-        wordsListViewModel.liveCards.observe(viewLifecycleOwner, Observer { wordList ->
-            handleRecycler(wordList)
+        cardsOfCategoryViewModel.liveCards.observe(viewLifecycleOwner, Observer { cards ->
+            handleRecycler(cards)
         })
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
-            newWord.show(parentFragmentManager, "addNewWordDialog")
+            newWordDialog.show(parentFragmentManager, "addNewWordDialog")
 //            categoriesViewModel.clearCategories()
         }
         root.findViewById<FloatingActionButton>(R.id.addListOfWordsFab).setOnClickListener {
             val intent = Intent()
                 .setType("text/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
-            startActivityForResult(Intent.createChooser(intent, "Select file"), 111)
+            startActivityForResult(Intent.createChooser(intent, "Select file"), CHOOSE_FILE_REQUEST_CODE)
         }
-        wordsAdapter = WordsAdapter(this as OnItemClickListener)
+        cardsOfCategoryAdapter = CardsOfCategoryAdapter(this as OnItemClickListener)
         return root
     }
 
-    private fun handleRecycler(wordList: List<Card>) {
-        words_recycler.apply {
-            layoutManager = LinearLayoutManager(this.context)
-            adapter = wordsAdapter.apply { collection = wordList as MutableList<Card> }
-        }
-        callback =
-            SimpleItemTouchHelperCallback(
-                words_recycler.adapter as ItemTouchHelperAdapter
-            )
-        ItemTouchHelper(callback).attachToRecyclerView(words_recycler)
-        words_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
-                    gotoAddNewWordFab.hide()
-                    addListOfWordsFab.hide()
-                } else if (dy < 0) {
-                    gotoAddNewWordFab.show()
-                    addListOfWordsFab.show()
-                }
-            }
-        })
+    private fun handleRecycler(cards: List<Card>) {
+        initRecycler(cards)
+        attachCallbackRecycler()
+        addOnscrollListenerRecycler()
     }
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode != Activity.RESULT_OK) {
-            Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
-            return
-        }
-        if (requestCode == TARGET_FRAGMENT_REQUEST_CODE) {
-            data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                wordsListViewModel.saveWordToDb(it)
-            }
-        } else          // Selected a file to load
-            if ((requestCode == CHOOSE_FILE_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
-                val selectedFilename = data?.data //The uri with the location of the file
-                if (selectedFilename != null) {
-                    context?.contentResolver?.openInputStream(selectedFilename)?.bufferedReader()
-                        ?.forEachLine {
-                            wordsListViewModel.saveWordToDb(mapperAllStringsToOne(it))
-                        }
-                } else {
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                NEW_WORD_DIALOG_REQUEST_CODE -> {
+                    data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
+                        cardsOfCategoryViewModel.mapJsonToCard(it)
+                    }
+                    Log.e(TAG, "${data?.getStringExtra(EXTRA_GREETING_MESSAGE)}       added}")
+                }
+                CHOOSE_FILE_REQUEST_CODE -> {
+                    val selectedFilename = data?.data //The uri with the location of the file
+                    if (selectedFilename != null) {
+                        context?.contentResolver?.openInputStream(selectedFilename)
+                            ?.bufferedReader()
+                            ?.forEachLine {
+//                                cardsOfCategoryViewModel.saveCardToDb(mapperAllStringsToOne(it))
+                            }
+                    }
+                }
+                else -> {
                     val msg = "Null filename data received!"
                     val toast = Toast.makeText(this.context, msg, Toast.LENGTH_LONG)
                     toast.show()
                 }
             }
+        } else {
+            Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
+            return
+        }
     }
+
 
     private fun mapperAllStringsToOne(oneString: String): String {
         val arr = oneString.split(";")
@@ -150,11 +141,39 @@ class WordsListFragment : Fragment(), OnItemClickListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(wordId: Long) {
-        wordsListViewModel.deleteWordFromCategory(wordId)
+        cardsOfCategoryViewModel.deleteWordFromCategory(wordId)
         vibrate(vibrator)
     }
 
     override fun onItemLongPressed(categoryId: Long) {
         Log.e(TAG, "onLongPressed")
+    }
+
+
+    private fun initRecycler(cards: List<Card>){
+        words_recycler.apply {
+            layoutManager = LinearLayoutManager(this.context)
+            adapter = cardsOfCategoryAdapter.apply { collection = cards as MutableList<Card> }
+        }
+    }
+    private fun attachCallbackRecycler(){
+        callback =
+            SimpleItemTouchHelperCallback(
+                words_recycler.adapter as ItemTouchHelperAdapter
+            )
+        ItemTouchHelper(callback).attachToRecyclerView(words_recycler)
+    }
+    private fun addOnscrollListenerRecycler(){
+        words_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0) {
+                    gotoAddNewWordFab.hide()
+                    addListOfWordsFab.hide()
+                } else if (dy < 0) {
+                    gotoAddNewWordFab.show()
+                    addListOfWordsFab.show()
+                }
+            }
+        })
     }
 }

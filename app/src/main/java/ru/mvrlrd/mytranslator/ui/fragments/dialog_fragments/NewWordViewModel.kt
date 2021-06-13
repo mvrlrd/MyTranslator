@@ -22,10 +22,9 @@ class NewWordViewModel (
     apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
-
     private val localRepository = LocalIRepository( dbHelper)
-    private val searchResultRepository = RemoteIRepository(apiHelper)
-    private val getSearchResult: GetSearchResult = GetSearchResult(searchResultRepository)
+    private val remoteIRepository = RemoteIRepository(apiHelper)
+    private val getSearchResult: GetSearchResult = GetSearchResult(remoteIRepository)
     private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localRepository)
     private var _liveTranslations = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslations: LiveData<List<MeaningModelForRecycler>> = _liveTranslations
@@ -37,16 +36,16 @@ class NewWordViewModel (
             getSearchResult(word) {
                 it.fold(
                     ::handleFailure,
-                    ::handleLoadingData
+                    ::handleLoadDataFromWeb
                 )
             }
         }
     }
 
-    private fun handleLoadingData(response: ListSearchResult?) {
+    private fun handleLoadDataFromWeb(response: ListSearchResult?) {
         val filteredResponseList: List<SearchResultResponse>? =
             response?.filter { it.text == queryName }
-        Log.e(TAG, "${filteredResponseList?.size}   sizeeeeeeee")
+//        Log.e(TAG, "${filteredResponseList?.size}   sizeeeeeeee")
         _liveTranslations.value = filteredResponseList?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
@@ -84,14 +83,14 @@ class NewWordViewModel (
                 {
                     it.fold(
                         ::handleFailure,
-                        ::handleSavingCard
+                        ::handleSaveCardToDb
                     )
                 }
             }
         }
     }
 
-    private fun handleSavingCard(id: Long) {
+    private fun handleSaveCardToDb(id: Long) {
         Log.d(TAG, "id#$id was added to the database")
     }
 

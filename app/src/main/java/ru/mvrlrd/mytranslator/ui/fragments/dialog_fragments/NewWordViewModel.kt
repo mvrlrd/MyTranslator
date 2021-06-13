@@ -7,16 +7,15 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.data.network.response.SearchResultResponse
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.SaveCardToFavorites
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
-import java.util.*
 
 class NewWordViewModel (
     apiHelper: ApiHelper,
@@ -25,7 +24,7 @@ class NewWordViewModel (
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
     private val searcherWithApi: GetSearchResult = GetSearchResult(searchResultRepository)
-    private val cardSaverToDb: SaveCardToFavorites = SaveCardToFavorites(searchResultRepository)
+    private val cardSaverToDb: InserterCardToDb = InserterCardToDb(searchResultRepository)
 
     private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
@@ -73,7 +72,7 @@ class NewWordViewModel (
         viewModelScope.launch {
             meaningModelForRecycler.let { item ->
                 cardSaverToDb(
-                    CardOfWord(
+                    Card(
                         item.id,
                         item.text,
                         item.translation,

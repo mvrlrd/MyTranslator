@@ -8,22 +8,16 @@ import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
-import ru.mvrlrd.mytranslator.ui.old.old.translation.TranslationViewModel
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
-import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.words.WordsListViewModel
-import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
-import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogViewModel
 
 val appSources = module {
     single { NetworkAvailabilityHandler(androidContext()) }
@@ -31,10 +25,10 @@ val appSources = module {
     single { Room.databaseBuilder(
             androidContext(),
             AppSearchingHistoryDataBase::class.java,
-            "history_database"
+            "all_db"
         ).fallbackToDestructiveMigration().build()
     }
-    single { get<AppSearchingHistoryDataBase>().historyDao() }
+    single { get<AppSearchingHistoryDataBase>().allDatabasesDao() }
     single { SearchResultIRepository(get(), get()) }
 }
 
@@ -44,15 +38,15 @@ val appViewModules = module {
     viewModel { LearningViewModel(get(),get()) }
     viewModel { WordsListViewModel(get(), get()) }
     viewModel { NewWordViewModel(get(), get()) }
-    single { TagDialogViewModel(get(), get()) }
-    single { TranslationViewModel(get(), get()) }
+//    single { TagDialogViewModel(get(), get()) }
+//    single { TranslationViewModel(get(), get()) }
 
 }
 
 val appFragments = module {
     single { NewCategoryDialog() }
     single { NewWordDialog() }
-    single { TagDialogFragment() }
+//    single { TagDialogFragment() }
 
     factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
 //    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener) }

@@ -1,7 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
 import android.util.Log
-import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -10,7 +9,10 @@ import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.domain.use_cases.categories.*
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private val TAG = "CatViewModel"
@@ -21,9 +23,9 @@ class CategoriesViewModel(
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
-    private val categoriesLoader: TagsLoader = TagsLoader(searchResultRepository)
-    private val clearerCategories: ClearCategories = ClearCategories(searchResultRepository)
-    private val newCategoryAdderer: NewTagAdderer = NewTagAdderer(searchResultRepository)
+    private val categoriesLoaderCategoriesOfDb: LoaderCategoriesOfDb = LoaderCategoriesOfDb(searchResultRepository)
+    private val clearerCategoriesFromDb: RemoverCategoriesFromDb = RemoverCategoriesFromDb(searchResultRepository)
+    private val newCategoryAdderer: InserterCategoryToBd = InserterCategoryToBd(searchResultRepository)
     private val removerCategoryFromDb: RemoverCategoryFromDb = RemoverCategoryFromDb(searchResultRepository)
 
      var _allCategoryList = MutableLiveData<List<Category>>()
@@ -63,7 +65,7 @@ class CategoriesViewModel(
 
     fun refreshCategoriesScreen() {
         viewModelScope.launch {
-            categoriesLoader(Unit) {
+            categoriesLoaderCategoriesOfDb(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::refreshListOfCategories
@@ -78,7 +80,7 @@ class CategoriesViewModel(
 
     fun clearCategories() {
         viewModelScope.launch {
-            clearerCategories(Unit) {
+            clearerCategoriesFromDb(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::handleClearingCategories

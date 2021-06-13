@@ -2,10 +2,10 @@ package ru.mvrlrd.mytranslator.data
 
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithTag
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithCategory
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.domain.IRepository
@@ -22,8 +22,8 @@ class SearchResultIRepository(
         return remoteDataSource.getData(wordForTranslation)
     }
             //local
-    override suspend fun saveCardToDb(cardOfWord: CardOfWord): Either<Failure, Long> {
-        return localDataSource.saveCardToDb(cardOfWord)
+    override suspend fun saveCardToDb(card: Card): Either<Failure, Long> {
+        return localDataSource.saveCardToDb(card)
     }
 
     override suspend fun deleteCardFromDb(id: Long): Either<Failure, Int> {
@@ -34,7 +34,7 @@ class SearchResultIRepository(
         return localDataSource.clearAllCardsFromDb()
     }
 
-    override suspend fun getAllCardsFromDb(): Either<Failure, List<CardOfWord>> {
+    override suspend fun getAllCardsFromDb(): Either<Failure, List<Card>> {
         return localDataSource.getAllCardsFromDb()
     }
 
@@ -67,12 +67,12 @@ class SearchResultIRepository(
         return localDataSource.deleteTagFromCard(cardId, tagId)
     }
 
-    override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithWords> {
+    override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithCards> {
         return localDataSource.getCardsOfCategory(categoryId)
     }
 
     //garbage
-    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithTag> {
+    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithCategory> {
         return localDataSource.getTagsOfCurrentCard(cardId)
     }
 }

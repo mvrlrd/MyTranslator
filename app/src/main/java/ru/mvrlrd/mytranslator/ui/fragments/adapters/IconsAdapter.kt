@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -9,60 +8,60 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.item_icon.view.*
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.IconItem
+import ru.mvrlrd.mytranslator.data.local.entity.CategoryIconItem
 
 private val TAG = "IconsAdapter"
 
 class IconsAdapter(private val listener: IconAdapterListener) :
     RecyclerView.Adapter<IconsAdapter.IconHolder>() {
     private var collection = listOf(
-        IconItem(R.drawable.addressbook_96, false),
-        IconItem(R.drawable.airport_96, false),
-        IconItem(R.drawable.alligator_96, false),
-        IconItem(R.drawable.alps_96, false),
-        IconItem(R.drawable.ambulance_96, false),
-        IconItem(R.drawable.android_96, false),
-        IconItem(R.drawable.aperture_96, false),
-        IconItem(R.drawable.aquarium_96, false),
-        IconItem(R.drawable.bam_96, false),
-        IconItem(R.drawable.bank_96, false),
-        IconItem(R.drawable.bowling_ball_96, false),
-        IconItem(R.drawable.brainstorm_skill_96, false),
-        IconItem(R.drawable.broccoli_96, false),
-        IconItem(R.drawable.bug_96, false),
-        IconItem(R.drawable.business_96, false),
-        IconItem(R.drawable.cafe_96, false),
-        IconItem(R.drawable.camper_96, false),
-        IconItem(R.drawable.car_crash_96, false),
-        IconItem(R.drawable.cat_96, false),
-        IconItem(R.drawable.champagne_96, false),
-        IconItem(R.drawable.cloud_lightning_96, false),
-        IconItem(R.drawable.coffee_to_go_96, false),
-        IconItem(R.drawable.console_96, false),
-        IconItem(R.drawable.documentary_96, false),
-        IconItem(R.drawable.elbow_96, false),
-        IconItem(R.drawable.energy_drink_96, false),
-        IconItem(R.drawable.english_mustache_96, false),
-        IconItem(R.drawable.fantasy_96, false),
-        IconItem(R.drawable.fighter_jet_96, false),
-        IconItem(R.drawable.flower_bouquet_96, false),
-        IconItem(R.drawable.french_fries_96, false),
-        IconItem(R.drawable.ghost_96, false),
-        IconItem(R.drawable.hanger_96, false),
-        IconItem(R.drawable.weak_person_96, false),
-        IconItem(R.drawable.water_transportation_96, false),
-        IconItem(R.drawable.walter_white_96, false),
-        IconItem(R.drawable.ullet_camera_96, false),
-        IconItem(R.drawable.terrorists_96, false),
-        IconItem(R.drawable.tent_96, false),
-        IconItem(R.drawable.superstar_96, false),
-        IconItem(R.drawable.sport_96, false),
-        IconItem(R.drawable.soccer_ball_96, false),
-        IconItem(R.drawable.smoking_96, false),
-        IconItem(R.drawable.waste_separation_96, false),
-        IconItem(R.drawable.nature_care_96, false),
-        IconItem(R.drawable.large_tree_96, false),
-        IconItem(R.drawable.futurama_bender_96, false)
+        CategoryIconItem(R.drawable.addressbook_96, false),
+        CategoryIconItem(R.drawable.airport_96, false),
+        CategoryIconItem(R.drawable.alligator_96, false),
+        CategoryIconItem(R.drawable.alps_96, false),
+        CategoryIconItem(R.drawable.ambulance_96, false),
+        CategoryIconItem(R.drawable.android_96, false),
+        CategoryIconItem(R.drawable.aperture_96, false),
+        CategoryIconItem(R.drawable.aquarium_96, false),
+        CategoryIconItem(R.drawable.bam_96, false),
+        CategoryIconItem(R.drawable.bank_96, false),
+        CategoryIconItem(R.drawable.bowling_ball_96, false),
+        CategoryIconItem(R.drawable.brainstorm_skill_96, false),
+        CategoryIconItem(R.drawable.broccoli_96, false),
+        CategoryIconItem(R.drawable.bug_96, false),
+        CategoryIconItem(R.drawable.business_96, false),
+        CategoryIconItem(R.drawable.cafe_96, false),
+        CategoryIconItem(R.drawable.camper_96, false),
+        CategoryIconItem(R.drawable.car_crash_96, false),
+        CategoryIconItem(R.drawable.cat_96, false),
+        CategoryIconItem(R.drawable.champagne_96, false),
+        CategoryIconItem(R.drawable.cloud_lightning_96, false),
+        CategoryIconItem(R.drawable.coffee_to_go_96, false),
+        CategoryIconItem(R.drawable.console_96, false),
+        CategoryIconItem(R.drawable.documentary_96, false),
+        CategoryIconItem(R.drawable.elbow_96, false),
+        CategoryIconItem(R.drawable.energy_drink_96, false),
+        CategoryIconItem(R.drawable.english_mustache_96, false),
+        CategoryIconItem(R.drawable.fantasy_96, false),
+        CategoryIconItem(R.drawable.fighter_jet_96, false),
+        CategoryIconItem(R.drawable.flower_bouquet_96, false),
+        CategoryIconItem(R.drawable.french_fries_96, false),
+        CategoryIconItem(R.drawable.ghost_96, false),
+        CategoryIconItem(R.drawable.hanger_96, false),
+        CategoryIconItem(R.drawable.weak_person_96, false),
+        CategoryIconItem(R.drawable.water_transportation_96, false),
+        CategoryIconItem(R.drawable.walter_white_96, false),
+        CategoryIconItem(R.drawable.ullet_camera_96, false),
+        CategoryIconItem(R.drawable.terrorists_96, false),
+        CategoryIconItem(R.drawable.tent_96, false),
+        CategoryIconItem(R.drawable.superstar_96, false),
+        CategoryIconItem(R.drawable.sport_96, false),
+        CategoryIconItem(R.drawable.soccer_ball_96, false),
+        CategoryIconItem(R.drawable.smoking_96, false),
+        CategoryIconItem(R.drawable.waste_separation_96, false),
+        CategoryIconItem(R.drawable.nature_care_96, false),
+        CategoryIconItem(R.drawable.large_tree_96, false),
+        CategoryIconItem(R.drawable.futurama_bender_96, false)
     )
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IconHolder {
@@ -127,9 +126,9 @@ class IconsAdapter(private val listener: IconAdapterListener) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
 
-        fun bind(iconItem: IconItem) {
-            itemView.iconImageView.load(iconItem.drawableId)
-            itemView.iconImageView.isSelected = iconItem.isChecked
+        fun bind(categoryIconItem: CategoryIconItem) {
+            itemView.iconImageView.load(categoryIconItem.drawableId)
+            itemView.iconImageView.isSelected = categoryIconItem.isChecked
         }
     }
 

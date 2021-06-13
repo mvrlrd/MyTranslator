@@ -14,10 +14,8 @@ import com.yuyakaido.android.cardstackview.Direction
 import kotlinx.android.synthetic.main.fragment_learning.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
-import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesFragmentDirections
 
 private val TAG = "LearningFragment"
 
@@ -71,7 +69,7 @@ class LearningFragment : Fragment(),LearningProcess {
             viewLifecycleOwner,
             Observer { words ->
                 Log.e(TAG, words.toString())
-                handleCategoryRecycler(words as MutableList<CardOfWord>)
+                handleCategoryRecycler(words as MutableList<Card>)
             })
         //for the first loading
         if (learningViewModel.liveWordsList.value != null) {
@@ -79,11 +77,11 @@ class LearningFragment : Fragment(),LearningProcess {
         }
     }
 
-    private fun handleCategoryRecycler(allWords: List<CardOfWord>) {
+    private fun handleCategoryRecycler(allWords: List<Card>) {
         card_stack_view.apply {
             layoutManager = manager
             adapter =
-                csadapter.apply { collection = allWords.shuffled() as MutableList<CardOfWord> }
+                csadapter.apply { collection = allWords.shuffled() as MutableList<Card> }
         }
     }
 

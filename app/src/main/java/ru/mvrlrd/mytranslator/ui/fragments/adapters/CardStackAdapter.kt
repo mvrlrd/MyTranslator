@@ -4,21 +4,20 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.ColorLong
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import com.yuyakaido.android.cardstackview.CardStackListener
 import com.yuyakaido.android.cardstackview.Direction
 import kotlinx.android.synthetic.main.item_card.view.*
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningProcess
 import kotlin.properties.Delegates
 
 private val TAG ="CardStackAdapter"
 class CardStackAdapter(private val learningProcessHandler: LearningProcess) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), CardStackListener {
 
-    internal var collection: MutableList<CardOfWord> by
+    internal var collection: MutableList<Card> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
     var currentCardPosition = 0
@@ -57,7 +56,7 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) : Re
                 circ = position % it
                 currentCardPosition = circ
             }
-            Log.e(TAG, "onCardAppeared      ${collection[circ].text}  circ=$circ   current=$currentCardPosition   pos=$position")
+            Log.e(TAG, "onCardAppeared      ${collection[circ].word}  circ=$circ   current=$currentCardPosition   pos=$position")
         }
     }
     override fun onCardDragging(direction: Direction?, ratio: Float) {
@@ -102,14 +101,14 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) : Re
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bind(cardOfWord: CardOfWord) {
-            if (cardOfWord.image_url !="_"){
-                itemView.main_image_view.load("https:${cardOfWord.image_url}")
+        fun bind(card: Card) {
+            if (card.image_url !="_"){
+                itemView.main_image_view.load("https:${card.image_url}")
             }
-            itemView.item_card_word.text = cardOfWord.text
+            itemView.item_card_word.text = card.word
             itemView.item_card_transcription.let {
-                it.text = hideEmptyView(it, "[${cardOfWord.transcription}]")
-                itemView.item_card_translation.text = cardOfWord.translation
+                it.text = hideEmptyView(it, "[${card.transcription}]")
+                itemView.item_card_translation.text = card.translation
             }
         }
 

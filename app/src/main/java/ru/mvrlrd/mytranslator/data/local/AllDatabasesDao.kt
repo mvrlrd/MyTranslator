@@ -1,0 +1,68 @@
+package ru.mvrlrd.mytranslator.data.local
+
+import androidx.room.*
+import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.data.local.entity.Card
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardCategoryCrossRef
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithCategory
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
+
+@Dao
+interface AllDatabasesDao {
+    //words also known as cards
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCard(card: Card?): Long
+
+    @Query("DELETE FROM cards_db")
+    suspend fun clearCards(): Int
+
+    @Query("DELETE FROM cards_db WHERE id =:id")
+    suspend fun deleteCard(id: Long): Int
+
+    @Query("SELECT * FROM cards_db")
+    suspend fun getAllCards(): List<Card>
+
+    @Query("SELECT * FROM cards_db WHERE word=:word")
+    suspend fun getCard(word: String): Card
+
+ //categories
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCategory(category: Category): Long
+
+    @Query("DELETE FROM categories_db")
+    suspend fun clearCategories():Int
+
+    @Query("SELECT * FROM categories_db")
+    suspend fun getAllCategories(): List<Category>
+
+    @Query("SELECT * FROM categories_db WHERE isChecked")
+    suspend fun getCategoriesForLearning(): List<Category>
+
+    @Query("DELETE FROM categories_db WHERE categoryId =:catId")
+    suspend fun deleteCategory(catId: Long): Int
+
+// crossref
+    @Transaction
+    @Query("SELECT * FROM categories_db WHERE categoryId = :categoryId")
+    suspend fun getCardsOfCategory(categoryId: Long): CategoryWithCards
+
+    @Query("DELETE  FROM cardcategorycrossref WHERE id =:id AND categoryId =:categoryId")
+    suspend fun removeCardFromCategory(id : Long, categoryId : Long) : Int
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCardToCategory(cardCategoryCrossRef: CardCategoryCrossRef):Long
+
+    @Query("SELECT * FROM cardcategorycrossref")
+    suspend fun getAllCrossRef(): List<CardCategoryCrossRef>
+
+
+
+    //garbage
+    @Transaction
+    @Query("SELECT * FROM cards_db WHERE id = :id")
+    suspend fun getTagsOfCard(id: Long): CardWithCategory
+
+
+
+
+}

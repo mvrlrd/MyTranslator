@@ -7,12 +7,12 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetterCardsOfCategory
-import ru.mvrlrd.mytranslator.domain.use_cases.categories.GetterLearningCategories
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private val TAG ="LearningViewModel"
@@ -22,22 +22,22 @@ class LearningViewModel(
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
-    private val getterLearningCategories: GetterLearningCategories =
-        GetterLearningCategories(searchResultRepository)
-    private val getterWordsOfCategory: GetterCardsOfCategory = GetterCardsOfCategory(searchResultRepository)
+    private val loaderChosenCategoriesForLearning: LoaderChosenCategoriesForLearning =
+        LoaderChosenCategoriesForLearning(searchResultRepository)
+    private val loaderWordsOfCardsOfCategory: LoaderCardsOfCategory = LoaderCardsOfCategory(searchResultRepository)
 
 
     private var _learningCategoryList = MutableLiveData<List<Category>>()
     val liveLearningCategoriesList: LiveData<List<Category>> = _learningCategoryList
 
-    private var _wordsList = MutableLiveData<List<CardOfWord>>()
-    val liveWordsList: LiveData<List<CardOfWord>> = _wordsList
+    private var _wordsList = MutableLiveData<List<Card>>()
+    val liveWordsList: LiveData<List<Card>> = _wordsList
 
-    var allWordsList: MutableList<CardOfWord> = mutableListOf()
+    var allWordsList: MutableList<Card> = mutableListOf()
 
     fun getCategories(){
         viewModelScope.launch {
-            getterLearningCategories(Unit){it.fold(
+            loaderChosenCategoriesForLearning(Unit){it.fold(
                 ::handleFailure,
                 ::handleGettingCategories
             )}
@@ -55,7 +55,7 @@ class LearningViewModel(
     fun getAllWordsOfCategory1(cats:List<Category>) {
         viewModelScope.launch {
             for (i in cats){
-                getterWordsOfCategory(i.categoryId){ it.fold(
+                loaderWordsOfCardsOfCategory(i.categoryId){ it.fold(
                     ::handleFailure,
                     ::handleGettingAllWords2
                 )}
@@ -63,8 +63,8 @@ class LearningViewModel(
 
         }
     }
-    private fun handleGettingAllWords2(categoryWithWords: CategoryWithWords) {
-        allWordsList.addAll(categoryWithWords.cards)
+    private fun handleGettingAllWords2(categoryWithCards: CategoryWithCards) {
+        allWordsList.addAll(categoryWithCards.cards)
         _wordsList.value = allWordsList
         Log.e(TAG,allWordsList.toString())
     }

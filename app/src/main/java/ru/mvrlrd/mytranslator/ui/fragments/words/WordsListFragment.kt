@@ -17,13 +17,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
-import kotlinx.android.synthetic.main.adding_word_fragment.*
 import kotlinx.android.synthetic.main.words_in_category_fragment.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
@@ -95,10 +93,10 @@ class WordsListFragment : Fragment(), OnItemClickListener {
 
     }
 
-    private fun handleRecycler(wordList: List<CardOfWord>) {
+    private fun handleRecycler(wordList: List<Card>) {
         words_recycler.apply {
             layoutManager = LinearLayoutManager(this.context)
-            adapter = wordsAdapter.apply { collection = wordList as MutableList<CardOfWord> }
+            adapter = wordsAdapter.apply { collection = wordList as MutableList<Card> }
         }
         callback =
             SimpleItemTouchHelperCallback(

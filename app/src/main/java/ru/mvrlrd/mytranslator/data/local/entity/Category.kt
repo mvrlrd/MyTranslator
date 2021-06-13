@@ -8,7 +8,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "group_tags")
+@Entity(tableName = "categories_db")
 data class Category(
     @PrimaryKey(autoGenerate = true)
     @SerializedName("id")

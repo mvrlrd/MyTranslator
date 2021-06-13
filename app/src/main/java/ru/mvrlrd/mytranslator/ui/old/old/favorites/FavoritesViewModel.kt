@@ -3,15 +3,14 @@ package ru.mvrlrd.mytranslator.ui.old.old.favorites
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.handleCoroutineException
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.CleanerWordsDb
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.DeleteCardFromFavorites
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetAllCardsFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardsFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfDb
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
@@ -21,10 +20,10 @@ class FavoritesViewModel(
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
-    private val deleteCardFromFavorites: DeleteCardFromFavorites =
-        DeleteCardFromFavorites(searchResultRepository)
-    private val getAllCardsFromDb: GetAllCardsFromDb = GetAllCardsFromDb(searchResultRepository)
-    private val cleanerAllWords: CleanerWordsDb = CleanerWordsDb(searchResultRepository)
+    private val removerCardFromDb: RemoverCardFromDb =
+        RemoverCardFromDb(searchResultRepository)
+    private val loaderCardsOfDb: LoaderCardsOfDb = LoaderCardsOfDb(searchResultRepository)
+    private val removerAllOfCardsFromDb: RemoverCardsFromDb = RemoverCardsFromDb(searchResultRepository)
 
 
     var liveHistory: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
@@ -35,7 +34,7 @@ class FavoritesViewModel(
 
     private fun loadFavoritesCards() {
         viewModelScope.launch {
-            getAllCardsFromDb(Unit) {
+            loaderCardsOfDb(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::mapCardForRecycler
@@ -44,11 +43,11 @@ class FavoritesViewModel(
         }
     }
 
-    private fun mapCardForRecycler(allCardsList: List<CardOfWord>) {
+    private fun mapCardForRecycler(allCardsList: List<Card>) {
         liveHistory.value = allCardsList.map { card ->
             MeaningModelForRecycler(
                 card.id,
-                card.text,
+                card.word,
                 card.translation,
                 card.image_url,
                 card.transcription,
@@ -60,7 +59,7 @@ class FavoritesViewModel(
 
     fun deleteCardFromFavorites(meaningModelForRecycler: MeaningModelForRecycler) {
         viewModelScope.launch {
-            deleteCardFromFavorites(meaningModelForRecycler.id) {
+            removerCardFromDb(meaningModelForRecycler.id) {
                 it.fold(
                     ::handleFailure,
                     ::handleDeleting
@@ -75,7 +74,7 @@ class FavoritesViewModel(
 
     fun clearAllWordsFromDb(){
         viewModelScope.launch {
-            cleanerAllWords(Unit){
+            removerAllOfCardsFromDb(Unit){
                 it.fold(
                     ::handleFailure,
                     ::handleCleaningWords

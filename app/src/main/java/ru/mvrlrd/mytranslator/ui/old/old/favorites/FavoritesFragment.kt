@@ -18,11 +18,9 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
-import ru.mvrlrd.mytranslator.ui.old.old.tag_dialog.TagDialogFragment
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
-import ru.mvrlrd.mytranslator.ui.old.old.TranslationAdapter
 
 
 // TODO: Rename parameter arguments, choose names that match
@@ -39,7 +37,7 @@ private const val TAG = "TranslationFragment"
  */
 class FavoritesFragment : Fragment(), OnSwipeListener {
 
-    private val tagDialogFragment: TagDialogFragment by inject()
+//    private val tagDialogFragment: TagDialogFragment by inject()
 
     private val vibrator: Vibrator by inject()
     private lateinit var _adapter: TranslationAdapter
@@ -48,9 +46,9 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        tagDialogFragment.setTargetFragment(this,
-            TARGET_FRAGMENT_REQUEST_CODE
-        )
+//        tagDialogFragment.setTargetFragment(this,
+//            TARGET_FRAGMENT_REQUEST_CODE
+//        )
     }
 
     override fun onCreateView(
@@ -116,7 +114,7 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         val bundle = Bundle()
         bundle.putLong("id", currentCardId)
         Log.e("Looooo","current   ${currentCardId}")
-        tagDialogFragment.arguments = bundle
-        tagDialogFragment.show(parentFragmentManager, "tagDialog")
+//        tagDialogFragment.arguments = bundle
+//        tagDialogFragment.show(parentFragmentManager, "tagDialog")
     }
 }

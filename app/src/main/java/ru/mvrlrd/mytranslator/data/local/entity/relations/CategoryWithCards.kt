@@ -3,17 +3,17 @@ package ru.mvrlrd.mytranslator.data.local.entity.relations
 import androidx.room.Embedded
 import androidx.room.Junction
 import androidx.room.Relation
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 
-class CategoryWithWords(
+class CategoryWithCards(
     @Embedded val category: Category,
     @Relation(
         parentColumn = "categoryId",
         entityColumn = "id",
-        associateBy = Junction(CardTagCrossRef::class)
+        associateBy = Junction(CardCategoryCrossRef::class)
     )
-    val cards : List<CardOfWord>
+    val cards : List<Card>
 
 
 ){

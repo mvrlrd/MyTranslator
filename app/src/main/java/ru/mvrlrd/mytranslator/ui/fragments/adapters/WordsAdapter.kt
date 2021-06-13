@@ -1,16 +1,14 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
 import android.annotation.SuppressLint
-import android.opengl.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
 import kotlinx.android.synthetic.main.item_word.view.*
 import ru.mvrlrd.mytranslator.R
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import java.util.*
@@ -20,7 +18,7 @@ private val TAG = "WordsAdapter"
 class WordsAdapter(private val onSwipeListener: OnItemClickListener):
     RecyclerView.Adapter<WordsAdapter.WordHolder>(), ItemTouchHelperAdapter
 {
-    internal var collection: MutableList<CardOfWord> by
+    internal var collection: MutableList<Card> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordHolder {
@@ -67,7 +65,7 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
 
     override fun onItemDismiss(position: Int) {
         onSwipeListener.onItemSwiped(collection[position].id)
-        Log.e(TAG, "${collection[position].text}    onItemDismissed()")
+        Log.e(TAG, "${collection[position].word}    onItemDismissed()")
         collection.removeAt(position)
         notifyItemRemoved(position)
     }
@@ -77,10 +75,10 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
         //        , ItemTouchHelperViewHolder {
 
         @SuppressLint("SetTextI18n")
-        fun bind(cardOfWord : CardOfWord) {
-            itemView.wordTextView.text = cardOfWord.text
-            itemView.translationTextView.text = cardOfWord.translation
-            itemView.transcriptionTextView2.let{it.text = hideEmptyView(it, "[${cardOfWord.transcription}]") }
+        fun bind(card : Card) {
+            itemView.wordTextView.text = card.word
+            itemView.translationTextView.text = card.translation
+            itemView.transcriptionTextView2.let{it.text = hideEmptyView(it, "[${card.transcription}]") }
 
             itemView.antonymTextView.text = ""
         }

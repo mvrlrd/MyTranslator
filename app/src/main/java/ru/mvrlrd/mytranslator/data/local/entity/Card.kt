@@ -8,10 +8,10 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "searching_history")
-data class CardOfWord (
+@Entity(tableName = "cards_db")
+data class Card (
     @PrimaryKey(autoGenerate = true) val id: Long,
-    @ColumnInfo val text: String?,
+    @ColumnInfo val word: String?,
     @ColumnInfo var translation: String?,
     @ColumnInfo val image_url: String?,
     @ColumnInfo val transcription: String?,
@@ -23,15 +23,15 @@ data class CardOfWord (
 //    constructor(text:String?,translation: String? ): this(0,text,translation)
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is CardOfWord){
+        return if (other !is Card){
             false
-        }else this.text == other.text
+        }else this.word == other.word
     }
 
     fun toStringArray(): Array<String?> {
         return arrayOf(
             this.id.toString(),
-            this.text,
+            this.word,
             this.translation,
             this.image_url,
             this.transcription,

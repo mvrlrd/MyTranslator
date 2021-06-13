@@ -8,13 +8,13 @@ import com.google.gson.Gson
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.SearchResultIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.entity.CardOfWord
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithWords
+import ru.mvrlrd.mytranslator.data.local.entity.Card
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.AddererWordToCategory
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.GetterCardsOfCategory
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.RemoverWordFromCategory
-import ru.mvrlrd.mytranslator.domain.use_cases.cards.SaveCardToFavorites
+import ru.mvrlrd.mytranslator.domain.use_cases.binders.BinderCardToCategory
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private val TAG = "WordsInCategoryViewModel"
@@ -25,26 +25,26 @@ class WordsListViewModel(
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
-    private val getterCardsOfCategory: GetterCardsOfCategory =
-        GetterCardsOfCategory(searchResultRepository)
-    private val addererWordToCategory: AddererWordToCategory =
-        AddererWordToCategory(searchResultRepository)
-    private val saveCardToFavorites: SaveCardToFavorites =
-        SaveCardToFavorites(searchResultRepository)
+    private val loaderCardsOfCategory: LoaderCardsOfCategory =
+        LoaderCardsOfCategory(searchResultRepository)
+    private val binderCardToCategory: BinderCardToCategory =
+        BinderCardToCategory(searchResultRepository)
+    private val inserterCardToDb: InserterCardToDb =
+        InserterCardToDb(searchResultRepository)
 
-    private val removerWordFromCategory: RemoverWordFromCategory = RemoverWordFromCategory(searchResultRepository)
+    private val removerCardFromCategory: RemoverCardFromCategory = RemoverCardFromCategory(searchResultRepository)
 
 
-    private var _liveWordList = MutableLiveData<List<CardOfWord>>()
-    val liveWordList: LiveData<List<CardOfWord>> = _liveWordList
+    private var _liveWordList = MutableLiveData<List<Card>>()
+    val liveWordList: LiveData<List<Card>> = _liveWordList
     var categoryId: Long = 0L
 
 
     fun saveWordToDb(str : String) {
-    val card = Gson().fromJson(str, CardOfWord::class.java)
+    val card = Gson().fromJson(str, Card::class.java)
         if (checkIfWordIsInCategory(card) == false) {
             viewModelScope.launch {
-                saveCardToFavorites(card) {
+                inserterCardToDb(card) {
                     it.fold(
                         ::handleFailure,
                         ::handleAddingWordToDb
@@ -64,7 +64,7 @@ class WordsListViewModel(
 
     private fun saveWordToCategory(categoryId: Long, cardId: Long) {
         viewModelScope.launch {
-            addererWordToCategory(arrayOf(cardId, categoryId)) {
+            binderCardToCategory(arrayOf(cardId, categoryId)) {
                 it.fold(
                     ::handleFailure,
                     ::handleAddingWordToCategory
@@ -81,7 +81,7 @@ class WordsListViewModel(
 
     fun getAllWordsOfCategory(categoryId: Long) {
         viewModelScope.launch {
-            getterCardsOfCategory(categoryId) {
+            loaderCardsOfCategory(categoryId) {
                 it.fold(
                     ::handleFailure,
                     ::handleGettingAllWords
@@ -90,8 +90,8 @@ class WordsListViewModel(
         }
     }
 
-    private fun handleGettingAllWords(categoryWithWords: CategoryWithWords) {
-        _liveWordList.value = categoryWithWords.cards
+    private fun handleGettingAllWords(categoryWithCards: CategoryWithCards) {
+        _liveWordList.value = categoryWithCards.cards
     }
 
 
@@ -99,7 +99,7 @@ class WordsListViewModel(
 
     fun deleteWordFromCategory(cardId: Long){
         viewModelScope.launch {
-            removerWordFromCategory(arrayOf(cardId, categoryId)){
+            removerCardFromCategory(arrayOf(cardId, categoryId)){
                 it.fold(
                     ::handleFailure,
                     ::handleDeletingWordFromCat
@@ -111,7 +111,7 @@ class WordsListViewModel(
         Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
     }
 
-    private fun checkIfWordIsInCategory(card: CardOfWord):Boolean? {
+    private fun checkIfWordIsInCategory(card: Card):Boolean? {
         return liveWordList.value?.contains(card)
 
     }

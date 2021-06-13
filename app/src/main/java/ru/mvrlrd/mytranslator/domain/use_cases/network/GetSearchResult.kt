@@ -6,7 +6,7 @@ import ru.mvrlrd.mytranslator.domain.IRepository
 import ru.mvrlrd.mytranslator.domain.use_cases.UseCase
 import ru.mvrlrd.mytranslator.functional.Either
 
-class GetSearchResult (private val searchResultIRepository: IRepository):
+class GetSearchResult(private val searchResultIRepository: IRepository) :
     UseCase<ListSearchResult?, String>() {
 
     override suspend fun run(params: String): Either<Failure, ListSearchResult?> {

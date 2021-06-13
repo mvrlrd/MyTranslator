@@ -1,4 +1,4 @@
-package ru.mvrlrd.mytranslator.ui.old.old
+package ru.mvrlrd.mytranslator.ui.old.old.favorites
 
 import android.annotation.SuppressLint
 import android.os.Build
@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.recycler_item.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
+import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import java.util.*
 import kotlin.properties.Delegates
 

@@ -117,8 +117,8 @@ class CategoriesViewModel(
         insertCategory(category)
     }
     fun addCategory(editingCategoryId: Long, string: Array<String>){
-        val editingCategory = Category( categoryId = editingCategoryId, name = string[0], icon = string[1])
-        insertCategory(editingCategory)
+        val category = Category( categoryId = editingCategoryId, name = string[0], icon = string[1])
+        insertCategory(category)
     }
 }
 

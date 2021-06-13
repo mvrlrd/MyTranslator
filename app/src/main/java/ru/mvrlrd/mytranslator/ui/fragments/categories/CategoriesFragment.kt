@@ -7,7 +7,6 @@ import android.os.Bundle
 import android.os.Vibrator
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -29,8 +28,8 @@ import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 import kotlin.math.max
 import kotlin.math.min
 
-private const val TARGET_FRAGMENT_REQUEST_CODE = 1
-private const val CHOOSE_FILE_REQUEST_CODE = 111
+private const val NEW_CATEGORY_DIALOG_REQUEST_CODE = 1
+private const val EDIT_CATEGORY_DIALOG_REQUEST_CODE = 111
 private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "CategoryFragment"
 
@@ -93,14 +92,16 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
+            var categoryId = 0L
             when (requestCode) {
-                TARGET_FRAGMENT_REQUEST_CODE -> {
-                    addCategory(0, data)
+                NEW_CATEGORY_DIALOG_REQUEST_CODE -> {
+                    categoryId = 0
                 }
-                CHOOSE_FILE_REQUEST_CODE -> {
-                    addCategory(editableId, data)
+                EDIT_CATEGORY_DIALOG_REQUEST_CODE -> {
+                    categoryId = editableId
                 }
             }
+            addCategory(categoryId, data)
         } else {
             Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return
@@ -114,10 +115,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         }
     }
 
-
-
-    
-
     private fun handleRecycler(allCategories: List<Category>) {
         initRecycler(allCategories)
         initCallbackRecycler()
@@ -125,7 +122,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     }
 
     private fun openDialogToAddNewCategory() {
-        newCategoryDialog.setTargetFragment(this, TARGET_FRAGMENT_REQUEST_CODE)
+        newCategoryDialog.setTargetFragment(this, NEW_CATEGORY_DIALOG_REQUEST_CODE)
         newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 
@@ -134,7 +131,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         val bundle = Bundle()
         bundle.putString("current state", currentCategory.toString())
         newCategoryDialog.arguments = bundle
-        newCategoryDialog.setTargetFragment(this, CHOOSE_FILE_REQUEST_CODE)
+        newCategoryDialog.setTargetFragment(this, EDIT_CATEGORY_DIALOG_REQUEST_CODE)
         newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 

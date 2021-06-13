@@ -10,6 +10,6 @@ class LoaderCategoriesOfDb(private val searchResultRepository: IRepository) :
     UseCase<List<Category>, Unit>() {
 
     override suspend fun run(params: Unit): Either<Failure, List<Category>> {
-        return searchResultRepository.getAllTags()
+        return searchResultRepository.getAllCategories()
     }
 }

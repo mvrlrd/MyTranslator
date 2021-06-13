@@ -8,20 +8,20 @@ import ru.mvrlrd.mytranslator.functional.Either
 
 interface LocalDataSource {
     //words
-    suspend fun saveCardToDb(card: Card): Either<Failure, Long>
+    suspend fun insertCardToDb(card: Card): Either<Failure, Long>
     suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>
     suspend fun clearAllCardsFromDb(): Either<Failure, Int>
-    suspend fun getAllCardsFromDb(): Either<Failure, List<Card>>
+    suspend fun getAllCardsOfDb(): Either<Failure, List<Card>>
 
     //category
-    suspend fun insertNewTagToDb(category: Category): Either<Failure, Long>
-    suspend fun deleteCategory(categoryId: Long): Either<Failure, Int>
-    suspend fun clearCategories(): Either<Failure, Int>
+    suspend fun insertCategoryToDb(category: Category): Either<Failure, Long>
+    suspend fun deleteCategoryFromDb(categoryId: Long): Either<Failure, Int>
+    suspend fun clearAllCategoriesFromDb(): Either<Failure, Int>
     suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>>
-    suspend fun getAllTags(): Either<Failure, List<Category>>
+    suspend fun getAllCategoriesOfDb(): Either<Failure, List<Category>>
 
     //crossref
-    suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long>
-    suspend fun deleteTagFromCard(cardId: Long, tagId: Long): Either<Failure, Int>
+    suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>
+    suspend fun deleteCardFromCategory(cardId: Long, tagId: Long): Either<Failure, Int>
     suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithCards>
 }

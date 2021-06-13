@@ -9,6 +9,6 @@ class RemoverCategoriesFromDb(private val searchResultRepository: IRepository) :
     UseCase<Int, Unit>() {
 
     override suspend fun run(params: Unit): Either<Failure, Int> {
-        return searchResultRepository.clearCategoriesFromDb()
+        return searchResultRepository.clearAllCategoriesFromDb()
     }
 }

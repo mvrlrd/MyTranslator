@@ -9,6 +9,6 @@ class RemoverCategoryFromDb(private val searchResultRepository: IRepository) :
     UseCase<Int, Long>() {
 
     override suspend fun run(params: Long): Either<Failure, Int> {
-        return searchResultRepository.deleteCategory(params)
+        return searchResultRepository.deleteCategoryFromDb(params)
     }
 }

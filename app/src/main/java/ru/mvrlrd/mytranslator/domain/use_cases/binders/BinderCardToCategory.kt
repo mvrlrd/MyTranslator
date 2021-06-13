@@ -11,6 +11,6 @@ class BinderCardToCategory(private val searchResultRepository: IRepository) :
     override suspend fun run(params: Array<Long>): Either<Failure, Long> {
         val cardId = params[0]
         val tagId = params[1]
-        return searchResultRepository.assignTagToCard(cardId, tagId)
+        return searchResultRepository.assignCardToCategory(cardId, tagId)
     }
 }

@@ -11,6 +11,6 @@ class RemoverCardFromCategory(private val searchResultRepository: IRepository) :
     override suspend fun run(params: Array<Long>): Either<Failure, Int> {
         val wordId = params[0]
         val categoryId = params[1]
-        return searchResultRepository.deleteTagFromCard(wordId, categoryId)
+        return searchResultRepository.deleteCardFromCategory(wordId, categoryId)
     }
 }

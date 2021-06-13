@@ -10,7 +10,7 @@ import ru.mvrlrd.mytranslator.functional.Either
 class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
 
     //words
-    override suspend fun saveCardToDb(card: Card): Either<Failure, Long> {
+    override suspend fun insertCardToDb(card: Card): Either<Failure, Long> {
         return Either.Right(allDatabasesDao.insertCard(card))
     }
 
@@ -22,20 +22,20 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
         return Either.Right(allDatabasesDao.clearCards())
     }
 
-    override suspend fun getAllCardsFromDb(): Either<Failure, List<Card>> {
+    override suspend fun getAllCardsOfDb(): Either<Failure, List<Card>> {
         return Either.Right(allDatabasesDao.getAllCards())
     }
 
     //category
-    override suspend fun insertNewTagToDb(category: Category): Either<Failure, Long> {
+    override suspend fun insertCategoryToDb(category: Category): Either<Failure, Long> {
         return Either.Right(allDatabasesDao.insertCategory(category))
     }
 
-    override suspend fun deleteCategory(categoryId: Long): Either<Failure, Int> {
+    override suspend fun deleteCategoryFromDb(categoryId: Long): Either<Failure, Int> {
         return Either.Right(allDatabasesDao.deleteCategory(categoryId))
     }
 
-    override suspend fun clearCategories(): Either<Failure, Int> {
+    override suspend fun clearAllCategoriesFromDb(): Either<Failure, Int> {
         return Either.Right(allDatabasesDao.clearCategories())
     }
 
@@ -43,12 +43,12 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
         return Either.Right(allDatabasesDao.getCategoriesForLearning())
     }
 
-    override suspend fun getAllTags(): Either<Failure, List<Category>> {
+    override suspend fun getAllCategoriesOfDb(): Either<Failure, List<Category>> {
         return Either.Right(allDatabasesDao.getAllCategories())
     }
 
     //crossref
-    override suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long> {
+    override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {
         return Either.Right(
             allDatabasesDao.insertCardToCategory(
                 CardCategoryCrossRef(
@@ -59,7 +59,7 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
         )
     }
 
-    override suspend fun deleteTagFromCard(
+    override suspend fun deleteCardFromCategory(
         cardId: Long, tagId: Long
     ): Either<Failure, Int> {
         return Either.Right(allDatabasesDao.removeCardFromCategory(cardId, tagId))

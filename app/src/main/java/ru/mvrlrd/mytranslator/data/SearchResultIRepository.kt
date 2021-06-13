@@ -23,49 +23,49 @@ class SearchResultIRepository(
 
     //local
     override suspend fun saveCardToDb(card: Card): Either<Failure, Long> {
-        return localDataSource.saveCardToDb(card)
+        return localDataSource.insertCardToDb(card)
     }
 
     override suspend fun deleteCardFromDb(id: Long): Either<Failure, Int> {
         return localDataSource.deleteCardFromDb(id)
     }
 
-    override suspend fun clearAllWordsFromDb(): Either<Failure, Int> {
+    override suspend fun clearAllCardsFromDb(): Either<Failure, Int> {
         return localDataSource.clearAllCardsFromDb()
     }
 
     override suspend fun getAllCardsFromDb(): Either<Failure, List<Card>> {
-        return localDataSource.getAllCardsFromDb()
+        return localDataSource.getAllCardsOfDb()
     }
 
     //category
-    override suspend fun addNewTagToDb(category: Category): Either<Failure, Long> {
-        return localDataSource.insertNewTagToDb(category)
+    override suspend fun addCategoryToDb(category: Category): Either<Failure, Long> {
+        return localDataSource.insertCategoryToDb(category)
     }
 
-    override suspend fun deleteCategory(categoryId: Long): Either<Failure, Int> {
-        return localDataSource.deleteCategory(categoryId)
+    override suspend fun deleteCategoryFromDb(categoryId: Long): Either<Failure, Int> {
+        return localDataSource.deleteCategoryFromDb(categoryId)
     }
 
-    override suspend fun clearCategoriesFromDb(): Either<Failure, Int> {
-        return localDataSource.clearCategories()
+    override suspend fun clearAllCategoriesFromDb(): Either<Failure, Int> {
+        return localDataSource.clearAllCategoriesFromDb()
     }
 
     override suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>> {
         return localDataSource.getAllCategoriesForLearning()
     }
 
-    override suspend fun getAllTags(): Either<Failure, List<Category>> {
-        return localDataSource.getAllTags()
+    override suspend fun getAllCategories(): Either<Failure, List<Category>> {
+        return localDataSource.getAllCategoriesOfDb()
     }
 
     //crossref
-    override suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long> {
-        return localDataSource.assignTagToCard(cardId, tagId)
+    override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {
+        return localDataSource.assignCardToCategory(cardId, tagId)
     }
 
-    override suspend fun deleteTagFromCard(cardId: Long, tagId: Long): Either<Failure, Int> {
-        return localDataSource.deleteTagFromCard(cardId, tagId)
+    override suspend fun deleteCardFromCategory(cardId: Long, tagId: Long): Either<Failure, Int> {
+        return localDataSource.deleteCardFromCategory(cardId, tagId)
     }
 
     override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithCards> {

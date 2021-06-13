@@ -10,6 +10,6 @@ class InserterCategoryToBd(private val searchResultRepository: IRepository) :
     UseCase<Long, Category>() {
 
     override suspend fun run(category: Category): Either<Failure, Long> {
-        return searchResultRepository.addNewTagToDb(category)
+        return searchResultRepository.addCategoryToDb(category)
     }
 }

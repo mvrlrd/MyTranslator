@@ -6,14 +6,14 @@ import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.functional.Either
 
-
-class ApiHelper(private val apiService: ISkyengApiService,private val networkHandler: NetworkAvailabilityHandler) :
+class ApiHelper(
+    private val apiService: ISkyengApiService,
+    private val networkHandler: NetworkAvailabilityHandler
+) :
     RemoteDataSource {
 
-    override suspend fun getData(wordForTranslation : String): Either<Failure, ListSearchResult?> =
-        requestData { apiService.search(wordForTranslation)}
-
-
+    override suspend fun getData(wordForTranslation: String): Either<Failure, ListSearchResult?> =
+        requestData { apiService.search(wordForTranslation) }
 
     private fun <T> responseHandle(response: Response<T>): Either<Failure, T?> =
         when (response.isSuccessful) {
@@ -32,5 +32,4 @@ class ApiHelper(private val apiService: ISkyengApiService,private val networkHan
             }
             false -> Either.Left(Failure.NetworkConnection)
         }
-
 }

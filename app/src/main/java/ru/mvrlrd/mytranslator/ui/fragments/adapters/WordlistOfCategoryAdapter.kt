@@ -14,10 +14,10 @@ import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import java.util.*
 import kotlin.properties.Delegates
 
-private val TAG = "WordsAdapter"
-class WordsAdapter(private val onSwipeListener: OnItemClickListener):
-    RecyclerView.Adapter<WordsAdapter.WordHolder>(), ItemTouchHelperAdapter
-{
+private const val TAG = "WordsAdapter"
+
+class WordsAdapter(private val onSwipeListener: OnItemClickListener) :
+    RecyclerView.Adapter<WordsAdapter.WordHolder>(), ItemTouchHelperAdapter {
     internal var collection: MutableList<Card> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
@@ -30,23 +30,18 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
 //        TranslationHolder(parent.inflate(R.layout.recycler_item))
     }
 
-
     override fun onBindViewHolder(holder: WordHolder, position: Int) {
         holder.bind(collection[position])
         holder.itemView.setOnClickListener {
             onSwipeListener.onItemClick(collection[position].id)
         }
-
         holder.itemView.setOnLongClickListener {
             onSwipeListener.onItemLongPressed(collection[position].id)
             true
         }
     }
 
-
-
     override fun getItemCount() = collection.size
-
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Log.e("onItemMove", "run ")
@@ -75,22 +70,22 @@ class WordsAdapter(private val onSwipeListener: OnItemClickListener):
         //        , ItemTouchHelperViewHolder {
 
         @SuppressLint("SetTextI18n")
-        fun bind(card : Card) {
+        fun bind(card: Card) {
             itemView.wordTextView.text = card.word
             itemView.translationTextView.text = card.translation
-            itemView.transcriptionTextView2.let{it.text = hideEmptyView(it, "[${card.transcription}]") }
-
+            itemView.transcriptionTextView2.let {
+                it.text = hideEmptyView(it, "[${card.transcription}]")
+            }
             itemView.antonymTextView.text = ""
         }
 
-        private fun hideEmptyView(view : View, str: String?): String?{
-            if (str!="[_]"){
+        private fun hideEmptyView(view: View, str: String?): String? {
+            if (str != "[_]") {
                 view.visibility = View.VISIBLE
-            }else{
+            } else {
                 view.visibility = View.GONE
             }
             return str
         }
-
     }
 }

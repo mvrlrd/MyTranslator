@@ -22,7 +22,8 @@ import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 val appSources = module {
     single { NetworkAvailabilityHandler(androidContext()) }
     single { DbHelper(get()) }
-    single { Room.databaseBuilder(
+    single {
+        Room.databaseBuilder(
             androidContext(),
             AppSearchingHistoryDataBase::class.java,
             "all_db"
@@ -35,22 +36,15 @@ val appSources = module {
 val appViewModules = module {
     viewModel { FavoritesViewModel(get(), get()) }
     viewModel { CategoriesViewModel(get(), get()) }
-    viewModel { LearningViewModel(get(),get()) }
+    viewModel { LearningViewModel(get(), get()) }
     viewModel { WordsListViewModel(get(), get()) }
     viewModel { NewWordViewModel(get(), get()) }
-//    single { TagDialogViewModel(get(), get()) }
-//    single { TranslationViewModel(get(), get()) }
-
 }
 
 val appFragments = module {
     single { NewCategoryDialog() }
     single { NewWordDialog() }
-//    single { TagDialogFragment() }
-
-    factory { (listener: IconsAdapter.IconAdapterListener)-> IconsAdapter(listener) }
-//    factory { (listener: OnItemClickListener)->  CategoriesAdapter(listener) }
-//    single { WordsAdapter() }
+    factory { (listener: IconsAdapter.IconAdapterListener) -> IconsAdapter(listener) }
 }
 
 val appToolModule = module {

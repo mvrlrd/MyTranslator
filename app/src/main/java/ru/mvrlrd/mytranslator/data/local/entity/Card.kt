@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity(tableName = "cards_db")
-data class Card (
+data class Card(
     @PrimaryKey(autoGenerate = true) val id: Long,
     @ColumnInfo val word: String?,
     @ColumnInfo var translation: String?,
@@ -17,15 +17,13 @@ data class Card (
     @ColumnInfo val transcription: String?,
     @ColumnInfo val partOfSpeech: String?,
     @ColumnInfo val prefix: String?,
-    @ColumnInfo var progress : Int
-):Parcelable{
-//    @Ignore
-//    constructor(text:String?,translation: String? ): this(0,text,translation)
+    @ColumnInfo var progress: Int
+) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
-        return if (other !is Card){
+        return if (other !is Card) {
             false
-        }else this.word == other.word
+        } else this.word == other.word
     }
 
     fun toStringArray(): Array<String?> {
@@ -36,6 +34,7 @@ data class Card (
             this.image_url,
             this.transcription,
             this.partOfSpeech,
-            this.prefix)
+            this.prefix
+        )
     }
 }

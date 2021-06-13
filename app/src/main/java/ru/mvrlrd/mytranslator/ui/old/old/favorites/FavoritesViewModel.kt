@@ -23,10 +23,9 @@ class FavoritesViewModel(
     private val removerCardFromDb: RemoverCardFromDb =
         RemoverCardFromDb(searchResultRepository)
     private val loaderCardsOfDb: LoaderCardsOfDb = LoaderCardsOfDb(searchResultRepository)
-    private val removerAllOfCardsFromDb: RemoverCardsFromDb = RemoverCardsFromDb(searchResultRepository)
-
-
-    var liveHistory: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
+    private val removerAllOfCardsFromDb: RemoverCardsFromDb =
+        RemoverCardsFromDb(searchResultRepository)
+    var liveMeaningsForRecycler: MutableLiveData<List<MeaningModelForRecycler>> = MutableLiveData()
 
     init {
         loadFavoritesCards()
@@ -44,7 +43,7 @@ class FavoritesViewModel(
     }
 
     private fun mapCardForRecycler(allCardsList: List<Card>) {
-        liveHistory.value = allCardsList.map { card ->
+        liveMeaningsForRecycler.value = allCardsList.map { card ->
             MeaningModelForRecycler(
                 card.id,
                 card.word,
@@ -72,9 +71,9 @@ class FavoritesViewModel(
         Log.d(TAG, "$quantity item was deleted from the database")
     }
 
-    fun clearAllWordsFromDb(){
+    fun clearAllWordsFromDb() {
         viewModelScope.launch {
-            removerAllOfCardsFromDb(Unit){
+            removerAllOfCardsFromDb(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::handleCleaningWords
@@ -83,8 +82,8 @@ class FavoritesViewModel(
         }
     }
 
-    private fun handleCleaningWords(num: Int){
-        liveHistory.value = mutableListOf()
+    private fun handleCleaningWords(num: Int) {
+        liveMeaningsForRecycler.value = mutableListOf()
         Log.e(TAG, "$num items were deleted from words db")
     }
 

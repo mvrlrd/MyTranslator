@@ -4,7 +4,6 @@ import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardCategoryCrossRef
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithCategory
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.functional.Either
 
@@ -39,6 +38,7 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
     override suspend fun clearCategories(): Either<Failure, Int> {
         return Either.Right(allDatabasesDao.clearCategories())
     }
+
     override suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>> {
         return Either.Right(allDatabasesDao.getCategoriesForLearning())
     }
@@ -48,27 +48,25 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
     }
 
     //crossref
-    override suspend fun assignTagToCard(
-        cardId: Long,
-        tagId: Long
-    ): Either<Failure, Long> {
-        return Either.Right(allDatabasesDao.insertCardToCategory(CardCategoryCrossRef(cardId, tagId)))
+    override suspend fun assignTagToCard(cardId: Long, tagId: Long): Either<Failure, Long> {
+        return Either.Right(
+            allDatabasesDao.insertCardToCategory(
+                CardCategoryCrossRef(
+                    cardId,
+                    tagId
+                )
+            )
+        )
     }
 
     override suspend fun deleteTagFromCard(
-        cardId: Long,
-        tagId: Long
+        cardId: Long, tagId: Long
     ): Either<Failure, Int> {
         return Either.Right(allDatabasesDao.removeCardFromCategory(cardId, tagId))
     }
 
     override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithCards> {
         return Either.Right(allDatabasesDao.getCardsOfCategory(categoryId))
-    }
-
-    //garbage
-    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithCategory> {
-        return Either.Right(allDatabasesDao.getTagsOfCard(cardId))
     }
 }
 

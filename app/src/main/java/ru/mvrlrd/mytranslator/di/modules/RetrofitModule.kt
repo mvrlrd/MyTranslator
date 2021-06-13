@@ -12,7 +12,6 @@ import ru.mvrlrd.mytranslator.data.network.ISkyengApiService
 import java.util.concurrent.TimeUnit
 
 internal const val BASE_URL = "https://dictionary.skyeng.ru/api/public/v1/"
-
 private const val TIMEOUT_IN_SECONDS = 1L
 
 internal fun provideOkHTTPClient(): OkHttpClient {

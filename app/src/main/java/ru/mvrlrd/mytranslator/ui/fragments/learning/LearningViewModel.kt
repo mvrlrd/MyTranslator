@@ -15,7 +15,8 @@ import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-private val TAG ="LearningViewModel"
+private const val TAG = "LearningViewModel"
+
 class LearningViewModel(
     apiHelper: ApiHelper,
     dbHelper: DbHelper
@@ -24,54 +25,53 @@ class LearningViewModel(
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
     private val loaderChosenCategoriesForLearning: LoaderChosenCategoriesForLearning =
         LoaderChosenCategoriesForLearning(searchResultRepository)
-    private val loaderWordsOfCardsOfCategory: LoaderCardsOfCategory = LoaderCardsOfCategory(searchResultRepository)
+    private val loaderCardsOfCategory: LoaderCardsOfCategory =
+        LoaderCardsOfCategory(searchResultRepository)
+    private var _categoriesForLearning = MutableLiveData<List<Category>>()
+    val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
 
+    private var _cardsOfCategory = MutableLiveData<List<Card>>()
+    val liveCardsOfCategory: LiveData<List<Card>> = _cardsOfCategory
 
-    private var _learningCategoryList = MutableLiveData<List<Category>>()
-    val liveLearningCategoriesList: LiveData<List<Category>> = _learningCategoryList
+    ///????????
+    var allCards: MutableList<Card> = mutableListOf()//?????/
 
-    private var _wordsList = MutableLiveData<List<Card>>()
-    val liveWordsList: LiveData<List<Card>> = _wordsList
-
-    var allWordsList: MutableList<Card> = mutableListOf()
-
-    fun getCategories(){
+    fun getCategories() {
         viewModelScope.launch {
-            loaderChosenCategoriesForLearning(Unit){it.fold(
-                ::handleFailure,
-                ::handleGettingCategories
-            )}
+            loaderChosenCategoriesForLearning(Unit) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleGettingCategories
+                )
+            }
         }
     }
 
-    private fun handleGettingCategories(categoryList: List<Category>){
-        _learningCategoryList.value = categoryList
+    private fun handleGettingCategories(categoryList: List<Category>) {
+        _categoriesForLearning.value = categoryList
 //        for (i in categoryList){
 //            getAllWordsOfCategory(i.categoryId)
 //        }
 //        _wordsList.value = allWordsList
     }
 
-    fun getAllWordsOfCategory1(cats:List<Category>) {
+    fun getAllWordsOfCategory1(cats: List<Category>) {
         viewModelScope.launch {
-            for (i in cats){
-                loaderWordsOfCardsOfCategory(i.categoryId){ it.fold(
-                    ::handleFailure,
-                    ::handleGettingAllWords2
-                )}
+            for (i in cats) {
+                loaderCardsOfCategory(i.categoryId) {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleGettingAllWords2
+                    )
+                }
             }
 
         }
     }
+
     private fun handleGettingAllWords2(categoryWithCards: CategoryWithCards) {
-        allWordsList.addAll(categoryWithCards.cards)
-        _wordsList.value = allWordsList
-        Log.e(TAG,allWordsList.toString())
+        allCards.addAll(categoryWithCards.cards)
+        _cardsOfCategory.value = allCards
+        Log.e(TAG, allCards.toString())
     }
-
-
-
-
-
-
 }

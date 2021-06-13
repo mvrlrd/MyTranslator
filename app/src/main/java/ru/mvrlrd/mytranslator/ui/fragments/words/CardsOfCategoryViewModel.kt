@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.words
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -17,7 +18,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-private val TAG = "WordsInCategoryViewModel"
+private const val TAG = "WordsInCategoryViewModel"
 
 class WordsListViewModel(
     apiHelper: ApiHelper,
@@ -31,17 +32,14 @@ class WordsListViewModel(
         BinderCardToCategory(searchResultRepository)
     private val inserterCardToDb: InserterCardToDb =
         InserterCardToDb(searchResultRepository)
-
-    private val removerCardFromCategory: RemoverCardFromCategory = RemoverCardFromCategory(searchResultRepository)
-
-
-    private var _liveWordList = MutableLiveData<List<Card>>()
-    val liveWordList: LiveData<List<Card>> = _liveWordList
+    private val removerCardFromCategory: RemoverCardFromCategory =
+        RemoverCardFromCategory(searchResultRepository)
+    private var _cards = MutableLiveData<List<Card>>()
+    val liveCards: LiveData<List<Card>> = _cards
     var categoryId: Long = 0L
 
-
-    fun saveWordToDb(str : String) {
-    val card = Gson().fromJson(str, Card::class.java)
+    fun saveWordToDb(str: String) {
+        val card = Gson().fromJson(str, Card::class.java)
         if (checkIfWordIsInCategory(card) == false) {
             viewModelScope.launch {
                 inserterCardToDb(card) {
@@ -57,6 +55,7 @@ class WordsListViewModel(
 //        return Gson().fromJson(jsonString, CardOfWord::class.java)
 //    }
 
+    @SuppressLint("LongLogTag")
     private fun handleAddingWordToDb(wordId: Long) {
         Log.e(TAG, "new word #$wordId has been added to the database")
         saveWordToCategory(categoryId, wordId)
@@ -73,11 +72,11 @@ class WordsListViewModel(
         }
     }
 
+    @SuppressLint("LongLogTag")
     private fun handleAddingWordToCategory(wordId: Long) {
         Log.e(TAG, "word #$wordId has been assigned with the category #$categoryId")
         getAllWordsOfCategory(categoryId)
     }
-
 
     fun getAllWordsOfCategory(categoryId: Long) {
         viewModelScope.launch {
@@ -91,15 +90,12 @@ class WordsListViewModel(
     }
 
     private fun handleGettingAllWords(categoryWithCards: CategoryWithCards) {
-        _liveWordList.value = categoryWithCards.cards
+        _cards.value = categoryWithCards.cards
     }
 
-
-
-
-    fun deleteWordFromCategory(cardId: Long){
+    fun deleteWordFromCategory(cardId: Long) {
         viewModelScope.launch {
-            removerCardFromCategory(arrayOf(cardId, categoryId)){
+            removerCardFromCategory(arrayOf(cardId, categoryId)) {
                 it.fold(
                     ::handleFailure,
                     ::handleDeletingWordFromCat
@@ -107,12 +103,14 @@ class WordsListViewModel(
             }
         }
     }
-    private fun handleDeletingWordFromCat(numOfDeletedWord : Int){
+
+    @SuppressLint("LongLogTag")
+    private fun handleDeletingWordFromCat(numOfDeletedWord: Int) {
         Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
     }
 
-    private fun checkIfWordIsInCategory(card: Card):Boolean? {
-        return liveWordList.value?.contains(card)
+    private fun checkIfWordIsInCategory(card: Card): Boolean? {
+        return liveCards.value?.contains(card)
 
     }
 }

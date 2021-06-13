@@ -14,8 +14,10 @@ import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningProcess
 import kotlin.properties.Delegates
 
-private val TAG ="CardStackAdapter"
-class CardStackAdapter(private val learningProcessHandler: LearningProcess) : RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), CardStackListener {
+private val TAG = "CardStackAdapter"
+
+class CardStackAdapter(private val learningProcessHandler: LearningProcess) :
+    RecyclerView.Adapter<CardStackAdapter.ViewHolder>(), CardStackListener {
 
     internal var collection: MutableList<Card> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
@@ -42,7 +44,8 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) : Re
 
         }
     }
-    private fun shuffleCards(quantityOfCards: Int): Int{
+
+    private fun shuffleCards(quantityOfCards: Int): Int {
         return (0..quantityOfCards).random()
     }
 
@@ -56,9 +59,13 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) : Re
                 circ = position % it
                 currentCardPosition = circ
             }
-            Log.e(TAG, "onCardAppeared      ${collection[circ].word}  circ=$circ   current=$currentCardPosition   pos=$position")
+            Log.e(
+                TAG,
+                "onCardAppeared      ${collection[circ].word}  circ=$circ   current=$currentCardPosition   pos=$position"
+            )
         }
     }
+
     override fun onCardDragging(direction: Direction?, ratio: Float) {
 //        Log.e(TAG, "onCardDragging")
     }
@@ -88,12 +95,13 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) : Re
             }
         }
     }
-    private fun removeLearnedItem(){
+
+    private fun removeLearnedItem() {
         collection.removeAt(currentCardPosition)
-        if (collection.isEmpty()){
+        if (collection.isEmpty()) {
             learningProcessHandler.finishLearningProcess()
         }
-        if (collection.isNotEmpty()){
+        if (collection.isNotEmpty()) {
             notifyDataSetChanged()
         }
 
@@ -102,7 +110,7 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) : Re
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(card: Card) {
-            if (card.image_url !="_"){
+            if (card.image_url != "_") {
                 itemView.main_image_view.load("https:${card.image_url}")
             }
             itemView.item_card_word.text = card.word

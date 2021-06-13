@@ -15,30 +15,31 @@ import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-private val TAG = "CatViewModel"
+private const val TAG = "CatViewModel"
 
 class CategoriesViewModel(
     apiHelper: ApiHelper,
     dbHelper: DbHelper
 ) : BaseViewModel() {
-
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
-    private val categoriesLoaderCategoriesOfDb: LoaderCategoriesOfDb = LoaderCategoriesOfDb(searchResultRepository)
-    private val clearerCategoriesFromDb: RemoverCategoriesFromDb = RemoverCategoriesFromDb(searchResultRepository)
-    private val newCategoryAdderer: InserterCategoryToBd = InserterCategoryToBd(searchResultRepository)
-    private val removerCategoryFromDb: RemoverCategoryFromDb = RemoverCategoryFromDb(searchResultRepository)
+    private val inserterCategoryToBd: InserterCategoryToBd =
+        InserterCategoryToBd(searchResultRepository)
+    private val loaderCategoriesOfDb: LoaderCategoriesOfDb =
+        LoaderCategoriesOfDb(searchResultRepository)
+    private val removerCategoriesFromDb: RemoverCategoriesFromDb =
+        RemoverCategoriesFromDb(searchResultRepository)
+    private val removerCategoryFromDb: RemoverCategoryFromDb =
+        RemoverCategoryFromDb(searchResultRepository)
+    private var _allCategories = MutableLiveData<List<Category>>()
+    val liveAllCategories: LiveData<List<Category>> = _allCategories
 
-     var _allCategoryList = MutableLiveData<List<Category>>()
-    val liveAllCategoriesList: LiveData<List<Category>> = _allCategoryList
-
-
-    fun addNewCategory(id: Long,name: String, icon: String) {
-        val groupTag = Category(id, name, icon, false,0.0)
+    fun addNewCategory(id: Long, name: String, icon: String) {
+        val groupTag = Category(id, name, icon, false, 0.0)
         when {
-            _allCategoryList.value.isNullOrEmpty()
-                    || !_allCategoryList.value!!.contains(groupTag) -> {
+            _allCategories.value.isNullOrEmpty()
+                    || !_allCategories.value!!.contains(groupTag) -> {
                 viewModelScope.launch {
-                    newCategoryAdderer(groupTag) {
+                    inserterCategoryToBd(groupTag) {
                         it.fold(
                             ::handleFailure,
                             ::handleAddingCategory
@@ -46,7 +47,7 @@ class CategoriesViewModel(
                     }
                 }
             }
-            _allCategoryList.value!!.contains(groupTag) -> {
+            _allCategories.value!!.contains(groupTag) -> {
                 return
             }
         }
@@ -57,15 +58,15 @@ class CategoriesViewModel(
         refreshCategoriesScreen()
     }
 
-    fun updateCategory(category: Category){
+    fun updateCategory(category: Category) {
         viewModelScope.launch {
-            newCategoryAdderer(category)
+            inserterCategoryToBd(category)
         }
     }
 
     fun refreshCategoriesScreen() {
         viewModelScope.launch {
-            categoriesLoaderCategoriesOfDb(Unit) {
+            loaderCategoriesOfDb(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::refreshListOfCategories
@@ -75,12 +76,12 @@ class CategoriesViewModel(
     }
 
     private fun refreshListOfCategories(allCategoriesList: List<Category>) {
-        _allCategoryList.value = allCategoriesList
+        _allCategories.value = allCategoriesList
     }
 
     fun clearCategories() {
         viewModelScope.launch {
-            clearerCategoriesFromDb(Unit) {
+            removerCategoriesFromDb(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::handleClearingCategories
@@ -89,26 +90,27 @@ class CategoriesViewModel(
 
         }
     }
+
     private fun handleClearingCategories(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted items were deleted from db")
         refreshCategoriesScreen()
     }
 
-    fun deleteCategory(categoryId: Long){
+    fun deleteCategory(categoryId: Long) {
         viewModelScope.launch {
-            removerCategoryFromDb(categoryId){it.fold(
-                ::handleFailure,
-                ::handleDeletingCategory
-            )}
+            removerCategoryFromDb(categoryId) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleDeletingCategory
+                )
+            }
         }
     }
-    private fun handleDeletingCategory(numOfDeleted : Int){
+
+    private fun handleDeletingCategory(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted item was deleted from db")
         refreshCategoriesScreen()
     }
-
-
-
 }
 
 

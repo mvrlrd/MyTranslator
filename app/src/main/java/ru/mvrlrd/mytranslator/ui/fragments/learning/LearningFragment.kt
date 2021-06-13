@@ -17,26 +17,25 @@ import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
 
-private val TAG = "LearningFragment"
+private const val TAG = "LearningFragment"
 
-class LearningFragment : Fragment(),LearningProcess {
-
+class LearningFragment : Fragment(), LearningProcess {
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
     private val learningViewModel: LearningViewModel by inject()
-
-    private var pos : Int? = null
+    private var pos: Int? = null
     private var swipeDirection: Direction? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         csadapter = CardStackAdapter(this as LearningProcess)
-        manager = CardStackLayoutManager(this.context,
+        manager = CardStackLayoutManager(
+            this.context,
 //            CardStackListener.DEFAULT
-            csadapter as CardStackListener)
-            manager.setCanScrollVertical(false)
-            manager.setSwipeThreshold(0.8f)
-
+            csadapter as CardStackListener
+        )
+        manager.setCanScrollVertical(false)
+        manager.setSwipeThreshold(0.8f)
     }
 
     override fun onCreateView(
@@ -61,19 +60,19 @@ class LearningFragment : Fragment(),LearningProcess {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        learningViewModel.liveLearningCategoriesList.observe(viewLifecycleOwner, Observer { cat ->
+        learningViewModel.liveCategoriesForLearning.observe(viewLifecycleOwner, Observer { cat ->
             learningViewModel.getAllWordsOfCategory1(cat)
         })
 
-        learningViewModel.liveWordsList.observe(
+        learningViewModel.liveCardsOfCategory.observe(
             viewLifecycleOwner,
             Observer { words ->
                 Log.e(TAG, words.toString())
                 handleCategoryRecycler(words as MutableList<Card>)
             })
         //for the first loading
-        if (learningViewModel.liveWordsList.value != null) {
-            handleCategoryRecycler(learningViewModel.liveWordsList.value!!)
+        if (learningViewModel.liveCardsOfCategory.value != null) {
+            handleCategoryRecycler(learningViewModel.liveCardsOfCategory.value!!)
         }
     }
 

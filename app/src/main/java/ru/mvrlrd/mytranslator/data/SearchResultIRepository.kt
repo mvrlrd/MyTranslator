@@ -4,7 +4,6 @@ import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
-import ru.mvrlrd.mytranslator.data.local.entity.relations.CardWithCategory
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
@@ -17,11 +16,12 @@ class SearchResultIRepository(
 ) : IRepository {
 
     //words
-            //remote
+    //remote
     override suspend fun getSearchResult(wordForTranslation: String): Either<Failure, ListSearchResult?> {
         return remoteDataSource.getData(wordForTranslation)
     }
-            //local
+
+    //local
     override suspend fun saveCardToDb(card: Card): Either<Failure, Long> {
         return localDataSource.saveCardToDb(card)
     }
@@ -39,7 +39,6 @@ class SearchResultIRepository(
     }
 
     //category
-
     override suspend fun addNewTagToDb(category: Category): Either<Failure, Long> {
         return localDataSource.insertNewTagToDb(category)
     }
@@ -51,9 +50,11 @@ class SearchResultIRepository(
     override suspend fun clearCategoriesFromDb(): Either<Failure, Int> {
         return localDataSource.clearCategories()
     }
+
     override suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>> {
         return localDataSource.getAllCategoriesForLearning()
     }
+
     override suspend fun getAllTags(): Either<Failure, List<Category>> {
         return localDataSource.getAllTags()
     }
@@ -69,10 +70,5 @@ class SearchResultIRepository(
 
     override suspend fun getCardsOfCategory(categoryId: Long): Either<Failure, CategoryWithCards> {
         return localDataSource.getCardsOfCategory(categoryId)
-    }
-
-    //garbage
-    override suspend fun getTagsOfCurrentCard(cardId: Long): Either<Failure, CardWithCategory> {
-        return localDataSource.getTagsOfCurrentCard(cardId)
     }
 }

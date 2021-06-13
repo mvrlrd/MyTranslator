@@ -6,18 +6,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import coil.api.load
 import kotlinx.android.synthetic.main.item_translations.view.*
-import kotlinx.android.synthetic.main.item_word.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import java.util.*
 import kotlin.properties.Delegates
 
-private val TAG ="TranslationAdapter"
-class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener):
-    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter
-{
+private const val TAG = "TranslationAdapter"
+
+class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener) :
+    RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(), ItemTouchHelperAdapter {
     internal var collection: MutableList<String> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
 
@@ -29,7 +27,6 @@ class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener
         )
 //        TranslationHolder(parent.inflate(R.layout.recycler_item))
     }
-
 
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) {
         holder.bind(collection[position])
@@ -47,10 +44,7 @@ class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener
         }
     }
 
-
-
     override fun getItemCount() = collection.size
-
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Log.e("onItemMove", "run ")
@@ -79,16 +73,12 @@ class TranslationAdapter(private val onSwipeListener: OnClickTranslationListener
         //        , ItemTouchHelperViewHolder {
 
         @SuppressLint("SetTextI18n")
-        fun bind(translation : String) {
+        fun bind(translation: String) {
             itemView.translation_item_TextView.text = translation
-
-
-
         }
-
     }
 
-    interface OnClickTranslationListener{
+    interface OnClickTranslationListener {
         fun onClickItem(translation: String)
     }
 }

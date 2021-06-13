@@ -95,7 +95,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
                 }
             }
 
-            listener.onIconClicked(holder.itemView,collection[position].drawableId)
+            listener.onIconClicked(holder.itemView, collection[position].drawableId)
 
             collection[position].isChecked = !collection[position].isChecked
 //            if (holder.itemView.iconImageView.isSelected){
@@ -105,7 +105,10 @@ class IconsAdapter(private val listener: IconAdapterListener) :
 //                holder.itemView.iconImageView.borderWidth =4
 //                holder.itemView.iconImageView.borderColor =Color.BLACK
 //            }
-            Log.e(TAG, "R.drawable.id #${collection[position].drawableId} now ${collection[position].isChecked} = $message  position in list #$position")
+            Log.e(
+                TAG,
+                "R.drawable.id #${collection[position].drawableId} now ${collection[position].isChecked} = $message  position in list #$position"
+            )
         }
     }
 
@@ -133,6 +136,6 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     }
 
     interface IconAdapterListener {
-        fun onIconClicked(view: View,id: Int)
+        fun onIconClicked(view: View, id: Int)
     }
 }

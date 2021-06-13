@@ -22,12 +22,6 @@ import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-private const val TARGET_FRAGMENT_REQUEST_CODE = 1
-private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "TranslationFragment"
 
 /**
@@ -36,20 +30,10 @@ private const val TAG = "TranslationFragment"
  * create an instance of this fragment.
  */
 class FavoritesFragment : Fragment(), OnSwipeListener {
-
-//    private val tagDialogFragment: TagDialogFragment by inject()
-
     private val vibrator: Vibrator by inject()
     private lateinit var _adapter: TranslationAdapter
     private val viewModel: FavoritesViewModel by inject()
     private lateinit var callback: ItemTouchHelper.Callback
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-//        tagDialogFragment.setTargetFragment(this,
-//            TARGET_FRAGMENT_REQUEST_CODE
-//        )
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,31 +46,29 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         root.findViewById<FloatingActionButton>(R.id.cleanFavoritesFab).setOnClickListener {
             viewModel.clearAllWordsFromDb()
         }
-        // Inflate the layout for this fragment
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.liveHistory.observe(viewLifecycleOwner, Observer { meanings ->
+        viewModel.liveMeaningsForRecycler.observe(viewLifecycleOwner, Observer { meanings ->
             handleTranslationList(meanings as MutableList<MeaningModelForRecycler>)
         })
 
     }
+
     private fun handleTranslationList(list: MutableList<MeaningModelForRecycler>) {
         translation_recyclerview.apply {
             layoutManager = LinearLayoutManager(this.context)
-            adapter = _adapter.apply { collection = list  as MutableList<MeaningModelForRecycler> }
+            adapter = _adapter.apply { collection = list as MutableList<MeaningModelForRecycler> }
         }
         callback =
             SimpleItemTouchHelperCallback(
                 translation_recyclerview.adapter as ItemTouchHelperAdapter
             )
         ItemTouchHelper(callback).attachToRecyclerView(translation_recyclerview)
-
     }
-
 
     companion object {
         /**
@@ -109,12 +91,9 @@ class FavoritesFragment : Fragment(), OnSwipeListener {
         vibrate(vibrator)
     }
 
-
     override fun onItemLongPressed(currentCardId: Long) {
         val bundle = Bundle()
         bundle.putLong("id", currentCardId)
-        Log.e("Looooo","current   ${currentCardId}")
-//        tagDialogFragment.arguments = bundle
-//        tagDialogFragment.show(parentFragmentManager, "tagDialog")
+        Log.e("Looooo", "current   ${currentCardId}")
     }
 }

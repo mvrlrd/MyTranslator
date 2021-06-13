@@ -28,30 +28,26 @@ import ru.mvrlrd.mytranslator.ui.fragments.adapters.WordsAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
-
 private const val TARGET_FRAGMENT_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
 private const val TAG = "WordsInCategoryFragment"
 private const val CHOOSE_FILE_REQUEST_CODE = 111
-
 
 class WordsListFragment : Fragment(), OnItemClickListener {
 
     private lateinit var wordsAdapter: WordsAdapter
     private val newWord: NewWordDialog by inject()
     private val wordsListViewModel: WordsListViewModel by inject()
-
     private val vibrator: Vibrator by inject()
     private lateinit var callback: ItemTouchHelper.Callback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val id = arguments?.get("categoryId")
         id?.let {
             wordsListViewModel.getAllWordsOfCategory(it as Long)
             wordsListViewModel.categoryId = id as Long
-            }
+        }
     }
 
     override fun onCreateView(
@@ -63,34 +59,22 @@ class WordsListFragment : Fragment(), OnItemClickListener {
             this,
             TARGET_FRAGMENT_REQUEST_CODE
         )
-        wordsListViewModel.liveWordList.observe(viewLifecycleOwner, Observer { wordList ->
+        wordsListViewModel.liveCards.observe(viewLifecycleOwner, Observer { wordList ->
             handleRecycler(wordList)
         })
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
-
         root.findViewById<FloatingActionButton>(R.id.gotoAddNewWordFab).setOnClickListener {
             newWord.show(parentFragmentManager, "addNewWordDialog")
 //            categoriesViewModel.clearCategories()
         }
-
         root.findViewById<FloatingActionButton>(R.id.addListOfWordsFab).setOnClickListener {
             val intent = Intent()
                 .setType("text/*")
                 .setAction(Intent.ACTION_GET_CONTENT)
             startActivityForResult(Intent.createChooser(intent, "Select file"), 111)
         }
-
         wordsAdapter = WordsAdapter(this as OnItemClickListener)
         return root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-
-
-
-
     }
 
     private fun handleRecycler(wordList: List<Card>) {
@@ -103,7 +87,6 @@ class WordsListFragment : Fragment(), OnItemClickListener {
                 words_recycler.adapter as ItemTouchHelperAdapter
             )
         ItemTouchHelper(callback).attachToRecyclerView(words_recycler)
-
         words_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                 if (dy > 0) {
@@ -117,8 +100,6 @@ class WordsListFragment : Fragment(), OnItemClickListener {
         })
     }
 
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK) {
@@ -129,8 +110,7 @@ class WordsListFragment : Fragment(), OnItemClickListener {
             data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
                 wordsListViewModel.saveWordToDb(it)
             }
-        }
-        else          // Selected a file to load
+        } else          // Selected a file to load
             if ((requestCode == CHOOSE_FILE_REQUEST_CODE) && (resultCode == Activity.RESULT_OK)) {
                 val selectedFilename = data?.data //The uri with the location of the file
                 if (selectedFilename != null) {
@@ -146,24 +126,23 @@ class WordsListFragment : Fragment(), OnItemClickListener {
             }
     }
 
-    private fun mapperAllStringsToOne(oneString: String):String{
+    private fun mapperAllStringsToOne(oneString: String): String {
         val arr = oneString.split(";")
         val str2 = StringBuilder()
-if (arr.size==2) {
-
-    str2.append("{\"id\":\"0\",")
-    str2.append("\"text\":\"${arr[0].changeSymbol()}\",")
-    str2.append("\"translation\":\"${arr[1].changeSymbol()}\",")
-    str2.append("\"image_url\":\"_\",")
-    str2.append("\"transcription\":\"_\",")
-    str2.append("\"partOfSpeech\":\"_\",")
-    str2.append("\"prefix\":\"_\"}")
-}
+        if (arr.size == 2) {
+            str2.append("{\"id\":\"0\",")
+            str2.append("\"text\":\"${arr[0].changeSymbol()}\",")
+            str2.append("\"translation\":\"${arr[1].changeSymbol()}\",")
+            str2.append("\"image_url\":\"_\",")
+            str2.append("\"transcription\":\"_\",")
+            str2.append("\"partOfSpeech\":\"_\",")
+            str2.append("\"prefix\":\"_\"}")
+        }
         return str2.toString()
     }
 
-    private fun String.changeSymbol():String =
-        this.replace("\"","\\\"")
+    private fun String.changeSymbol(): String =
+        this.replace("\"", "\\\"")
 
     override fun onItemClick(categoryId: Long) {
         Log.e(TAG, "onShortPressed")
@@ -178,9 +157,4 @@ if (arr.size==2) {
     override fun onItemLongPressed(categoryId: Long) {
         Log.e(TAG, "onLongPressed")
     }
-
-
-
-
-
 }

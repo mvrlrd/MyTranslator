@@ -16,7 +16,7 @@ import ru.mvrlrd.mytranslator.ui.old.old.OnSwipeListener
 import java.util.*
 import kotlin.properties.Delegates
 
-class TranslationAdapter(private val swipeListener : OnSwipeListener) :
+class TranslationAdapter(private val swipeListener: OnSwipeListener) :
     RecyclerView.Adapter<TranslationAdapter.TranslationHolder>(),
     ItemTouchHelperAdapter {
 
@@ -32,12 +32,10 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
 //        TranslationHolder(parent.inflate(R.layout.recycler_item))
     }
 
-
     override fun onBindViewHolder(holder: TranslationHolder, position: Int) =
-        holder.bind(collection[position],swipeListener)
+        holder.bind(collection[position], swipeListener)
 
     override fun getItemCount() = collection.size
-
 
     override fun onItemMove(fromPosition: Int, toPosition: Int): Boolean {
         Log.e("onItemMove", "run ")
@@ -57,23 +55,16 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemDismiss(position: Int) {
         Log.e("onItemDismiss", "run ")
-
         swipeListener.onItemSwiped(collection[position])
-
         println("${collection[position].translation}    swiped")
         collection.removeAt(position)
         notifyItemRemoved(position)
-
     }
+
 
     class TranslationHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
         //        , ItemTouchHelperViewHolder {
-
-
-
-
-
         @SuppressLint("SetTextI18n")
         fun bind(meaningModelForRecycler: MeaningModelForRecycler, swipeListener: OnSwipeListener) {
             itemView.recycler_text.text = meaningModelForRecycler.text
@@ -82,11 +73,9 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
             itemView.partOfSpeechTextView.text = meaningModelForRecycler.partOfSpeech
             itemView.prefixTextView.text = meaningModelForRecycler.prefix ?: ""
             itemView.transcriptionTextView.text = "[${meaningModelForRecycler.transcription}]"
-            
-
             // long press on recycler item
             itemView.setOnLongClickListener(View.OnLongClickListener {
-                Log.e("TAG","fffff   ${meaningModelForRecycler.id}")
+                Log.e("TAG", "fffff   ${meaningModelForRecycler.id}")
                 swipeListener.onItemLongPressed(meaningModelForRecycler.id)
 //                it.recycler_text.text = "aaaaa"
                 false
@@ -96,15 +85,9 @@ class TranslationAdapter(private val swipeListener : OnSwipeListener) :
 //        override fun onItemSelected() {
 //            itemView.setBackgroundColor(Color.BLACK)
 //        }
-
 //        override fun onItemClear() {
 //            itemView.setBackgroundColor(0)
 //        }
     }
-
-
-
-
-
 }
 

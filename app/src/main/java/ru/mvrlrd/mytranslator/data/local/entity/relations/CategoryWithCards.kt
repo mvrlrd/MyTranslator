@@ -13,9 +13,7 @@ class CategoryWithCards(
         entityColumn = "id",
         associateBy = Junction(CardCategoryCrossRef::class)
     )
-    val cards : List<Card>
-
-
-){
-    fun averageProgress() = cards.map{ it -> it.progress}.average()
+    val cards: List<Card>
+) {
+    fun averageProgress() = cards.map { it -> it.progress }.average()
 }

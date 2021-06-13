@@ -23,18 +23,16 @@ class NewWordViewModel (
 ) : BaseViewModel() {
 
     private val searchResultRepository = SearchResultIRepository(apiHelper, dbHelper)
-    private val searcherWithApi: GetSearchResult = GetSearchResult(searchResultRepository)
-    private val cardSaverToDb: InserterCardToDb = InserterCardToDb(searchResultRepository)
-
-    private var _liveTranslationsList = MutableLiveData<List<MeaningModelForRecycler>>()
-    val liveTranslationsList: LiveData<List<MeaningModelForRecycler>> = _liveTranslationsList
-
-    private var queryName: String =""
+    private val getSearchResult: GetSearchResult = GetSearchResult(searchResultRepository)
+    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(searchResultRepository)
+    private var _liveTranslations = MutableLiveData<List<MeaningModelForRecycler>>()
+    val liveTranslations: LiveData<List<MeaningModelForRecycler>> = _liveTranslations
+    private var queryName: String = ""
 
     fun loadDataFromWeb(word: String) {
         queryName = word
         viewModelScope.launch {
-            searcherWithApi(word) {
+            getSearchResult(word) {
                 it.fold(
                     ::handleFailure,
                     ::handleLoadingData
@@ -46,10 +44,8 @@ class NewWordViewModel (
     private fun handleLoadingData(response: ListSearchResult?) {
         val filteredResponseList: List<SearchResultResponse>? =
             response?.filter { it.text == queryName }
-        Log.e(TAG, "${filteredResponseList?.size}   sizeeeeeeee" )
-
-        _liveTranslationsList.value = filteredResponseList?.map { resp ->
-
+        Log.e(TAG, "${filteredResponseList?.size}   sizeeeeeeee")
+        _liveTranslations.value = filteredResponseList?.map { resp ->
             resp.meanings?.map { meaningsResponse ->
                 MeaningModelForRecycler(
                     0,
@@ -71,7 +67,7 @@ class NewWordViewModel (
     fun saveCardToDb(meaningModelForRecycler: MeaningModelForRecycler) {
         viewModelScope.launch {
             meaningModelForRecycler.let { item ->
-                cardSaverToDb(
+                inserterCardToDb(
                     Card(
                         item.id,
                         item.text,
@@ -101,7 +97,7 @@ class NewWordViewModel (
         const val TAG = "TranslationViewModel"
     }
 
-    fun clearLiveTranslationList(){
-        _liveTranslationsList.value = emptyList()
+    fun clearLiveTranslationList() {
+        _liveTranslations.value = emptyList()
     }
 }

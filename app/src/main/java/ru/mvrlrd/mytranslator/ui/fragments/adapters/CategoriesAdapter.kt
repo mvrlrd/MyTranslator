@@ -66,6 +66,7 @@ class CategoriesAdapter(
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
             itemView.isSelected = category.isChecked
+            itemView.percentageTextView.text = "${category.averageProgress}%"
 
 
             itemView.edit_icon_image_view.setOnClickListener {

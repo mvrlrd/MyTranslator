@@ -57,15 +57,18 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         categoriesViewModel.liveAllCategories.observe(
             viewLifecycleOwner,
             Observer { categories ->
                 handleRecycler(categories as MutableList<Category>)
+
             })
     }
 
     override fun onResume() {
         super.onResume()
+
 //        Log.e("category", "onResume")
         categoriesViewModel.refreshCategoriesScreen()
     }
@@ -74,6 +77,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onItemClick(category: Category) {
 //        openDialogToEditCurrentCategory(category)
         categoriesViewModel.insertCategory(category)
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -115,6 +120,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         initRecycler(allCategories)
         attachCallbackToRecycler()
         keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling()
+//        if (categoriesViewModel.liveAllCategories.value!=null){
+//            categoriesViewModel.getAllCardsOfCategory(categoriesViewModel.liveAllCategories.value!!)
+//        }
     }
 
     private fun openDialogToAddNewCategory() {
@@ -137,7 +145,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                 LinearLayoutManager(this.context)
             adapter =
                 categoriesAdapter.apply { collection = allCategories as MutableList<Category> }
-        }.addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
+        }
+//            .addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
 
 
     //keep a distance between header("add new category") and the recycler items while scrolling

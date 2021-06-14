@@ -62,6 +62,7 @@ class CategoriesViewModel(
     }
     private fun handleRefreshCategoriesScreen(loadedCategories: List<Category>) {
         //liveAllCategories is observed by CategoriesFragment --loadedCategories--> CategoriesAdapter --> recyclerView refreshes
+
         _allCategories.value = loadedCategories
     }
 
@@ -124,24 +125,23 @@ class CategoriesViewModel(
     )
 
 
-    fun getAllCardsOfCategory(categories: List<Category>) {
+    fun getAllCardsOfCategory(category: Category) {
+
         viewModelScope.launch {
-            for (item in categories) {
-                loaderCardsOfCategory(item.categoryId) {
+                loaderCardsOfCategory(category.categoryId) {
                     it.fold(
                         ::handleFailure,
                         ::handleGetAllCardsOfCategory
                     )
                 }
-            }
-
         }
     }
 
     private fun handleGetAllCardsOfCategory(categoryWithCards: CategoryWithCards) {
         val progress = categoryWithCards.averageProgress()
-        categoryWithCards.category.averageProgress = progress
-
+        val updatedCategory = categoryWithCards.category
+        updatedCategory.averageProgress = progress
+        insertCategory(updatedCategory)
     }
 }
 

@@ -117,16 +117,11 @@ class CategoriesViewModel(
         }
     }
 
-//    fun editCategory(string: Array<String>){
-//        val editedCategory = parseCategory(string)
-//        if (!checkIfCategoryAlreadyExists(editedCategory)) {
-//            insertCategory(editedCategory)
-//        }
-//    }
-
-    private fun parseCategory(string: Array<String>) = Category( categoryId = string[0].toLong(), name = string[1], icon = string[2], isChecked = string[3]=="true")
-
-
+    private fun parseCategory(string: Array<String>) = Category(
+        categoryId = string[0].toLong(),
+        name = string[1], icon = string[2],
+        isChecked = string[3] == "true"
+    )
 }
 
 

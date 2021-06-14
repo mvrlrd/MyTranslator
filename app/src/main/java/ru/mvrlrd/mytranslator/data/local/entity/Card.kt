@@ -37,4 +37,10 @@ data class Card(
             this.prefix
         )
     }
+
+    override fun hashCode(): Int {
+        var result = word?.hashCode() ?: 0
+        result = 31 * result + (translation?.hashCode() ?: 0)
+        return result
+    }
 }

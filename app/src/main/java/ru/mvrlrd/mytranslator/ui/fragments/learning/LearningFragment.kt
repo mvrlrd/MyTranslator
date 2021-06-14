@@ -89,7 +89,7 @@ class LearningFragment : Fragment(), LearningProcess {
         findNavController().navigate(action)
     }
 
-    override fun updateCard(card: Card) {
-        learningViewModel.updateCardInDb(card)
+    override fun updateCard(cardId: Long, newProgress: Int) {
+        learningViewModel.updateCardProgress(cardId, newProgress)
     }
 }

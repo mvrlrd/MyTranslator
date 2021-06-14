@@ -50,6 +50,9 @@ class CategoriesViewModel(
         Log.e(TAG, "$quantity item added to Db")
         refreshCategoriesScreen()
     }
+
+
+
     fun refreshCategoriesScreen() {
         viewModelScope.launch {
             loaderCategoriesOfDb(Unit) {
@@ -125,15 +128,16 @@ class CategoriesViewModel(
     )
 
 
-    fun getAllCardsOfCategory(category: Category) {
-
+    fun getAllCardsOfCategory(categories: List<Category>) {
         viewModelScope.launch {
-                loaderCardsOfCategory(category.categoryId) {
+            for(cat in categories) {
+                loaderCardsOfCategory(cat.categoryId) {
                     it.fold(
                         ::handleFailure,
                         ::handleGetAllCardsOfCategory
                     )
                 }
+            }
         }
     }
 
@@ -142,6 +146,7 @@ class CategoriesViewModel(
         val updatedCategory = categoryWithCards.category
         updatedCategory.averageProgress = progress
         insertCategory(updatedCategory)
+
     }
 }
 

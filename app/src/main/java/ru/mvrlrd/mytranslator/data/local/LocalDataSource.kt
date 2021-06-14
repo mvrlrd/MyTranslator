@@ -12,6 +12,7 @@ interface LocalDataSource {
     suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>
     suspend fun clearAllCardsFromDb(): Either<Failure, Int>
     suspend fun getAllCardsOfDb(): Either<Failure, List<Card>>
+    suspend fun updateCardProgress(cardId: Long, newProgress: Int): Either<Failure, Int>
 
     //category
     suspend fun insertCategoryToDb(category: Category): Either<Failure, Long>
@@ -19,6 +20,7 @@ interface LocalDataSource {
     suspend fun clearAllCategoriesFromDb(): Either<Failure, Int>
     suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>>
     suspend fun getAllCategoriesOfDb(): Either<Failure, List<Category>>
+    suspend fun updateCategoryProgress(categoryId: Long, newProgress: Double): Either<Failure, Int>
 
     //crossref
     suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>

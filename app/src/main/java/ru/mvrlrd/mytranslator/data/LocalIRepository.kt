@@ -30,6 +30,10 @@ class LocalIRepository (private val localDataSource: LocalDataSource
         return localDataSource.getAllCardsOfDb()
     }
 
+    override suspend fun updateCardProgress(cardId: Long, newProgress: Int): Either<Failure, Int> {
+        return localDataSource.updateCardProgress(cardId,newProgress)
+    }
+
     //category
     override suspend fun addCategoryToDb(category: Category): Either<Failure, Long> {
         return localDataSource.insertCategoryToDb(category)
@@ -49,6 +53,13 @@ class LocalIRepository (private val localDataSource: LocalDataSource
 
     override suspend fun getAllCategories(): Either<Failure, List<Category>> {
         return localDataSource.getAllCategoriesOfDb()
+    }
+
+    override suspend fun updateCategoryProgress(
+        categoryId: Long,
+        newProgress: Double
+    ): Either<Failure, Int> {
+        return localDataSource.updateCategoryProgress(categoryId,newProgress)
     }
 
     //crossref

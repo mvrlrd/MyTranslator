@@ -85,16 +85,17 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) :
     override fun onCardSwiped(direction: Direction?) {
         when (direction) {
             Direction.Left -> {
-                collection[currentCardPosition].progress += 25
-                learningProcessHandler.updateCard(collection[currentCardPosition])
+                if(collection[currentCardPosition].progress<100) {
+                    collection[currentCardPosition].progress += 25
+                    learningProcessHandler.updateCard(collection[currentCardPosition].id, collection[currentCardPosition].progress)
+                }
                 if (collection[currentCardPosition].progress == 100) {
-
                     removeLearnedItem()
                 }
             }
             Direction.Right -> {
                 collection[currentCardPosition].progress = 0
-                learningProcessHandler.updateCard(collection[currentCardPosition])
+                learningProcessHandler.updateCard(collection[currentCardPosition].id, 0)
             }
         }
     }

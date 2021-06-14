@@ -14,6 +14,7 @@ import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
+import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCardProgress
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "LearningViewModel"
@@ -29,6 +30,8 @@ class LearningViewModel(
         LoaderCardsOfCategory(localIRepository)
     private val inserterCardToDb: InserterCardToDb =
         InserterCardToDb(localIRepository)
+    private val refresherCardProgress: RefresherCardProgress=
+        RefresherCardProgress(localIRepository)
 
     private var _categoriesForLearning = MutableLiveData<List<Category>>()
     val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
@@ -56,6 +59,20 @@ class LearningViewModel(
 //            getAllWordsOfCategory(i.categoryId)
 //        }
 //        _wordsList.value = allWordsList
+    }
+
+    fun updateCardProgress(cardId: Long, newProgress: Int){
+        viewModelScope.launch {
+            refresherCardProgress(arrayOf(cardId, newProgress.toLong())){
+                it.fold(
+                    ::handleFailure,
+                    ::handleUpdateCardProgress
+                )
+            }
+        }
+    }
+    private fun handleUpdateCardProgress(num : Int){
+        Log.e(TAG, "$num item's progress was updated")
     }
 
     fun getAllWordsOfCategory1(cats: List<Category>) {

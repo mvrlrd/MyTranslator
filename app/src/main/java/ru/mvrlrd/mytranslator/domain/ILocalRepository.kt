@@ -16,6 +16,8 @@ interface ILocalRepository {
 
     suspend fun getAllCardsFromDb(): Either<Failure, List<Card>>
 
+    suspend fun updateCardProgress(cardId: Long, newProgress: Int): Either<Failure, Int>
+
     //category
     suspend fun addCategoryToDb(category: Category): Either<Failure, Long>
 
@@ -26,6 +28,8 @@ interface ILocalRepository {
     suspend fun getAllCategoriesForLearning(): Either<Failure, List<Category>>
 
     suspend fun getAllCategories(): Either<Failure, List<Category>>
+
+    suspend fun updateCategoryProgress(categoryId: Long, newProgress: Double): Either<Failure, Int>
 
     //crossref
     suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>

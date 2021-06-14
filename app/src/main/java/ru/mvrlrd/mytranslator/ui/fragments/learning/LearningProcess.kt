@@ -5,5 +5,5 @@ import ru.mvrlrd.mytranslator.data.local.entity.Card
 //handle some processes to connect CardStackAdapter to LearningFragment
 interface LearningProcess {
     fun finishLearningProcess()
-    fun updateCard(card: Card)
+    fun updateCard(cardId: Long, newProgress: Int)
 }

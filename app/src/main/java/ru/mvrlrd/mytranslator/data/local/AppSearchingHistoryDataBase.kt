@@ -6,7 +6,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardCategoryCrossRef
 
-@Database(entities = [Card::class, Category::class, CardCategoryCrossRef::class], version = 10)
+@Database(entities = [Card::class, Category::class, CardCategoryCrossRef::class], version = 11)
 abstract class AppSearchingHistoryDataBase : RoomDatabase() {
     abstract fun allDatabasesDao(): AllDatabasesDao
 }

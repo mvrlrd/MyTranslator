@@ -26,6 +26,10 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
         return Either.Right(allDatabasesDao.getAllCards())
     }
 
+    override suspend fun updateCardProgress(cardId: Long, newProgress: Int): Either<Failure, Int> {
+        return Either.Right(allDatabasesDao.updateCardProgress(cardId,newProgress))
+    }
+
     //category
     override suspend fun insertCategoryToDb(category: Category): Either<Failure, Long> {
         return Either.Right(allDatabasesDao.insertCategory(category))
@@ -45,6 +49,13 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
 
     override suspend fun getAllCategoriesOfDb(): Either<Failure, List<Category>> {
         return Either.Right(allDatabasesDao.getAllCategories())
+    }
+
+    override suspend fun updateCategoryProgress(
+        categoryId: Long,
+        newProgress: Double
+    ): Either<Failure, Int> {
+        return Either.Right(allDatabasesDao.updateCategoryProgress(categoryId, newProgress))
     }
 
     //crossref

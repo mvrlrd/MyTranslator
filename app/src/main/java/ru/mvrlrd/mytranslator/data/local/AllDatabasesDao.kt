@@ -24,6 +24,9 @@ interface AllDatabasesDao {
     @Query("SELECT * FROM cards_db WHERE word=:word")
     suspend fun getCard(word: String): Card
 
+    @Query("UPDATE cards_db SET progress=:newProgress WHERE id =:cardId")
+    suspend fun updateCardProgress(cardId: Long, newProgress: Int): Int
+
     //categories
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCategory(category: Category): Long
@@ -39,6 +42,10 @@ interface AllDatabasesDao {
 
     @Query("DELETE FROM categories_db WHERE categoryId =:catId")
     suspend fun deleteCategory(catId: Long): Int
+
+    @Query("UPDATE categories_db SET averageProgress=:newProgress WHERE categoryId =:catId")
+    suspend fun updateCategoryProgress(catId: Long, newProgress: Double): Int
+
 
     // crossref
     @Transaction

@@ -33,9 +33,6 @@ class CategoriesViewModel(
     val liveAllCategories: LiveData<List<Category>> = _allCategories
 
     private fun insertCategory(newCategory: Category) {
-        if (_allCategories.value.isNullOrEmpty()
-            || !_allCategories.value!!.contains(newCategory))
-            {
                 viewModelScope.launch {
                     inserterCategoryToBd(newCategory) {
                         it.fold(
@@ -44,12 +41,6 @@ class CategoriesViewModel(
                         )
                     }
                 }
-            }
-            else if(_allCategories.value!!.contains(newCategory)) {
-                Log.e(TAG, "${newCategory.name} already exists in Db")
-            //do toast that it is already exists
-                return
-            }
         }
     private fun handleAddNewCategory(quantity: Long) {
         Log.e(TAG, "$quantity item added to Db")
@@ -109,17 +100,32 @@ class CategoriesViewModel(
         refreshCategoriesScreen()
     }
 
-    fun addCategory(string: Array<String>){
-        val newCategory = Category( categoryId = string[0].toLong(), name = string[1], icon = string[2])
-        insertCategory(newCategory)
+    fun addCategory(string: Array<String>) {
+        val newCategory = parseCategory(string)
+        if (!checkIfCategoryAlreadyExists(newCategory)) {
+            insertCategory(newCategory)
+        }
     }
-    fun addCategory(category: Category){
-        insertCategory(category)
+
+    private fun checkIfCategoryAlreadyExists(addingCategory: Category): Boolean{
+        return if (_allCategories.value.isNullOrEmpty()
+            || !_allCategories.value!!.contains(addingCategory)) {
+            false
+        } else {Log.e(TAG, "${addingCategory.name} already exists in Db")
+            //do toast that it is already exists
+            true
+        }
     }
-    fun addCategory(editingCategoryId: Long, string: Array<String>){
-        val category = Category( categoryId = editingCategoryId, name = string[0], icon = string[1])
-        insertCategory(category)
-    }
+
+//    fun editCategory(string: Array<String>){
+//        val editedCategory = parseCategory(string)
+//        if (!checkIfCategoryAlreadyExists(editedCategory)) {
+//            insertCategory(editedCategory)
+//        }
+//    }
+
+    private fun parseCategory(string: Array<String>) = Category( categoryId = string[0].toLong(), name = string[1], icon = string[2], isChecked = string[3]=="true")
+
 
 }
 

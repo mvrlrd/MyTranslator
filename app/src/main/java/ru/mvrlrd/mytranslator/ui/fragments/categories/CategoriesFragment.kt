@@ -48,8 +48,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
        initAddNewCategoryButton(root)
-//        val editBut = root.findViewById<ImageView>(R.id.edit_icon_image_view)
-        
+        val editBut = root.findViewById<ImageView>(R.id.edit_icon_image_view)
+
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
         return root
     }
@@ -87,24 +87,29 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         findNavController().navigate(action)
     }
 
+    override fun editCurrentItem(category: Category) {
+        openDialogToEditCurrentCategory(category)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 NEW_CATEGORY_DIALOG_REQUEST_CODE -> {
+
                 }
                 EDIT_CATEGORY_DIALOG_REQUEST_CODE -> {
+
                 }
             }
-            data?.getStringArrayExtra(JSON_STRING_CATEGORY_FROM_DIALOG)?.let {
-                categoriesViewModel.addCategory(it)
-            }
+            getStringArrayFromIntent(data)?.let { categoriesViewModel.addCategory(it) }
         } else {
             Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return
         }
     }
 
+    private fun getStringArrayFromIntent(data: Intent?) = data?.getStringArrayExtra(JSON_STRING_CATEGORY_FROM_DIALOG)
 
     private fun handleRecycler(allCategories: List<Category>) {
         initRecycler(allCategories)

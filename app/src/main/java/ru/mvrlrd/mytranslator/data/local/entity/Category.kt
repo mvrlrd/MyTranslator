@@ -19,13 +19,16 @@ data class Category(
     var averageProgress: Double = 0.0
 ) : Parcelable {
     override fun equals(other: Any?): Boolean {
-        return if (other !is Category) {
-            false
-        } else this.name == other.name
+         if (other !is Category) {
+           return false
+        } else if((this.name == other.name)&&(this.icon==other.icon)){
+            return true
+         }
+       return false
     }
 
     override fun toString(): String {
-        return "$categoryId,$name,$icon"
+        return "$categoryId,$name,$icon,$isChecked"
     }
 }
 

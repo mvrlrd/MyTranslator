@@ -66,6 +66,11 @@ class CategoriesAdapter(
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
             itemView.category_icon_image_view.isSelected = category.isChecked
+
+            itemView.edit_icon_image_view.setOnClickListener {
+                listener.editCurrentItem(category)
+            }
+
             itemView.setOnClickListener {
                 checkUncheckItem(itemView.category_icon_image_view,category)
             }
@@ -106,6 +111,7 @@ class CategoriesAdapter(
         fun onItemClick(category: Category)
         fun onItemSwiped(categoryId: Long)
         fun onItemLongPressed(id: Long)
+        fun editCurrentItem(category: Category)
 //        fun onItemSwiped(recipe : RecipeInformation)
 //        fun onFavouriteIconClick(recipeData: RecipeInformation)
     }

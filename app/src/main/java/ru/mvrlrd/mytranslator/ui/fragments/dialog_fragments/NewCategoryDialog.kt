@@ -2,7 +2,6 @@ package ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -11,30 +10,25 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
-import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.adding_category_fragment.*
-import kotlinx.android.synthetic.main.item_icon.*
-import kotlinx.android.synthetic.main.item_icon.view.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 
-private const val TAG = "AddingCategoryFragment"
+private const val TAG = "NewCategoryDialog"
+private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
+
 class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
     private var iconId: String =""
     private var lastRequest: ()-> Unit = {}
-
-
-    private var currentIcon = ""
+    private var currentId = "0"
     private var currentTitle = ""
-
+    private var currentIcon = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,12 +38,13 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
             val myDay= mArgs?.getString("current state")
             if (myDay != null) {
                 Log.e(TAG, myDay)
-                val arr = myDay.split(" ")
-                currentIcon = arr[1]
-                currentTitle = arr[0]
+                val arr = myDay.split(",")
+                currentId = arr[0]
+                currentTitle = arr[1]
+                currentIcon = arr[2]
             }
+            arguments?.clear()
         }
-
     }
 
     override fun onCreateView(
@@ -60,13 +55,8 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
 //        val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField: TextInputEditText = root.findViewById(R.id.newCategoryEditText)
-
-
-
 //        addNewButton.isClickable = true
-
         val commitAddingButton = root.findViewById<Button>(R.id.commitAddingNewCategoryButton)
-
         commitAddingButton.setOnClickListener {
             val name = nameTextField.text.toString()
             var message = ""
@@ -82,7 +72,9 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
                 showSnackBar(message, lastRequest)
             } else {
                 nameTextField.text?.clear()
-                sendResult(name, iconId)
+                sendResult(currentId, name, iconId)
+                currentId="0"
+
 //                iconId = ""
                 dismiss()
             }
@@ -140,9 +132,9 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         ).setAction("Reload") { action() }.show()
     }
 
-    private fun sendResult(message: String, id: String) {
+    private fun sendResult(catId: String, name: String, iconId: String) {
         targetFragment ?: return
-        val intent = Intent().putExtra("message", arrayOf(message,id))
+        val intent = Intent().putExtra(JSON_STRING_CATEGORY_FROM_DIALOG, arrayOf(catId, name,iconId))
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
@@ -152,9 +144,5 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         }else{
             id.toString()
         }
-
-
-
-//        Log.e(TAG, " icon id = ${iconId} ")
     }
 }

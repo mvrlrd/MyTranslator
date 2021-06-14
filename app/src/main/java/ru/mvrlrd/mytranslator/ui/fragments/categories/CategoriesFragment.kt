@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -30,7 +31,7 @@ import kotlin.math.min
 
 private const val NEW_CATEGORY_DIALOG_REQUEST_CODE = 1
 private const val EDIT_CATEGORY_DIALOG_REQUEST_CODE = 111
-private const val EXTRA_GREETING_MESSAGE = "message"
+private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 private const val TAG = "CategoryFragment"
 
 class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListener {
@@ -39,7 +40,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private val newCategoryDialog: NewCategoryDialog by inject()
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
-    var editableId = -1L
     private lateinit var callback: ItemTouchHelper.Callback
 
     override fun onCreateView(
@@ -47,14 +47,13 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
-        val goToDialogToAddNewCategoryButton: Button =
-            root.findViewById(R.id.go_to_dialog_to_add_new_category_button)
-        goToDialogToAddNewCategoryButton.setOnClickListener {
-            openDialogToAddNewCategory()
-        }
+       initAddNewCategoryButton(root)
+//        val editBut = root.findViewById<ImageView>(R.id.edit_icon_image_view)
+        
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
         return root
     }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -73,7 +72,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     //update category in Bd by clicking category item, because its isChecked parameter was changed
     override fun onItemClick(category: Category) {
-//        openDialogToEditCurrent(category)
+//        openDialogToEditCurrentCategory(category)
         categoriesViewModel.updateCategory(category)
     }
 
@@ -88,32 +87,24 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         findNavController().navigate(action)
     }
 
-    //испаравить этот метод
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            var categoryId = 0L
             when (requestCode) {
                 NEW_CATEGORY_DIALOG_REQUEST_CODE -> {
-                    categoryId = 0
                 }
                 EDIT_CATEGORY_DIALOG_REQUEST_CODE -> {
-                    categoryId = editableId
                 }
             }
-            addCategory(categoryId, data)
+            data?.getStringArrayExtra(JSON_STRING_CATEGORY_FROM_DIALOG)?.let {
+                categoriesViewModel.addCategory(it)
+            }
         } else {
             Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return
         }
     }
 
-
-    private fun addCategory(catId: Long, data: Intent?) {
-        data?.getStringArrayExtra(EXTRA_GREETING_MESSAGE)?.let {
-            categoriesViewModel.addCategory(catId, it)
-        }
-    }
 
     private fun handleRecycler(allCategories: List<Category>) {
         initRecycler(allCategories)
@@ -126,8 +117,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 
-    private fun openDialogToEditCurrent(currentCategory: Category) {
-        editableId = currentCategory.categoryId
+    private fun openDialogToEditCurrentCategory(currentCategory: Category) {
         val bundle = Bundle()
         bundle.putString("current state", currentCategory.toString())
         newCategoryDialog.arguments = bundle
@@ -164,5 +154,13 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                 categories_recyclerview.adapter as ItemTouchHelperAdapter
             )
         ItemTouchHelper(callback).attachToRecyclerView(categories_recyclerview)
+    }
+
+    private fun initAddNewCategoryButton(root: View){
+        val goToDialogToAddNewCategoryButton: Button =
+            root.findViewById(R.id.go_to_dialog_to_add_new_category_button)
+        goToDialogToAddNewCategoryButton.setOnClickListener {
+            openDialogToAddNewCategory()
+        }
     }
 }

@@ -110,7 +110,7 @@ class CategoriesViewModel(
     }
 
     fun addCategory(string: Array<String>){
-        val newCategory = Category( categoryId = 0, name = string[0], icon = string[1])
+        val newCategory = Category( categoryId = string[0].toLong(), name = string[1], icon = string[2])
         insertCategory(newCategory)
     }
     fun addCategory(category: Category){
@@ -120,6 +120,7 @@ class CategoriesViewModel(
         val category = Category( categoryId = editingCategoryId, name = string[0], icon = string[1])
         insertCategory(category)
     }
+
 }
 
 

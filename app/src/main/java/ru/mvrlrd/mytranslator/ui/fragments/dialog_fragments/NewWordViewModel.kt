@@ -77,6 +77,7 @@ class NewWordViewModel (
                         item.transcription,
                         item.partOfSpeech,
                         item.prefix,
+                        0,
                         0
                     )
                 )

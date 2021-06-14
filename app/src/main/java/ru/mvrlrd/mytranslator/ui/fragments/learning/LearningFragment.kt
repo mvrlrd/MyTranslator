@@ -23,8 +23,6 @@ class LearningFragment : Fragment(), LearningProcess {
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
     private val learningViewModel: LearningViewModel by inject()
-    private var pos: Int? = null
-    private var swipeDirection: Direction? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,13 +53,13 @@ class LearningFragment : Fragment(), LearningProcess {
 
     override fun onResume() {
         super.onResume()
-        learningViewModel.getCategories()
+        learningViewModel.getChosenCategories()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        learningViewModel.liveCategoriesForLearning.observe(viewLifecycleOwner, Observer { cat ->
-            learningViewModel.getAllWordsOfCategory1(cat)
+        learningViewModel.liveCategoriesForLearning.observe(viewLifecycleOwner, Observer { cats ->
+            learningViewModel.getAllWordsOfCategory1(cats)
         })
 
         learningViewModel.liveCardsOfCategory.observe(
@@ -92,4 +90,6 @@ class LearningFragment : Fragment(), LearningProcess {
     override fun updateCard(cardId: Long, newProgress: Int) {
         learningViewModel.updateCardProgress(cardId, newProgress)
     }
+
+
 }

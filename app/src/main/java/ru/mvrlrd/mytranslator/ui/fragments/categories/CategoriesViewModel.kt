@@ -13,6 +13,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryProgress
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "CatViewModel"
@@ -32,6 +33,8 @@ class CategoriesViewModel(
         RemoverCategoryFromDb(localIRepository)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =
         LoaderCardsOfCategory(localIRepository)
+    private val refresherCategoryProgress: RefresherCategoryProgress =
+        RefresherCategoryProgress(localIRepository)
 
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
@@ -142,11 +145,26 @@ class CategoriesViewModel(
     }
 
     private fun handleGetAllCardsOfCategory(categoryWithCards: CategoryWithCards) {
-        val progress = categoryWithCards.averageProgress()
-        val updatedCategory = categoryWithCards.category
-        updatedCategory.averageProgress = progress
-        insertCategory(updatedCategory)
+        if (categoryWithCards.cards.isNotEmpty()) {
+            val progress = categoryWithCards.averageProgress()
+            val updatedCategoryId = categoryWithCards.category.categoryId
+            updateCategoryProgress(updatedCategoryId, progress)
+        }
+    }
 
+
+    private fun updateCategoryProgress(categoryId: Long, newProgress: Double) {
+        viewModelScope.launch {
+            refresherCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
+                it.fold(
+                    ::handleFailure,
+                    ::handleUpdateCategoryProgress
+                )
+            }
+        }
+    }
+    private fun handleUpdateCategoryProgress(num: Int){
+        Log.e(TAG, "$num category's progress was updated")
     }
 }
 

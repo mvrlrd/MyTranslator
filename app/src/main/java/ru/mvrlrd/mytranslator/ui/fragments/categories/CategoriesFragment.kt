@@ -41,6 +41,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
     private lateinit var callback: ItemTouchHelper.Callback
+//    private var listOfCats = mutableListOf<Category>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,13 +65,24 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                 handleRecycler(categories as MutableList<Category>)
 
             })
+
+
     }
+
+
 
     override fun onResume() {
         super.onResume()
+        Log.e(TAG, "onResume")
+//        categoriesViewModel.liveAllCategories.value.let {
+//
+//            Log.e(TAG, "inside___________${listOfCats}______________")
+//            categoriesViewModel.getAllCardsOfCategory(listOfCats)
+//        }
 
 //        Log.e("category", "onResume")
         categoriesViewModel.refreshCategoriesScreen()
+
     }
 
     //update category in Bd by clicking category item, because its isChecked parameter was changed

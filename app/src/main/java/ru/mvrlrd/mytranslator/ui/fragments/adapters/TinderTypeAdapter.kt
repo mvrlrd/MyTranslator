@@ -88,6 +88,7 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) :
                 if(collection[currentCardPosition].progress<100) {
                     collection[currentCardPosition].progress += 25
                     learningProcessHandler.updateCard(collection[currentCardPosition].id, collection[currentCardPosition].progress)
+
                 }
                 if (collection[currentCardPosition].progress == 100) {
                     removeLearnedItem()

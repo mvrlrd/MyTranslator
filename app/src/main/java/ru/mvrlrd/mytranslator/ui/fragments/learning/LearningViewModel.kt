@@ -15,6 +15,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
 import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCardProgress
+import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryProgress
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "LearningViewModel"
@@ -32,6 +33,8 @@ class LearningViewModel(
         InserterCardToDb(localIRepository)
     private val refresherCardProgress: RefresherCardProgress=
         RefresherCardProgress(localIRepository)
+    private val refresherCategoryProgress: RefresherCategoryProgress =
+        RefresherCategoryProgress(localIRepository)
 
     private var _categoriesForLearning = MutableLiveData<List<Category>>()
     val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
@@ -42,18 +45,18 @@ class LearningViewModel(
 
     var allCards: MutableList<Card> = mutableListOf()
 
-    fun getCategories() {
+    fun getChosenCategories() {
         viewModelScope.launch {
             loaderChosenCategoriesForLearning(Unit) {
                 it.fold(
                     ::handleFailure,
-                    ::handleGettingCategories
+                    ::handleGetChosenCategories
                 )
             }
         }
     }
 
-    private fun handleGettingCategories(categoryList: List<Category>) {
+    private fun handleGetChosenCategories(categoryList: List<Category>) {
         _categoriesForLearning.value = categoryList
 //        for (i in categoryList){
 //            getAllWordsOfCategory(i.categoryId)
@@ -72,8 +75,23 @@ class LearningViewModel(
         }
     }
     private fun handleUpdateCardProgress(num : Int){
-        Log.e(TAG, "$num item's progress was updated")
+        Log.e(TAG, "$num card's progress was updated")
     }
+
+    fun updateCategoryProgress(categoryId: Long, newProgress: Double) {
+        viewModelScope.launch {
+            refresherCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
+                it.fold(
+                    ::handleFailure,
+                    ::handleUpdateCategoryProgress
+                )
+            }
+        }
+    }
+    private fun handleUpdateCategoryProgress(num: Int){
+        Log.e(TAG, "$num category's progress was updated")
+    }
+
 
     fun getAllWordsOfCategory1(cats: List<Category>) {
         viewModelScope.launch {
@@ -90,6 +108,9 @@ class LearningViewModel(
     }
 
     private fun handleGettingAllWords2(categoryWithCards: CategoryWithCards) {
+        for(i in categoryWithCards.cards){
+            i.categoryId = categoryWithCards.category.categoryId
+        }
         allCards.addAll(categoryWithCards.cards)
         _cardsOfCategory.value = allCards
         Log.e(TAG, allCards.toString())

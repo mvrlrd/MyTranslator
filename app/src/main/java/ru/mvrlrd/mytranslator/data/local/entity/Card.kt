@@ -17,7 +17,8 @@ data class Card(
     @ColumnInfo val transcription: String?,
     @ColumnInfo val partOfSpeech: String?,
     @ColumnInfo val prefix: String?,
-    @ColumnInfo var progress: Int
+    @ColumnInfo var progress: Int,
+     var categoryId: Long
 ) : Parcelable {
 
     override fun equals(other: Any?): Boolean {

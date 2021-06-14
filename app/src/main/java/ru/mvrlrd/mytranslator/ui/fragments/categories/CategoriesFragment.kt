@@ -63,7 +63,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
             viewLifecycleOwner,
             Observer { categories ->
                 handleRecycler(categories as MutableList<Category>)
-
             })
 
 
@@ -74,15 +73,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onResume() {
         super.onResume()
         Log.e(TAG, "onResume")
-//        categoriesViewModel.liveAllCategories.value.let {
-//
-//            Log.e(TAG, "inside___________${listOfCats}______________")
-//            categoriesViewModel.getAllCardsOfCategory(listOfCats)
-//        }
-
-//        Log.e("category", "onResume")
-        categoriesViewModel.refreshCategoriesScreen()
-
+        categoriesViewModel.refreshCategoriesScreen2()
     }
 
     //update category in Bd by clicking category item, because its isChecked parameter was changed

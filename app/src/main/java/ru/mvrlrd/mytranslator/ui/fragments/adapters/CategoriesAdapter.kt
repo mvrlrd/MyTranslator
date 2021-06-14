@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
+import java.math.RoundingMode
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
@@ -11,6 +12,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperViewHolder
 import java.util.*
+import kotlin.math.roundToInt
 import kotlin.properties.Delegates
 
 private const val TAG = "CategoriesAdapter"
@@ -66,7 +68,7 @@ class CategoriesAdapter(
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
             itemView.isSelected = category.isChecked
-            itemView.percentageTextView.text = "${category.averageProgress}%"
+            itemView.percentageTextView.text = "${category.averageProgress.roundToInt()}%"
 
 
             itemView.edit_icon_image_view.setOnClickListener {

@@ -131,6 +131,20 @@ class CategoriesViewModel(
     )
 
 
+    fun refreshCategoriesScreen2() {
+        viewModelScope.launch {
+            loaderCategoriesOfDb(Unit) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleRefreshCategoriesScreen2
+                )
+            }
+        }
+    }
+    fun handleRefreshCategoriesScreen2(cats: List<Category>){
+        getAllCardsOfCategory(cats)
+    }
+
     fun getAllCardsOfCategory(categories: List<Category>) {
         viewModelScope.launch {
             for(cat in categories) {
@@ -164,6 +178,7 @@ class CategoriesViewModel(
         }
     }
     private fun handleUpdateCategoryProgress(num: Int){
+        refreshCategoriesScreen()
         Log.e(TAG, "$num category's progress was updated")
     }
 }

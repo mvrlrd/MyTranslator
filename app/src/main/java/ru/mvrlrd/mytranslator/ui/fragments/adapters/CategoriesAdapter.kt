@@ -65,14 +65,15 @@ class CategoriesAdapter(
         fun bind(category: Category) {
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
-            itemView.category_icon_image_view.isSelected = category.isChecked
+            itemView.isSelected = category.isChecked
+
 
             itemView.edit_icon_image_view.setOnClickListener {
                 listener.editCurrentItem(category)
             }
 
             itemView.setOnClickListener {
-                checkUncheckItem(itemView.category_icon_image_view,category)
+                checkUncheckItem(itemView,category)
             }
 
             itemView.setOnLongClickListener {
@@ -86,7 +87,7 @@ class CategoriesAdapter(
             itemView.transitionName = categoryItemTransitionName
         }
 
-        private fun checkUncheckItem(v: ImageView, category: Category){
+        private fun checkUncheckItem(v: View, category: Category){
             category.isChecked = !category.isChecked
             v.isSelected = category.isChecked
             listener.onItemClick(category)

@@ -86,12 +86,15 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) :
         when (direction) {
             Direction.Left -> {
                 collection[currentCardPosition].progress += 25
+                learningProcessHandler.updateCard(collection[currentCardPosition])
                 if (collection[currentCardPosition].progress == 100) {
+
                     removeLearnedItem()
                 }
             }
             Direction.Right -> {
                 collection[currentCardPosition].progress = 0
+                learningProcessHandler.updateCard(collection[currentCardPosition])
             }
         }
     }

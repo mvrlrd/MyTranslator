@@ -48,7 +48,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
        initAddNewCategoryButton(root)
-        val editBut = root.findViewById<ImageView>(R.id.edit_icon_image_view)
+
 
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
         return root

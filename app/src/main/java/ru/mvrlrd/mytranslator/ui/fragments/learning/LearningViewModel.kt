@@ -11,6 +11,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
@@ -26,14 +27,17 @@ class LearningViewModel(
         LoaderChosenCategoriesForLearning(localIRepository)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =
         LoaderCardsOfCategory(localIRepository)
+    private val inserterCardToDb: InserterCardToDb =
+        InserterCardToDb(localIRepository)
+
     private var _categoriesForLearning = MutableLiveData<List<Category>>()
     val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
 
     private var _cardsOfCategory = MutableLiveData<List<Card>>()
     val liveCardsOfCategory: LiveData<List<Card>> = _cardsOfCategory
 
-    ///????????
-    var allCards: MutableList<Card> = mutableListOf()//?????/
+
+    var allCards: MutableList<Card> = mutableListOf()
 
     fun getCategories() {
         viewModelScope.launch {
@@ -72,5 +76,18 @@ class LearningViewModel(
         allCards.addAll(categoryWithCards.cards)
         _cardsOfCategory.value = allCards
         Log.e(TAG, allCards.toString())
+    }
+
+    fun updateCardInDb(card: Card){
+        viewModelScope.launch { inserterCardToDb(card){
+            it.fold(
+                ::handleFailure,
+                ::handleUpdateCardInDb
+            )
+        } }
+    }
+
+    private fun handleUpdateCardInDb(cardId: Long){
+
     }
 }

@@ -73,7 +73,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     //update category in Bd by clicking category item, because its isChecked parameter was changed
     override fun onItemClick(category: Category) {
 //        openDialogToEditCurrentCategory(category)
-        categoriesViewModel.updateCategory(category)
+        categoriesViewModel.insertCategory(category)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)

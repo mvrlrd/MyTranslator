@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
@@ -29,10 +30,13 @@ class CategoriesViewModel(
         RemoverCategoriesFromDb(localIRepository)
     private val removerCategoryFromDb: RemoverCategoryFromDb =
         RemoverCategoryFromDb(localIRepository)
+    private val loaderCardsOfCategory: LoaderCardsOfCategory =
+        LoaderCardsOfCategory(localIRepository)
+
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
 
-    private fun insertCategory(newCategory: Category) {
+     fun insertCategory(newCategory: Category) {
                 viewModelScope.launch {
                     inserterCategoryToBd(newCategory) {
                         it.fold(
@@ -61,11 +65,7 @@ class CategoriesViewModel(
         _allCategories.value = loadedCategories
     }
 
-    fun updateCategory(category: Category) {
-        viewModelScope.launch {
-            inserterCategoryToBd(category)
-        }
-    }
+
 
     fun clearCategories() {
         viewModelScope.launch {
@@ -122,6 +122,27 @@ class CategoriesViewModel(
         name = string[1], icon = string[2],
         isChecked = string[3] == "true"
     )
+
+
+    fun getAllCardsOfCategory(categories: List<Category>) {
+        viewModelScope.launch {
+            for (item in categories) {
+                loaderCardsOfCategory(item.categoryId) {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleGetAllCardsOfCategory
+                    )
+                }
+            }
+
+        }
+    }
+
+    private fun handleGetAllCardsOfCategory(categoryWithCards: CategoryWithCards) {
+        val progress = categoryWithCards.averageProgress()
+        categoryWithCards.category.averageProgress = progress
+
+    }
 }
 
 

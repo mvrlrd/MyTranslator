@@ -10,11 +10,11 @@ import kotlinx.android.synthetic.main.item_icon.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CategoryIconItem
 
-private val TAG = "IconsAdapter"
+private const val TAG = "IconsAdapter"
 
 class IconsAdapter(private val listener: IconAdapterListener) :
     RecyclerView.Adapter<IconsAdapter.IconHolder>() {
-    private var collection = listOf(
+    private var icons = listOf(
         CategoryIconItem(R.drawable.addressbook_96, false),
         CategoryIconItem(R.drawable.airport_96, false),
         CategoryIconItem(R.drawable.alligator_96, false),
@@ -71,10 +71,10 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     }
 
     override fun onBindViewHolder(holder: IconHolder, position: Int) {
-        holder.bind(collection[position])
+        holder.bind(icons[position])
         holder.itemView.iconImageView.setOnClickListener {
             var message = ""
-            message = when (collection[position].isChecked) {
+            message = when (icons[position].isChecked) {
                 true -> {
                     holder.itemView.iconImageView.isSelected = false
 //                    holder.itemView.iconImageView.borderWidth = 6
@@ -95,9 +95,9 @@ class IconsAdapter(private val listener: IconAdapterListener) :
                 }
             }
 
-            listener.onIconClicked(holder.itemView, collection[position].drawableId)
+            listener.onIconClicked(holder.itemView, icons[position].drawableId)
 
-            collection[position].isChecked = !collection[position].isChecked
+            icons[position].isChecked = !icons[position].isChecked
 //            if (holder.itemView.iconImageView.isSelected){
 //                holder.itemView.iconImageView.borderWidth =10
 //                holder.itemView.iconImageView.borderColor = Color.WHITE
@@ -107,22 +107,22 @@ class IconsAdapter(private val listener: IconAdapterListener) :
 //            }
             Log.e(
                 TAG,
-                "R.drawable.id #${collection[position].drawableId} now ${collection[position].isChecked} = $message  position in list #$position"
+                "R.drawable.id #${icons[position].drawableId} now ${icons[position].isChecked} = $message  position in list #$position"
             )
         }
     }
 
     private fun letOnlyOneMarkerBe(position: Int) {
 
-        for (i in collection.indices) {
+        for (i in icons.indices) {
             if (i != position) {
-                collection[i].isChecked = false
+                icons[i].isChecked = false
             }
         }
         notifyDataSetChanged()
     }
 
-    override fun getItemCount() = collection.size
+    override fun getItemCount() = icons.size
 
 
     class IconHolder(itemView: View) :

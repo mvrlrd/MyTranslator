@@ -65,7 +65,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     )
 
     // This keeps track of the currently selected position
-    var selectedPosition by Delegates.observable(-1) { property, oldPos, newPos ->
+     var selectedPosition by Delegates.observable(-1) { property, oldPos, newPos ->
         if (newPos in icons.indices) {
             notifyItemChanged(oldPos)
             notifyItemChanged(newPos)

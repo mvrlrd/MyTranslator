@@ -80,6 +80,13 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         return root
     }
 
+    override fun onStop() {
+        super.onStop()
+        iconsAdapter.selectedPosition=-1
+        iconId=""
+        //on start надо запихнуть номер позиции иконки которую открыли редактировать/ тогда при редактировании категории сразу будет выбрана старая иконка
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleRecycler()

@@ -62,6 +62,14 @@ class LocalIRepository (private val localDataSource: LocalDataSource
         return localDataSource.updateCategoryProgress(categoryId,newProgress)
     }
 
+    override suspend fun updateCategory(
+        categoryId: Long,
+        newName: String,
+        newIcon: String
+    ): Either<Failure, Int> {
+        return localDataSource.updateCategory(categoryId, newName, newIcon)
+    }
+
     //crossref
     override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {
         return localDataSource.assignCardToCategory(cardId, tagId)

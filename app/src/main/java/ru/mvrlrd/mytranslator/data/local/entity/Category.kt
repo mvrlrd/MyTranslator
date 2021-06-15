@@ -28,7 +28,7 @@ data class Category(
     }
 
     override fun toString(): String {
-        return "$categoryId,$name,$icon,$isChecked"
+        return "$categoryId,$name,$icon"
     }
 }
 

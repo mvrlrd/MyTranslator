@@ -58,6 +58,14 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
         return Either.Right(allDatabasesDao.updateCategoryProgress(categoryId, newProgress))
     }
 
+    override suspend fun updateCategory(
+        categoryId: Long,
+        newName: String,
+        newIcon: String
+    ): Either<Failure, Int> {
+        return Either.Right(allDatabasesDao.updateCategory(categoryId, newName, newIcon))
+    }
+
     //crossref
     override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {
         return Either.Right(

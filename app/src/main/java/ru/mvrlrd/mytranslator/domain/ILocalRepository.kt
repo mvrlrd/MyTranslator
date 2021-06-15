@@ -31,6 +31,8 @@ interface ILocalRepository {
 
     suspend fun updateCategoryProgress(categoryId: Long, newProgress: Double): Either<Failure, Int>
 
+    suspend fun updateCategory(categoryId: Long, newName: String, newIcon: String): Either<Failure, Int>
+
     //crossref
     suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>
 

@@ -29,7 +29,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
     private var currentId = "0"
     private var currentTitle = ""
     private var currentIcon = ""
-    private var isChecked =""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +43,6 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
                 currentId = arr[0]
                 currentTitle = arr[1]
                 currentIcon = arr[2]
-                isChecked = arr[3]
             }
             arguments?.clear()
         }
@@ -74,7 +73,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
                 showSnackBar(message, lastRequest)
             } else {
                 nameTextField.text?.clear()
-                sendResult(currentId, name, iconId, isChecked)
+                sendResult(currentId, name, iconId)
                 currentId="0"
 
 //                iconId = ""
@@ -134,9 +133,9 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         ).setAction("Reload") { action() }.show()
     }
 
-    private fun sendResult(catId: String, name: String, iconId: String, isChecked : String) {
+    private fun sendResult(catId: String, name: String, iconId: String) {
         targetFragment ?: return
-        val intent = Intent().putExtra(JSON_STRING_CATEGORY_FROM_DIALOG, arrayOf(catId, name,iconId, isChecked))
+        val intent = Intent().putExtra(JSON_STRING_CATEGORY_FROM_DIALOG, arrayOf(catId, name,iconId))
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 

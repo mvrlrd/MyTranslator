@@ -104,13 +104,13 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 NEW_CATEGORY_DIALOG_REQUEST_CODE -> {
-
+                    getStringArrayFromIntent(data)?.let { categoriesViewModel.addCategory(it) }
                 }
                 EDIT_CATEGORY_DIALOG_REQUEST_CODE -> {
-
+                    getStringArrayFromIntent(data)?.let { categoriesViewModel.updateCategorysNameAndIcon(it) }
                 }
             }
-            getStringArrayFromIntent(data)?.let { categoriesViewModel.addCategory(it) }
+
         } else {
             Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return

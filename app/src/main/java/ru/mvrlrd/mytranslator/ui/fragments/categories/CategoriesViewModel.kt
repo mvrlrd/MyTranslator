@@ -13,6 +13,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryNameAndIcon
 import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryProgress
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
@@ -35,28 +36,29 @@ class CategoriesViewModel(
         LoaderCardsOfCategory(localIRepository)
     private val refresherCategoryProgress: RefresherCategoryProgress =
         RefresherCategoryProgress(localIRepository)
+    private val refresherCategoryNameAndIcon: RefresherCategoryNameAndIcon =
+        RefresherCategoryNameAndIcon(localIRepository)
 
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
 
-     fun insertCategory(newCategory: Category) {
-                viewModelScope.launch {
-                    inserterCategoryToBd(newCategory) {
-                        it.fold(
-                            ::handleFailure,
-                            ::handleAddNewCategory
-                        )
-                    }
-                }
+    fun insertCategory(newCategory: Category) {
+        viewModelScope.launch {
+            inserterCategoryToBd(newCategory) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleAddNewCategory
+                )
+            }
         }
+    }
+
     private fun handleAddNewCategory(quantity: Long) {
         Log.e(TAG, "$quantity item added to Db")
         refreshCategoriesScreen()
     }
 
-
-
-    fun refreshCategoriesScreen() {
+    private fun refreshCategoriesScreen() {
         viewModelScope.launch {
             loaderCategoriesOfDb(Unit) {
                 it.fold(
@@ -70,6 +72,22 @@ class CategoriesViewModel(
         //liveAllCategories is observed by CategoriesFragment --loadedCategories--> CategoriesAdapter --> recyclerView refreshes
 
         _allCategories.value = loadedCategories
+    }
+
+    fun updateCategorysNameAndIcon(str: Array<String>){
+        Log.e(TAG, "${str[0]} ${str[1]} ${str[2]}      10101010010101011001010")
+        viewModelScope.launch {
+            refresherCategoryNameAndIcon(str){
+                it.fold(
+                    ::handleFailure,
+                    ::handleUpdateCategorysNameAndIcon
+                )
+            }
+        }
+    }
+    private fun handleUpdateCategorysNameAndIcon(num: Int){
+        Log.e(TAG, "$num category's name and icon were updated")
+        refreshCategoriesScreen()
     }
 
 
@@ -126,8 +144,8 @@ class CategoriesViewModel(
 
     private fun parseCategory(string: Array<String>) = Category(
         categoryId = string[0].toLong(),
-        name = string[1], icon = string[2],
-        isChecked = string[3] == "true"
+        name = string[1],
+        icon = string[2]
     )
 
 

@@ -46,6 +46,9 @@ interface AllDatabasesDao {
     @Query("UPDATE categories_db SET averageProgress=:newProgress WHERE categoryId =:catId")
     suspend fun updateCategoryProgress(catId: Long, newProgress: Double): Int
 
+    @Query("UPDATE categories_db SET name=:newName, icon=:newIcon  WHERE categoryId =:catId")
+    suspend fun updateCategory(catId: Long, newName: String, newIcon: String): Int
+
 
     // crossref
     @Transaction

@@ -1,9 +1,7 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
-import java.math.RoundingMode
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.item_category.view.*

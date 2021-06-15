@@ -1,6 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +8,7 @@ import coil.api.load
 import kotlinx.android.synthetic.main.item_icon.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.CategoryIconItem
+import kotlin.properties.Delegates
 
 private const val TAG = "IconsAdapter"
 
@@ -64,6 +64,14 @@ class IconsAdapter(private val listener: IconAdapterListener) :
         CategoryIconItem(R.drawable.futurama_bender_96, false)
     )
 
+    // This keeps track of the currently selected position
+    var selectedPosition by Delegates.observable(-1) { property, oldPos, newPos ->
+        if (newPos in icons.indices) {
+            notifyItemChanged(oldPos)
+            notifyItemChanged(newPos)
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IconHolder {
         val view: View = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_icon, parent, false)
@@ -71,71 +79,28 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     }
 
     override fun onBindViewHolder(holder: IconHolder, position: Int) {
-        holder.bind(icons[position])
-        holder.itemView.iconImageView.setOnClickListener {
-            var message = ""
-            message = when (icons[position].isChecked) {
-                true -> {
-                    holder.itemView.iconImageView.isSelected = false
-//                    holder.itemView.iconImageView.borderWidth = 6
-//                    holder.itemView.iconImageView.borderColor =Color.BLACK
-//                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
-                    "unselected"
-                }
-                false -> {
-                    holder.itemView.iconImageView.isSelected = true
-//                    holder.itemView.iconImageView.borderWidth =10
-//                    holder.itemView.iconImageView.borderColor = Color.WHITE
-                    letOnlyOneMarkerBe(position)
-                    Log.e(TAG, "pos ${position} , ad pos =${holder.adapterPosition} ")
-
-//                    listener.onIconClicked(holder.itemView,collection[position].drawableId)
-                    "selected"
-
-                }
-            }
-
-            listener.onIconClicked(holder.itemView, icons[position].drawableId)
-
-            icons[position].isChecked = !icons[position].isChecked
-//            if (holder.itemView.iconImageView.isSelected){
-//                holder.itemView.iconImageView.borderWidth =10
-//                holder.itemView.iconImageView.borderColor = Color.WHITE
-//            }else{
-//                holder.itemView.iconImageView.borderWidth =4
-//                holder.itemView.iconImageView.borderColor =Color.BLACK
-//            }
-            Log.e(
-                TAG,
-                "R.drawable.id #${icons[position].drawableId} now ${icons[position].isChecked} = $message  position in list #$position"
-            )
+        if (position in icons.indices){
+            holder.bind(icons[position], position == selectedPosition)
+            holder.itemView.setOnClickListener {
+                listener.onIconSelected(holder.itemView,icons[position].drawableId.toString())
+                selectedPosition = position }
         }
-    }
-
-    private fun letOnlyOneMarkerBe(position: Int) {
-
-        for (i in icons.indices) {
-            if (i != position) {
-                icons[i].isChecked = false
-            }
-        }
-        notifyDataSetChanged()
     }
 
     override fun getItemCount() = icons.size
 
 
+
     class IconHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
-        //        , ItemTouchHelperViewHolder {
 
-        fun bind(categoryIconItem: CategoryIconItem) {
-            itemView.iconImageView.load(categoryIconItem.drawableId)
-            itemView.iconImageView.isSelected = categoryIconItem.isChecked
+        fun bind(iconItem: CategoryIconItem, selected: Boolean) {
+                itemView.iconImageView.load(iconItem.drawableId)
+                itemView.iconImageView.isSelected = selected
         }
     }
 
     interface IconAdapterListener {
-        fun onIconClicked(view: View, id: Int)
+        fun onIconSelected(view: View, iconId: String)
     }
 }

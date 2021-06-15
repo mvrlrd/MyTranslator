@@ -24,11 +24,12 @@ private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     private val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
-    private var iconId: String =""
+
     private var lastRequest: ()-> Unit = {}
     private var currentId = "0"
     private var currentTitle = ""
-    private var currentIcon = ""
+    private var iconId: String = ""
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,7 +43,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
                 val arr = myDay.split(",")
                 currentId = arr[0]
                 currentTitle = arr[1]
-                currentIcon = arr[2]
+                iconId = arr[2]
             }
             arguments?.clear()
         }
@@ -53,11 +54,9 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.adding_category_fragment, container, false)
-
-//        val addNewButton: FloatingActionButton = root.findViewById(R.id.addNewCategoryFab)
         val nameTextField: TextInputEditText = root.findViewById(R.id.newCategoryEditText)
-//        addNewButton.isClickable = true
         val commitAddingButton = root.findViewById<Button>(R.id.commitAddingNewCategoryButton)
+
         commitAddingButton.setOnClickListener {
             val name = nameTextField.text.toString()
             var message = ""
@@ -75,8 +74,6 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
                 nameTextField.text?.clear()
                 sendResult(currentId, name, iconId)
                 currentId="0"
-
-//                iconId = ""
                 dismiss()
             }
         }
@@ -94,13 +91,6 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
             adapter = iconsAdapter
 
         }
-//        icons_of_categories_recyclerview.addOnScrollListener(object :
-//            RecyclerView.OnScrollListener() {
-//            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-////                if (dy > 0) addNewCategoryFab.hide()
-////                else if (dy < 0) addNewCategoryFab.show()
-////            }
-//        })
     }
 
     private fun emptyName(): String{
@@ -139,11 +129,11 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
     }
 
-    override fun onIconClicked(view: View, id: Int) {
-        iconId = if (iconId == id.toString()){
+    override fun onIconSelected(view: View, id: String) {
+        iconId = if (iconId == id){
             ""
         }else{
-            id.toString()
+            id
         }
     }
 }

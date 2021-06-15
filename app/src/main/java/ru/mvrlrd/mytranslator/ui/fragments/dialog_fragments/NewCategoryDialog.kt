@@ -22,9 +22,7 @@ private const val TAG = "NewCategoryDialog"
 private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 
 class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
-
     private val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
-
     private var lastRequest: ()-> Unit = {}
     private var currentId = "0"
     private var currentTitle = ""
@@ -89,14 +87,13 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleRecycler()
+        initRecycler()
     }
 
-    private fun handleRecycler() {
+    private fun initRecycler() {
         icons_of_categories_recyclerview.apply {
             layoutManager = GridLayoutManager(this.context, 3)
             adapter = iconsAdapter
-
         }
     }
 

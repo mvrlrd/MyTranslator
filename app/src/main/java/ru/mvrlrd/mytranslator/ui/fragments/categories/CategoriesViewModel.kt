@@ -75,22 +75,23 @@ class CategoriesViewModel(
     }
 
     fun updateCategorysNameAndIcon(str: Array<String>){
-        Log.e(TAG, "${str[0]} ${str[1]} ${str[2]}      10101010010101011001010")
-        viewModelScope.launch {
-            refresherCategoryNameAndIcon(str){
-                it.fold(
-                    ::handleFailure,
-                    ::handleUpdateCategorysNameAndIcon
-                )
+        val editedCategory = parseCategory(str)
+        if(!checkIfCategoryAlreadyExists(editedCategory)){
+            viewModelScope.launch {
+                refresherCategoryNameAndIcon(str){
+                    it.fold(
+                        ::handleFailure,
+                        ::handleUpdateCategorysNameAndIcon
+                    )
+                }
             }
         }
     }
+
     private fun handleUpdateCategorysNameAndIcon(num: Int){
         Log.e(TAG, "$num category's name and icon were updated")
         refreshCategoriesScreen()
     }
-
-
 
     fun clearCategories() {
         viewModelScope.launch {
@@ -159,11 +160,12 @@ class CategoriesViewModel(
             }
         }
     }
-    fun handleRefreshCategoriesScreen2(cats: List<Category>){
+
+    private fun handleRefreshCategoriesScreen2(cats: List<Category>){
         getAllCardsOfCategory(cats)
     }
 
-    fun getAllCardsOfCategory(categories: List<Category>) {
+    private fun getAllCardsOfCategory(categories: List<Category>) {
         viewModelScope.launch {
             for(cat in categories) {
                 loaderCardsOfCategory(cat.categoryId) {

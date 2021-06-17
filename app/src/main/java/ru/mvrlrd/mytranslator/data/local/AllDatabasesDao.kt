@@ -49,6 +49,10 @@ interface AllDatabasesDao {
     @Query("UPDATE categories_db SET name=:newName, icon=:newIcon  WHERE categoryId =:catId")
     suspend fun updateCategory(catId: Long, newName: String, newIcon: String): Int
 
+    @Query("UPDATE categories_db SET isChecked=:isChecked WHERE categoryId =:catId")
+    suspend fun updateCategoryIsChecked(catId: Long, isChecked: Boolean): Int
+
+
 
     // crossref
     @Transaction

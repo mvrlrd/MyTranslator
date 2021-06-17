@@ -13,8 +13,9 @@ import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
-import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryNameAndIcon
-import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryProgress
+import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryIsChecked
+import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryNameAndIcon
+import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryProgress
 import ru.mvrlrd.mytranslator.presenter.BaseAndroidViewModel
 
 private const val TAG = "CatViewModel"
@@ -34,15 +35,17 @@ class CategoriesViewModel(
         RemoverCategoryFromDb(localIRepository)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =
         LoaderCardsOfCategory(localIRepository)
-    private val refresherCategoryProgress: RefresherCategoryProgress =
-        RefresherCategoryProgress(localIRepository)
-    private val refresherCategoryNameAndIcon: RefresherCategoryNameAndIcon =
-        RefresherCategoryNameAndIcon(localIRepository)
+    private val updaterCategoryProgress: UpdaterCategoryProgress =
+        UpdaterCategoryProgress(localIRepository)
+    private val updaterCategoryNameAndIcon: UpdaterCategoryNameAndIcon =
+        UpdaterCategoryNameAndIcon(localIRepository)
+    private val updaterCategoryIsChecked: UpdaterCategoryIsChecked =
+        UpdaterCategoryIsChecked(localIRepository)
 
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
 
-    fun insertCategory(newCategory: Category) {
+    private fun insertCategory(newCategory: Category) {
         viewModelScope.launch {
             inserterCategoryToBd(newCategory) {
                 it.fold(
@@ -52,12 +55,13 @@ class CategoriesViewModel(
             }
         }
     }
+
     private fun handleAddNewCategory(quantity: Long) {
         Log.e(TAG, "$quantity item added to Db")
         loadAllCategories()
     }
 
-    fun loadAllCategories() {
+    private fun loadAllCategories() {
         viewModelScope.launch {
             loaderCategoriesOfDb(Unit) {
                 it.fold(
@@ -72,16 +76,11 @@ class CategoriesViewModel(
         _allCategories.value = loadedCategories
     }
 
-
-
-
-
-
     fun updateCategorysNameAndIcon(str: Array<String>){
         val editedCategory = parseCategory(str)
         if(!checkIfCategoryAlreadyExists(editedCategory)){
             viewModelScope.launch {
-                refresherCategoryNameAndIcon(str){
+                updaterCategoryNameAndIcon(str){
                     it.fold(
                         ::handleFailure,
                         ::handleUpdateCategorysNameAndIcon
@@ -110,6 +109,21 @@ class CategoriesViewModel(
 
     private fun handleClearCategories(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted items(all) were deleted from db")
+        loadAllCategories()
+    }
+
+    fun selectUnselectCategory(arr: Array<String>){
+        viewModelScope.launch {
+            updaterCategoryIsChecked(arr){
+                it.fold(
+                    ::handleFailure,
+                    ::handleSelectUnselectCategory
+                )
+            }
+        }
+    }
+    private fun handleSelectUnselectCategory(num: Int){
+        Log.e(TAG, "$num item was checked/unchecked")
         loadAllCategories()
     }
 
@@ -153,7 +167,7 @@ class CategoriesViewModel(
     )
 
 
-    fun refreshCategoriesScreen2() {
+    fun refreshCategoriesList() {
         viewModelScope.launch {
             loaderCategoriesOfDb(Unit) {
                 it.fold(
@@ -188,11 +202,9 @@ class CategoriesViewModel(
             updateCategoryProgress(updatedCategoryId, progress)
         }
     }
-
-
     private fun updateCategoryProgress(categoryId: Long, newProgress: Double) {
         viewModelScope.launch {
-            refresherCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
+            updaterCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
                 it.fold(
                     ::handleFailure,
                     ::handleUpdateCategoryProgress
@@ -202,7 +214,7 @@ class CategoriesViewModel(
     }
     private fun handleUpdateCategoryProgress(num: Int){
         loadAllCategories()
-        Log.e(TAG, "$num category's progress was updated")
+//        Log.e(TAG, "$num category's progress was updated")
     }
 }
 

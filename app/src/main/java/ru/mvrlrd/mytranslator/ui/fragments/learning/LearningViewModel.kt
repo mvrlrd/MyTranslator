@@ -10,12 +10,11 @@ import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
-import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
-import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCardProgress
-import ru.mvrlrd.mytranslator.domain.use_cases.update.RefresherCategoryProgress
+import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCardProgress
+import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryProgress
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "LearningViewModel"
@@ -31,10 +30,10 @@ class LearningViewModel(
         LoaderCardsOfCategory(localIRepository)
     private val inserterCardToDb: InserterCardToDb =
         InserterCardToDb(localIRepository)
-    private val refresherCardProgress: RefresherCardProgress=
-        RefresherCardProgress(localIRepository)
-    private val refresherCategoryProgress: RefresherCategoryProgress =
-        RefresherCategoryProgress(localIRepository)
+    private val updaterCardProgress: UpdaterCardProgress=
+        UpdaterCardProgress(localIRepository)
+    private val updaterCategoryProgress: UpdaterCategoryProgress =
+        UpdaterCategoryProgress(localIRepository)
 
     private var _categoriesForLearning = MutableLiveData<List<Category>>()
     val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
@@ -66,7 +65,7 @@ class LearningViewModel(
 
     fun updateCardProgress(cardId: Long, newProgress: Int){
         viewModelScope.launch {
-            refresherCardProgress(arrayOf(cardId, newProgress.toLong())){
+            updaterCardProgress(arrayOf(cardId, newProgress.toLong())){
                 it.fold(
                     ::handleFailure,
                     ::handleUpdateCardProgress
@@ -80,7 +79,7 @@ class LearningViewModel(
 
     fun updateCategoryProgress(categoryId: Long, newProgress: Double) {
         viewModelScope.launch {
-            refresherCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
+            updaterCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
                 it.fold(
                     ::handleFailure,
                     ::handleUpdateCategoryProgress

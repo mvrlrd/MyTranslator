@@ -90,7 +90,7 @@ class CategoriesAdapter(
         private fun checkUncheckItem(v: View, category: Category){
             category.isChecked = !category.isChecked
             v.isSelected = category.isChecked
-            listener.onItemClick(category)
+            listener.onItemClick(category.categoryId, category.isChecked)
         }
 
         override fun onItemSelected() {
@@ -104,7 +104,7 @@ class CategoriesAdapter(
 
 
     interface CategoriesAdapterListener {
-        fun onItemClick(category: Category)
+        fun onItemClick(id: Long, isChecked: Boolean)
         fun onItemSwiped(categoryId: Long)
         fun onItemLongPressed(id: Long)
         fun editCurrentItem(category: Category)

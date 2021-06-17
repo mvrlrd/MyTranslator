@@ -33,6 +33,8 @@ interface ILocalRepository {
 
     suspend fun updateCategory(categoryId: Long, newName: String, newIcon: String): Either<Failure, Int>
 
+    suspend fun updateCategoryIsChecked(categoryId: Long, isChecked: Boolean): Either<Failure, Int>
+
     //crossref
     suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>
 

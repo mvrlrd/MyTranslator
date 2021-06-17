@@ -50,27 +50,23 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         return root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleRecycler()
-        categoriesViewModel.liveAllCategories.observe(
-            viewLifecycleOwner,
-            Observer { categories ->
-                categoriesAdapter.updateCollection(categories)
-            })
+        observeCategoryListChanges()
     }
+
 
     override fun onResume() {
         super.onResume()
         Log.e(TAG, "onResume")
-        categoriesViewModel.loadAllCategories()
+        categoriesViewModel.refreshCategoriesList()
     }
 
     //update category in Bd by clicking category item, because its isChecked parameter was changed
-    override fun onItemClick(category: Category) {
+    override fun onItemClick(id: Long, isChecked: Boolean) {
 //        openDialogToEditCurrentCategory(category)
-        categoriesViewModel.insertCategory(category)
+        categoriesViewModel.selectUnselectCategory(arrayOf(id.toString(), isChecked.toString()))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -168,5 +164,12 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         goToDialogToAddNewCategoryButton.setOnClickListener {
             openDialogToAddNewCategory()
         }
+    }
+    private fun observeCategoryListChanges(){
+        categoriesViewModel.liveAllCategories.observe(
+            viewLifecycleOwner,
+            Observer { categories ->
+                categoriesAdapter.updateCollection(categories)
+            })
     }
 }

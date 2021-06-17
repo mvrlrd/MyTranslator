@@ -6,7 +6,7 @@ import ru.mvrlrd.mytranslator.domain.ILocalRepository
 import ru.mvrlrd.mytranslator.domain.use_cases.UseCase
 import ru.mvrlrd.mytranslator.functional.Either
 
-class RefresherCategoryProgress(private val localIRepository: ILocalRepository) :
+class UpdaterCategoryProgress(private val localIRepository: ILocalRepository) :
     UseCase<Int, Array<String>>() {
 
     override suspend fun run(params: Array<String>): Either<Failure, Int> {

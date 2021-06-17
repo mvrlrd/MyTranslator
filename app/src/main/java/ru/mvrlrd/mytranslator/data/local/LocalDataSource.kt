@@ -22,7 +22,7 @@ interface LocalDataSource {
     suspend fun getAllCategoriesOfDb(): Either<Failure, List<Category>>
     suspend fun updateCategoryProgress(categoryId: Long, newProgress: Double): Either<Failure, Int>
     suspend fun updateCategory(categoryId: Long, newName: String, newIcon: String): Either<Failure, Int>
-
+    suspend fun updateCategoryIsChecked(categoryId: Long, isChecked: Boolean): Either<Failure, Int>
 
     //crossref
     suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>

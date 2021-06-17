@@ -6,7 +6,7 @@ import ru.mvrlrd.mytranslator.domain.ILocalRepository
 import ru.mvrlrd.mytranslator.domain.use_cases.UseCase
 import ru.mvrlrd.mytranslator.functional.Either
 
-class RefresherCardProgress (private val searchResultRepository: ILocalRepository) :
+class UpdaterCardProgress (private val searchResultRepository: ILocalRepository) :
     UseCase<Int, Array<Long>>() {
 
     override suspend fun run(params: Array<Long>): Either<Failure, Int> {

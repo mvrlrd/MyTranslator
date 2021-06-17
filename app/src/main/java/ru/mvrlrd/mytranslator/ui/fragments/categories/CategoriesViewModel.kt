@@ -25,25 +25,15 @@ class CategoriesViewModel(
 ) : BaseViewModel() {
     private val localIRepository = LocalIRepository( dbHelper)
 //insert//delete//clear//
-    private val inserterCategoryToBd: InserterCategoryToBd =
-        InserterCategoryToBd(localIRepository)
-    private val loaderCategoriesOfDb: LoaderCategoriesOfDb =
-        LoaderCategoriesOfDb(localIRepository)
-    private val loaderCardsOfCategory: LoaderCardsOfCategory =
-        LoaderCardsOfCategory(localIRepository)
-    private val loaderChosenCategoriesForLearning: LoaderChosenCategoriesForLearning =
-        LoaderChosenCategoriesForLearning(localIRepository)
-    private val removerCategoriesFromDb: RemoverCategoriesFromDb =
-        RemoverCategoriesFromDb(localIRepository)
-    private val removerCategoryFromDb: RemoverCategoryFromDb =
-        RemoverCategoryFromDb(localIRepository)
-
-    private val updaterCategoryProgress: UpdaterCategoryProgress =
-        UpdaterCategoryProgress(localIRepository)
-    private val updaterCategoryNameAndIcon: UpdaterCategoryNameAndIcon =
-        UpdaterCategoryNameAndIcon(localIRepository)
-    private val updaterCategoryIsChecked: UpdaterCategoryIsChecked =
-        UpdaterCategoryIsChecked(localIRepository)
+    private val inserterCategoryToBd = InserterCategoryToBd(localIRepository)
+    private val loaderCategoriesOfDb = LoaderCategoriesOfDb(localIRepository)
+    private val loaderCardsOfCategory = LoaderCardsOfCategory(localIRepository)
+    private val loaderChosenCategoriesForLearning = LoaderChosenCategoriesForLearning(localIRepository)
+    private val removerCategoriesFromDb = RemoverCategoriesFromDb(localIRepository)
+    private val removerCategoryFromDb = RemoverCategoryFromDb(localIRepository)
+    private val updaterCategoryProgress = UpdaterCategoryProgress(localIRepository)
+    private val updaterCategoryNameAndIcon = UpdaterCategoryNameAndIcon(localIRepository)
+    private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
 
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories

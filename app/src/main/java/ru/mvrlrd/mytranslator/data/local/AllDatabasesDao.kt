@@ -37,6 +37,7 @@ interface AllDatabasesDao {
     @Query("SELECT * FROM categories_db")
     suspend fun getAllCategories(): List<Category>
 
+
     @Query("SELECT * FROM categories_db WHERE isChecked")
     suspend fun getCategoriesForLearning(): List<Category>
 

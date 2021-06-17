@@ -16,25 +16,28 @@ import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryIsChecked
 import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryNameAndIcon
 import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryProgress
-import ru.mvrlrd.mytranslator.presenter.BaseAndroidViewModel
+import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "CatViewModel"
 
 class CategoriesViewModel(
     dbHelper: DbHelper
-) : BaseAndroidViewModel() {
+) : BaseViewModel() {
     private val localIRepository = LocalIRepository( dbHelper)
 //insert//delete//clear//
     private val inserterCategoryToBd: InserterCategoryToBd =
         InserterCategoryToBd(localIRepository)
     private val loaderCategoriesOfDb: LoaderCategoriesOfDb =
         LoaderCategoriesOfDb(localIRepository)
+    private val loaderCardsOfCategory: LoaderCardsOfCategory =
+        LoaderCardsOfCategory(localIRepository)
+    private val loaderChosenCategoriesForLearning: LoaderChosenCategoriesForLearning =
+        LoaderChosenCategoriesForLearning(localIRepository)
     private val removerCategoriesFromDb: RemoverCategoriesFromDb =
         RemoverCategoriesFromDb(localIRepository)
     private val removerCategoryFromDb: RemoverCategoryFromDb =
         RemoverCategoryFromDb(localIRepository)
-    private val loaderCardsOfCategory: LoaderCardsOfCategory =
-        LoaderCardsOfCategory(localIRepository)
+
     private val updaterCategoryProgress: UpdaterCategoryProgress =
         UpdaterCategoryProgress(localIRepository)
     private val updaterCategoryNameAndIcon: UpdaterCategoryNameAndIcon =
@@ -55,7 +58,6 @@ class CategoriesViewModel(
             }
         }
     }
-
     private fun handleAddNewCategory(quantity: Long) {
         Log.e(TAG, "$quantity item added to Db")
         loadAllCategories()
@@ -89,7 +91,6 @@ class CategoriesViewModel(
             }
         }
     }
-
     private fun handleUpdateCategorysNameAndIcon(num: Int){
         Log.e(TAG, "$num category's name and icon were updated")
         loadAllCategories()
@@ -106,7 +107,6 @@ class CategoriesViewModel(
 
         }
     }
-
     private fun handleClearCategories(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted items(all) were deleted from db")
         loadAllCategories()
@@ -137,7 +137,6 @@ class CategoriesViewModel(
             }
         }
     }
-
     private fun handleDeleteCategory(oneItem: Int) {
         Log.e(TAG, "$oneItem item was deleted from db")
         loadAllCategories()
@@ -169,7 +168,7 @@ class CategoriesViewModel(
 
     fun refreshCategoriesList() {
         viewModelScope.launch {
-            loaderCategoriesOfDb(Unit) {
+            loaderChosenCategoriesForLearning(Unit) {
                 it.fold(
                     ::handleFailure,
                     ::handleRefreshCategoriesScreen2
@@ -179,7 +178,12 @@ class CategoriesViewModel(
     }
 
     private fun handleRefreshCategoriesScreen2(cats: List<Category>){
-        getAllCardsOfCategory(cats)
+        if(cats.isNullOrEmpty()){
+            loadAllCategories()
+        }else{
+            getAllCardsOfCategory(cats)
+        }
+
     }
 
     private fun getAllCardsOfCategory(categories: List<Category>) {
@@ -214,7 +218,7 @@ class CategoriesViewModel(
     }
     private fun handleUpdateCategoryProgress(num: Int){
         loadAllCategories()
-//        Log.e(TAG, "$num category's progress was updated")
+//        ç
     }
 }
 

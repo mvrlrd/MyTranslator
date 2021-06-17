@@ -10,8 +10,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -41,16 +39,13 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
     private lateinit var callback: ItemTouchHelper.Callback
-//    private var listOfCats = mutableListOf<Category>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
-       initAddNewCategoryButton(root)
-
-
+        initAddNewCategoryButton(root)
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
         return root
     }
@@ -58,30 +53,24 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        handleRecycler()
         categoriesViewModel.liveAllCategories.observe(
             viewLifecycleOwner,
             Observer { categories ->
-                handleRecycler(categories as MutableList<Category>)
+                categoriesAdapter.updateCollection(categories)
             })
-
-
     }
-
-
 
     override fun onResume() {
         super.onResume()
         Log.e(TAG, "onResume")
-        categoriesViewModel.refreshCategoriesScreen2()
+        categoriesViewModel.loadAllCategories()
     }
 
     //update category in Bd by clicking category item, because its isChecked parameter was changed
     override fun onItemClick(category: Category) {
 //        openDialogToEditCurrentCategory(category)
         categoriesViewModel.insertCategory(category)
-
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -119,8 +108,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     private fun getStringArrayFromIntent(data: Intent?) = data?.getStringArrayExtra(JSON_STRING_CATEGORY_FROM_DIALOG)
 
-    private fun handleRecycler(allCategories: List<Category>) {
-        initRecycler(allCategories)
+    private fun handleRecycler() {
+        initRecycler()
         attachCallbackToRecycler()
         keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling()
 //        if (categoriesViewModel.liveAllCategories.value!=null){
@@ -142,12 +131,12 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     }
 
 
-    private fun initRecycler(allCategories: List<Category>) =
+    private fun initRecycler() =
         categories_recyclerview.apply {
             layoutManager =
                 LinearLayoutManager(this.context)
             adapter =
-                categoriesAdapter.apply { collection = allCategories as MutableList<Category> }
+                categoriesAdapter
         }
 //            .addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
 

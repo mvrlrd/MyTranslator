@@ -58,6 +58,11 @@ class CategoriesAdapter(
         notifyItemRemoved(position)
     }
 
+    fun updateCollection(updatedCollection: List<Category>){
+        collection = updatedCollection as MutableList<Category>
+        notifyDataSetChanged()
+    }
+
     class CategoryHolder(private val listener: CategoriesAdapterListener, itemView: View) :
         RecyclerView.ViewHolder(itemView)
                 , ItemTouchHelperViewHolder {
@@ -67,22 +72,16 @@ class CategoriesAdapter(
             itemView.category_icon_image_view.load(category.icon.toInt())
             itemView.isSelected = category.isChecked
             itemView.percentageTextView.text = "${category.averageProgress.roundToInt()}%"
-
-
             itemView.edit_icon_image_view.setOnClickListener {
                 listener.editCurrentItem(category)
             }
-
             itemView.setOnClickListener {
                 checkUncheckItem(itemView,category)
             }
-
             itemView.setOnLongClickListener {
-
                 listener.onItemLongPressed(category.categoryId)
                 true
             }
-
             val categoryItemTransitionName =
                 itemView.resources.getString(R.string.word_list_transition_name, category.categoryId)
             itemView.transitionName = categoryItemTransitionName
@@ -103,19 +102,11 @@ class CategoriesAdapter(
         }
     }
 
-//    interface ListItem{
-//
-//        fun getTypeOfItem()
-//
-//    }
 
     interface CategoriesAdapterListener {
         fun onItemClick(category: Category)
         fun onItemSwiped(categoryId: Long)
         fun onItemLongPressed(id: Long)
         fun editCurrentItem(category: Category)
-//        fun onItemSwiped(recipe : RecipeInformation)
-//        fun onFavouriteIconClick(recipeData: RecipeInformation)
     }
-
 }

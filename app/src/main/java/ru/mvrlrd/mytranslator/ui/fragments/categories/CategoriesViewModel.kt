@@ -207,8 +207,9 @@ class CategoriesViewModel(
         }
     }
     private fun handleUpdateCategoryProgress(num: Int){
+        Log.e(TAG,"eeeeeeeeeeeeeeeeeeeeeeeeeeee")
         loadAllCategories()
-//        ç
+
     }
 }
 

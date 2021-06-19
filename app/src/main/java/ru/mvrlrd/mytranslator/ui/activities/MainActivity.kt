@@ -19,6 +19,7 @@ class MainActivity : AppCompatActivity() {
         getSupportActionBar()?.hide()
     }
 
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         onBackPressed()
         return super.onOptionsItemSelected(item)

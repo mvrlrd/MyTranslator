@@ -53,7 +53,12 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleRecycler()
-        observeCategoryListChanges()
+//        observeCategoryListChanges()
+        //write an observer function here
+        categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { cats->
+            categoriesAdapter.updateCollection(cats)
+        })
+
     }
 
 

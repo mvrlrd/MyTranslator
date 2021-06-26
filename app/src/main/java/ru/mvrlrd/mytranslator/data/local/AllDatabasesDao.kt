@@ -1,6 +1,7 @@
 package ru.mvrlrd.mytranslator.data.local
 
 import androidx.room.*
+import kotlinx.coroutines.flow.Flow
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CardCategoryCrossRef
@@ -8,6 +9,10 @@ import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 
 @Dao
 interface AllDatabasesDao {
+//
+    @Query("SELECT * FROM categories_db")
+    fun getAllCatsFlow(): Flow<List<Category>>
+
     //cards
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertCard(card: Card?): Long

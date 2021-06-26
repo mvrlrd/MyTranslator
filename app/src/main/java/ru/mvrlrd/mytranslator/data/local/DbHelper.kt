@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.data.local
 
+import kotlinx.coroutines.flow.Flow
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
@@ -8,6 +9,12 @@ import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.functional.Either
 
 class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
+
+
+
+    override fun getAllCatsFlow(): Flow<List<Category>> {
+        return allDatabasesDao.getAllCatsFlow()
+    }
 
     //words
     override suspend fun insertCardToDb(card: Card): Either<Failure, Long> {

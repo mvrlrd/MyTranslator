@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.data
 
+import kotlinx.coroutines.flow.Flow
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Card
@@ -12,6 +13,10 @@ import ru.mvrlrd.mytranslator.functional.Either
 
 class LocalIRepository (private val localDataSource: LocalDataSource
 ) : ILocalRepository {
+
+    override fun getAllCatsFlow(): Flow<List<Category>> {
+        return localDataSource.getAllCatsFlow()
+    }
 
     //local
     override suspend fun saveCardToDb(card: Card): Either<Failure, Long> {

@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
@@ -35,8 +36,28 @@ class CategoriesViewModel(
     private val updaterCategoryNameAndIcon = UpdaterCategoryNameAndIcon(localIRepository)
     private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
 
+    private val getterCatsFlow = GetterAllCatsFlow(localIRepository)
+
+    private var _mutableLiveDataCats = MutableLiveData<List<Category>>()
+    val catsLive = _mutableLiveDataCats
+
+
     private var _allCategories = MutableLiveData<List<Category>>()
     val liveAllCategories: LiveData<List<Category>> = _allCategories
+
+    init {
+        getAllCatsFlow()
+    }
+
+
+
+    private fun getAllCatsFlow() {
+        viewModelScope.launch {
+            getterCatsFlow.getAllCatsFlow().collect { categories ->
+                _mutableLiveDataCats.postValue(categories)
+            }
+        }
+    }
 
     private fun insertCategory(newCategory: Category) {
         viewModelScope.launch {
@@ -50,7 +71,7 @@ class CategoriesViewModel(
     }
     private fun handleAddNewCategory(quantity: Long) {
         Log.e(TAG, "$quantity item added to Db")
-        loadAllCategories()
+//        loadAllCategories()
     }
 
     private fun loadAllCategories() {
@@ -83,7 +104,7 @@ class CategoriesViewModel(
     }
     private fun handleUpdateCategorysNameAndIcon(num: Int){
         Log.e(TAG, "$num category's name and icon were updated")
-        loadAllCategories()
+//        loadAllCategories()
     }
 
     fun clearCategories() {
@@ -99,7 +120,7 @@ class CategoriesViewModel(
     }
     private fun handleClearCategories(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted items(all) were deleted from db")
-        loadAllCategories()
+//        loadAllCategories()
     }
 
     fun selectUnselectCategory(arr: Array<String>){
@@ -114,7 +135,7 @@ class CategoriesViewModel(
     }
     private fun handleSelectUnselectCategory(num: Int){
         Log.e(TAG, "$num item was checked/unchecked")
-        loadAllCategories()
+//        loadAllCategories()
     }
 
     fun deleteCategory(categoryId: Long) {
@@ -129,7 +150,7 @@ class CategoriesViewModel(
     }
     private fun handleDeleteCategory(oneItem: Int) {
         Log.e(TAG, "$oneItem item was deleted from db")
-        loadAllCategories()
+//        loadAllCategories()
     }
 
     fun addCategory(string: Array<String>) {
@@ -169,7 +190,7 @@ class CategoriesViewModel(
 
     private fun handleRefreshCategoriesScreen2(cats: List<Category>){
         if(cats.isNullOrEmpty()){
-            loadAllCategories()
+//            loadAllCategories()
         }else{
             getAllCardsOfCategory(cats)
         }
@@ -207,8 +228,8 @@ class CategoriesViewModel(
         }
     }
     private fun handleUpdateCategoryProgress(num: Int){
-        Log.e(TAG,"eeeeeeeeeeeeeeeeeeeeeeeeeeee")
-        loadAllCategories()
+        Log.e(TAG,"handleUpdateCategoryProgress")
+//        loadAllCategories()
 
     }
 }

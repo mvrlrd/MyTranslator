@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.data.local
 
+import kotlinx.coroutines.flow.Flow
 import ru.mvrlrd.mytranslator.Failure
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
@@ -7,6 +8,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.functional.Either
 
 interface LocalDataSource {
+    fun getAllCatsFlow(): Flow<List<Category>>
     //words
     suspend fun insertCardToDb(card: Card): Either<Failure, Long>
     suspend fun deleteCardFromDb(id: Long): Either<Failure, Int>

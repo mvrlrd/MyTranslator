@@ -75,7 +75,13 @@ dependencies {
     //Retrofit
     implementation Retrofit.retrofit
     implementation Retrofit.converterGson
-    implementation Retrofit.adapterRxJava2
+    ////
+//    implementation Retrofit.adapterRxJava2  //Flow in DB in conflict with it ;(
+//    The easiest solution was removing the adapter-rxjava2 dependency since I wasn't using
+//    it anymore anyway (and you likely aren't either since you don't include io.reactivex.rxjava2
+//    dependencies, hence the error).
+//    https://stackoverflow.com/questions/57331045/error-android-gradle-plugin-cannot-access-publisher
+    /////
     implementation Retrofit.okHttpLoggingInterceptor
 
     // Koin
@@ -114,17 +120,15 @@ dependencies {
 //    implementation Navigation.navigation_ui_ktx
 //    androidTestImplementation Navigation.testing_navigation
 
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.4'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.3.4'
-
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
     implementation 'com.squareup.okhttp3:okhttp:4.9.0'
-
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-
-
     implementation 'com.yuyakaido.android:card-stack-view:2.3.4'
-
     implementation 'com.android.support:recyclerview-selection:28.0.0'
+
+
+
 
 
 

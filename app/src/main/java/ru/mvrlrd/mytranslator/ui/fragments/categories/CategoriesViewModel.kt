@@ -27,7 +27,6 @@ class CategoriesViewModel(
     private val localIRepository = LocalIRepository( dbHelper)
 //insert//delete//clear//
     private val inserterCategoryToBd = InserterCategoryToBd(localIRepository)
-    private val loaderCategoriesOfDb = LoaderCategoriesOfDb(localIRepository)
     private val loaderCardsOfCategory = LoaderCardsOfCategory(localIRepository)
     private val loaderChosenCategoriesForLearning = LoaderChosenCategoriesForLearning(localIRepository)
     private val removerCategoriesFromDb = RemoverCategoriesFromDb(localIRepository)
@@ -41,15 +40,9 @@ class CategoriesViewModel(
     private var _mutableLiveDataCats = MutableLiveData<List<Category>>()
     val catsLive = _mutableLiveDataCats
 
-
-    private var _allCategories = MutableLiveData<List<Category>>()
-    val liveAllCategories: LiveData<List<Category>> = _allCategories
-
     init {
         getAllCatsFlow()
     }
-
-
 
     private fun getAllCatsFlow() {
         viewModelScope.launch {
@@ -69,24 +62,9 @@ class CategoriesViewModel(
             }
         }
     }
-    private fun handleAddNewCategory(quantity: Long) {
-        Log.e(TAG, "$quantity item added to Db")
-//        loadAllCategories()
-    }
 
-    private fun loadAllCategories() {
-        viewModelScope.launch {
-            loaderCategoriesOfDb(Unit) {
-                it.fold(
-                    ::handleFailure,
-                    ::handleLoadAllCategories
-                )
-            }
-        }
-    }
-    private fun handleLoadAllCategories(loadedCategories: List<Category>) {
-        //liveAllCategories is observed by CategoriesFragment --loadedCategories--> CategoriesAdapter --> recyclerView refreshes
-        _allCategories.value = loadedCategories
+    private fun handleAddNewCategory(id: Long) {
+        Log.e(TAG, "$id item added to Db")
     }
 
     fun updateCategorysNameAndIcon(str: Array<String>){
@@ -102,9 +80,9 @@ class CategoriesViewModel(
             }
         }
     }
+
     private fun handleUpdateCategorysNameAndIcon(num: Int){
         Log.e(TAG, "$num category's name and icon were updated")
-//        loadAllCategories()
     }
 
     fun clearCategories() {
@@ -115,12 +93,11 @@ class CategoriesViewModel(
                     ::handleClearCategories
                 )
             }
-
         }
     }
+
     private fun handleClearCategories(numOfDeleted: Int) {
         Log.e(TAG, "$numOfDeleted items(all) were deleted from db")
-//        loadAllCategories()
     }
 
     fun selectUnselectCategory(arr: Array<String>){
@@ -133,9 +110,9 @@ class CategoriesViewModel(
             }
         }
     }
+
     private fun handleSelectUnselectCategory(num: Int){
         Log.e(TAG, "$num item was checked/unchecked")
-//        loadAllCategories()
     }
 
     fun deleteCategory(categoryId: Long) {
@@ -148,9 +125,9 @@ class CategoriesViewModel(
             }
         }
     }
+
     private fun handleDeleteCategory(oneItem: Int) {
         Log.e(TAG, "$oneItem item was deleted from db")
-//        loadAllCategories()
     }
 
     fun addCategory(string: Array<String>) {
@@ -161,8 +138,8 @@ class CategoriesViewModel(
     }
 
     private fun checkIfCategoryAlreadyExists(addingCategory: Category): Boolean{
-        return if (_allCategories.value.isNullOrEmpty()
-            || !_allCategories.value!!.contains(addingCategory)) {
+        return if (catsLive.value.isNullOrEmpty()
+            || !catsLive.value!!.contains(addingCategory)) {
             false
         } else {Log.e(TAG, "${addingCategory.name} already exists in Db")
             //do toast that it is already exists
@@ -175,7 +152,6 @@ class CategoriesViewModel(
         name = string[1],
         icon = string[2]
     )
-
 
     fun refreshCategoriesList() {
         viewModelScope.launch {
@@ -190,7 +166,6 @@ class CategoriesViewModel(
 
     private fun handleRefreshCategoriesScreen2(cats: List<Category>){
         if(cats.isNullOrEmpty()){
-//            loadAllCategories()
         }else{
             getAllCardsOfCategory(cats)
         }
@@ -217,6 +192,7 @@ class CategoriesViewModel(
             updateCategoryProgress(updatedCategoryId, progress)
         }
     }
+
     private fun updateCategoryProgress(categoryId: Long, newProgress: Double) {
         viewModelScope.launch {
             updaterCategoryProgress(arrayOf(categoryId.toString(), newProgress.toString())){
@@ -227,10 +203,9 @@ class CategoriesViewModel(
             }
         }
     }
+
     private fun handleUpdateCategoryProgress(num: Int){
         Log.e(TAG,"handleUpdateCategoryProgress")
-//        loadAllCategories()
-
     }
 }
 

@@ -53,12 +53,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         handleRecycler()
-//        observeCategoryListChanges()
-        //write an observer function here
-        categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { cats->
-            categoriesAdapter.updateCollection(cats)
-        })
-
+        observeCategoryListChanges()
     }
 
 
@@ -170,11 +165,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
             openDialogToAddNewCategory()
         }
     }
-    private fun observeCategoryListChanges(){
-        categoriesViewModel.liveAllCategories.observe(
-            viewLifecycleOwner,
-            Observer { categories ->
-                categoriesAdapter.updateCollection(categories)
-            })
+    private fun observeCategoryListChanges() {
+        categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
+            categoriesAdapter.updateCollection(categoryList)
+        })
     }
 }

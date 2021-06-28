@@ -25,6 +25,7 @@ import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardsOfCategoryAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.attachCallbackToRecycler
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
@@ -39,7 +40,6 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
     private val newWordDialog: NewWordDialog by inject()
     private val cardsOfCategoryViewModel: CardsOfCategoryViewModel by inject()
     private val vibrator: Vibrator by inject()
-    private lateinit var callback: ItemTouchHelper.Callback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,7 +71,7 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
 
     private fun handleRecycler(cards: List<Card>) {
         initRecycler(cards)
-        attachCallbackToRecycler()
+        attachCallbackToRecycler(words_recycler)
         addOnscrollListenerToRecycler()
     }
 
@@ -128,13 +128,7 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
             adapter = cardsOfCategoryAdapter.apply { collection = cards as MutableList<Card> }
         }
     }
-    private fun attachCallbackToRecycler(){
-        callback =
-            SimpleItemTouchHelperCallback(
-                words_recycler.adapter as ItemTouchHelperAdapter
-            )
-        ItemTouchHelper(callback).attachToRecyclerView(words_recycler)
-    }
+
     private fun addOnscrollListenerToRecycler(){
         words_recycler.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {

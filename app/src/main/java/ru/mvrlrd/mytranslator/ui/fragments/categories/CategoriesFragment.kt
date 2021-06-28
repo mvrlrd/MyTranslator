@@ -14,18 +14,17 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.*
 import kotlinx.android.synthetic.main.categories_fragment.*
+import kotlinx.android.synthetic.main.item_category.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.attachCallbackToRecycler
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
-import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
-import kotlin.math.max
-import kotlin.math.min
+import ru.mvrlrd.mytranslator.ui.fragments.initRecycler
+import ru.mvrlrd.mytranslator.ui.fragments.keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling
 
 private const val NEW_CATEGORY_DIALOG_REQUEST_CODE = 1
 private const val EDIT_CATEGORY_DIALOG_REQUEST_CODE = 111
@@ -33,12 +32,12 @@ private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 private const val TAG = "CategoryFragment"
 
 class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListener {
-
     private val categoriesViewModel: CategoriesViewModel by inject()
     private val newCategoryDialog: NewCategoryDialog by inject()
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
-    private lateinit var callback: ItemTouchHelper.Callback
+
+    var mScrollY = 0F
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +72,11 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onItemSwiped(categoryId: Long) {
         categoriesViewModel.deleteCategory(categoryId)
         vibrate(vibrator)
+        if (mScrollY>=category_icon_image_view.height){
+            mScrollY-=category_icon_image_view.height
+        }else if(mScrollY>0){
+            mScrollY-=mScrollY
+        }
     }
 
     override fun onItemLongPressed(id: Long) {
@@ -95,7 +99,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                     getStringArrayFromIntent(data)?.let { categoriesViewModel.updateCategorysNameAndIcon(it) }
                 }
             }
-
         } else {
             Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
             return
@@ -105,9 +108,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private fun getStringArrayFromIntent(data: Intent?) = data?.getStringArrayExtra(JSON_STRING_CATEGORY_FROM_DIALOG)
 
     private fun handleRecycler() {
-        initRecycler()
-        attachCallbackToRecycler()
-        keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling()
+        this.context?.let { initRecycler(categories_recyclerview, it,categoriesAdapter) }
+        attachCallbackToRecycler(categories_recyclerview)
+        keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling(categories_recyclerview,addNewCatLayout)
 //        if (categoriesViewModel.liveAllCategories.value!=null){
 //            categoriesViewModel.getAllCardsOfCategory(categoriesViewModel.liveAllCategories.value!!)
 //        }
@@ -126,38 +129,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         newCategoryDialog.show(parentFragmentManager, "tagDialog")
     }
 
-
-    private fun initRecycler() =
-        categories_recyclerview.apply {
-            layoutManager =
-                LinearLayoutManager(this.context)
-            adapter =
-                categoriesAdapter
-        }
-//            .addItemDecoration(DividerItemDecoration(context, LinearLayout.VERTICAL))
-
-
-    //keep a distance between header("add new category") and the recycler items while scrolling
-    private fun keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling() {
-        var mScrollY = 0F
-        categories_recyclerview.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(rcv: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(rcv, dx, dy)
-                mScrollY += dy.toFloat()
-                mScrollY = max(mScrollY, 0F)
-                addNewCatLayout.translationY = min(-mScrollY, 0F)
-            }
-        })
-    }
-
-    private fun attachCallbackToRecycler() {
-        callback =
-            SimpleItemTouchHelperCallback(
-                categories_recyclerview.adapter as ItemTouchHelperAdapter
-            )
-        ItemTouchHelper(callback).attachToRecyclerView(categories_recyclerview)
-    }
-
     private fun initAddNewCategoryButton(root: View){
         val goToDialogToAddNewCategoryButton: Button =
             root.findViewById(R.id.go_to_dialog_to_add_new_category_button)
@@ -165,6 +136,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
             openDialogToAddNewCategory()
         }
     }
+
     private fun observeCategoryListChanges() {
         categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
             categoriesAdapter.updateCollection(categoryList)

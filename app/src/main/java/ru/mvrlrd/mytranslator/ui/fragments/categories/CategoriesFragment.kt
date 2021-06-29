@@ -14,6 +14,10 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.selection.SelectionPredicates
+import androidx.recyclerview.selection.SelectionTracker
+import androidx.recyclerview.selection.StableIdKeyProvider
+import androidx.recyclerview.selection.StorageStrategy
 import kotlinx.android.synthetic.main.categories_fragment.*
 import kotlinx.android.synthetic.main.item_category.*
 import org.koin.android.ext.android.inject
@@ -36,6 +40,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private val newCategoryDialog: NewCategoryDialog by inject()
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
+    var tracker : SelectionTracker<Long>? = null
 
     var mScrollY = 0F
 
@@ -46,11 +51,17 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
         initAddNewCategoryButton(root)
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
+
+
+
         return root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+
         handleRecycler()
         observeCategoryListChanges()
     }
@@ -65,6 +76,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     //update category in Bd by clicking category item, because its isChecked parameter was changed
     override fun onItemClick(id: Long, isChecked: Boolean) {
 //        openDialogToEditCurrentCategory(category)
+//        Log.e(TAG, "______________________________________ ${categoriesAdapter.getSelected()}")
         categoriesViewModel.selectUnselectCategory(arrayOf(id.toString(), isChecked.toString()))
     }
 
@@ -140,6 +152,17 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private fun observeCategoryListChanges() {
         categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
             categoriesAdapter.updateCollection(categoryList)
+
+            tracker = SelectionTracker.Builder<Long>(
+                "mySelection",
+                categories_recyclerview,
+                StableIdKeyProvider(categories_recyclerview),
+                MyItemDetailsLookup(categories_recyclerview),
+                StorageStrategy.createLongStorage()
+            ).withSelectionPredicate(
+                SelectionPredicates.createSelectAnything()
+            ).build()
+            categoriesAdapter.tracker = tracker
         })
     }
 }

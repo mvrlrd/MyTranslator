@@ -2,6 +2,8 @@ package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
 import android.util.Log
 import android.view.*
+import androidx.recyclerview.selection.ItemDetailsLookup
+import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.item_category.view.*
@@ -21,6 +23,10 @@ class CategoriesAdapter(
 
     internal var collection: MutableList<Category> by
     Delegates.observable(mutableListOf()) { _, _, _ -> notifyDataSetChanged() }
+    init {
+        setHasStableIds(true)
+    }
+    var tracker: SelectionTracker<Long>? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CategoryHolder {
         val view: View = LayoutInflater.from(parent.context)
@@ -31,7 +37,11 @@ class CategoriesAdapter(
     }
 
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
-        holder.bind(collection[position])
+        val cat = collection[position]
+        tracker?.let{
+            holder.bind(cat, it.isSelected(cat.categoryId))
+        }
+
     }
 
     override fun getItemCount() = collection.size
@@ -56,6 +66,7 @@ class CategoriesAdapter(
         Log.e(TAG, "${collection[position].name}    onItemDismissed()")
         collection.removeAt(position)
         notifyItemRemoved(position)
+
     }
 
     fun updateCollection(updatedCollection: List<Category>){
@@ -63,25 +74,32 @@ class CategoriesAdapter(
         notifyDataSetChanged()
     }
 
+
+    fun getAll() = collection
+    fun getSelected() = run { collection.filter { it.isChecked } }
+    override fun getItemId(position: Int): Long = collection[position].categoryId
+
     class CategoryHolder(private val listener: CategoriesAdapterListener, itemView: View) :
         RecyclerView.ViewHolder(itemView)
                 , ItemTouchHelperViewHolder {
 
-        fun bind(category: Category) {
+        fun bind(category: Category, selected: Boolean = false) {
+            itemView.isActivated = selected
+
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
-            itemView.isSelected = category.isChecked
+//            itemView.isSelected = category.isChecked
             itemView.percentageTextView.text = "${category.averageProgress.roundToInt()}%"
-            itemView.edit_icon_image_view.setOnClickListener {
-                listener.editCurrentItem(category)
-            }
-            itemView.setOnClickListener {
-                checkUncheckItem(itemView,category)
-            }
-            itemView.setOnLongClickListener {
-                listener.onItemLongPressed(category.categoryId)
-                true
-            }
+//            itemView.edit_icon_image_view.setOnClickListener {
+//                listener.editCurrentItem(category)
+//            }
+//            itemView.setOnClickListener {
+//                checkUncheckItem(itemView,category)
+//            }
+//            itemView.setOnLongClickListener {
+//                listener.onItemLongPressed(category.categoryId)
+//                true
+//            }
             val categoryItemTransitionName =
                 itemView.resources.getString(R.string.word_list_transition_name, category.categoryId)
             itemView.transitionName = categoryItemTransitionName
@@ -100,6 +118,14 @@ class CategoriesAdapter(
         override fun onItemClear() {
 
         }
+
+
+        fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
+            object : ItemDetailsLookup.ItemDetails<Long>() {
+                override fun getPosition(): Int = adapterPosition
+                override fun getSelectionKey(): Long? = itemId
+            }
+
     }
 
 

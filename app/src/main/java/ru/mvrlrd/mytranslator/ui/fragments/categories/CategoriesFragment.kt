@@ -24,6 +24,7 @@ import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.ui.fragments.MyItemKeyProvider
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.attachCallbackToRecycler
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
@@ -54,6 +55,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
 
 
+
+
         return root
     }
 
@@ -63,7 +66,20 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
 
         handleRecycler()
+        tracker = SelectionTracker.Builder<Long>(
+            "mySelection",
+            categories_recyclerview,
+            MyItemKeyProvider(categories_recyclerview),
+//            StableIdKeyProvider(categories_recyclerview),
+            MyItemDetailsLookup(categories_recyclerview),
+            StorageStrategy.createLongStorage()
+        ).withSelectionPredicate(
+            SelectionPredicates.createSelectAnything()
+        ).build()
+
         observeCategoryListChanges()
+
+
     }
 
 
@@ -153,15 +169,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
             categoriesAdapter.updateCollection(categoryList)
 
-            tracker = SelectionTracker.Builder<Long>(
-                "mySelection",
-                categories_recyclerview,
-                StableIdKeyProvider(categories_recyclerview),
-                MyItemDetailsLookup(categories_recyclerview),
-                StorageStrategy.createLongStorage()
-            ).withSelectionPredicate(
-                SelectionPredicates.createSelectAnything()
-            ).build()
+
             categoriesAdapter.tracker = tracker
         })
     }

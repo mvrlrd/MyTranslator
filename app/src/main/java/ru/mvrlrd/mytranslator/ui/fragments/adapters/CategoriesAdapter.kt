@@ -77,6 +77,7 @@ class CategoriesAdapter(
 
     fun getAll() = collection
     fun getSelected() = run { collection.filter { it.isChecked } }
+
     override fun getItemId(position: Int): Long = collection[position].categoryId
 
     class CategoryHolder(private val listener: CategoriesAdapterListener, itemView: View) :
@@ -85,7 +86,6 @@ class CategoriesAdapter(
 
         fun bind(category: Category, selected: Boolean = false) {
             itemView.isActivated = selected
-
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
 //            itemView.isSelected = category.isChecked

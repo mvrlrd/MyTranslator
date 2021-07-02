@@ -25,6 +25,7 @@ interface LocalDataSource {
     suspend fun updateCategoryProgress(categoryId: Long, newProgress: Double): Either<Failure, Int>
     suspend fun updateCategory(categoryId: Long, newName: String, newIcon: String): Either<Failure, Int>
     suspend fun updateCategoryIsChecked(categoryId: Long, isChecked: Boolean): Either<Failure, Int>
+    suspend fun unselectAllCategories(unselected: Boolean, selected: Boolean): Either<Failure, Int>
 
     //crossref
     suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long>

@@ -1,7 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
 import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.collect
@@ -14,6 +13,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterAllCategoriesToUnselect
 import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryIsChecked
 import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryNameAndIcon
 import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryProgress
@@ -34,6 +34,8 @@ class CategoriesViewModel(
     private val updaterCategoryProgress = UpdaterCategoryProgress(localIRepository)
     private val updaterCategoryNameAndIcon = UpdaterCategoryNameAndIcon(localIRepository)
     private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
+    private val unselecterAllCategories = UpdaterAllCategoriesToUnselect(localIRepository)
+
 
     private val getterCatsFlow = GetterAllCatsFlow(localIRepository)
 
@@ -112,6 +114,21 @@ class CategoriesViewModel(
     }
 
     private fun handleSelectUnselectCategory(num: Int){
+        Log.e(TAG, "$num item was checked/unchecked")
+    }
+
+    fun unselectAllCategories(){
+        viewModelScope.launch {
+            unselecterAllCategories(Unit){
+                it.fold(
+                    ::handleFailure,
+                    ::handleUnselectionAll
+                )
+            }
+        }
+    }
+
+    private fun handleUnselectionAll(num: Int){
         Log.e(TAG, "$num item was checked/unchecked")
     }
 

@@ -82,6 +82,13 @@ class LocalIRepository (private val localDataSource: LocalDataSource
         return localDataSource.updateCategoryIsChecked(categoryId,isChecked)
     }
 
+    override suspend fun unselectAllCategories(
+        unselected: Boolean,
+        selected: Boolean
+    ): Either<Failure, Int> {
+        return localDataSource.unselectAllCategories(unselected, selected)
+    }
+
     //crossref
     override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {
         return localDataSource.assignCardToCategory(cardId, tagId)

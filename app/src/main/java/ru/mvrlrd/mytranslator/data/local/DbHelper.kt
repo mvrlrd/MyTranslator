@@ -80,6 +80,13 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
         return Either.Right(allDatabasesDao.updateCategoryIsChecked(categoryId, isChecked))
     }
 
+    override suspend fun unselectAllCategories(
+        unselected: Boolean,
+        selected: Boolean
+    ): Either<Failure, Int> {
+        return Either.Right(allDatabasesDao.unSelectAllCategories(unselected, selected))
+    }
+
     //crossref
     override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {
         return Either.Right(

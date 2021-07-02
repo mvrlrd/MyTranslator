@@ -58,6 +58,10 @@ interface AllDatabasesDao {
     @Query("UPDATE categories_db SET isChecked=:isChecked WHERE categoryId =:catId")
     suspend fun updateCategoryIsChecked(catId: Long, isChecked: Boolean): Int
 
+    @Query("UPDATE categories_db SET isChecked=:unselected WHERE isChecked=:selected")
+    suspend fun unSelectAllCategories(unselected: Boolean, selected: Boolean): Int
+
+
 
 
     // crossref

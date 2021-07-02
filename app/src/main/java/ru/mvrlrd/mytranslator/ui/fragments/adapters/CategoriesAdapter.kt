@@ -1,5 +1,6 @@
 package ru.mvrlrd.mytranslator.ui.fragments.adapters
 
+import android.annotation.SuppressLint
 import android.util.Log
 import android.view.*
 import androidx.recyclerview.selection.ItemDetailsLookup
@@ -39,6 +40,10 @@ class CategoriesAdapter(
     override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
         val cat = collection[position]
         tracker?.let{
+            if (cat.isChecked){
+//                it.select(cat.categoryId)
+                cat.isChecked = false
+            }
             holder.bind(cat, it.isSelected(cat.categoryId))
         }
 
@@ -80,12 +85,29 @@ class CategoriesAdapter(
 
     override fun getItemId(position: Int): Long = collection[position].categoryId
 
+    fun clearSelection(){
+        for (i in collection){
+            Log.e(TAG,"${i.isChecked}  ${i.name}     BEFORE")
+        }
+            tracker?.clearSelection()
+        notifyDataSetChanged()
+        for (i in collection){
+            Log.e(TAG,"${i.isChecked}  ${i.name}     AFTER")
+        }
+    }
+
     class CategoryHolder(private val listener: CategoriesAdapterListener, itemView: View) :
         RecyclerView.ViewHolder(itemView)
                 , ItemTouchHelperViewHolder {
 
-        fun bind(category: Category, selected: Boolean = false) {
-            itemView.isActivated = selected
+        @SuppressLint("SetTextI18n")
+        fun bind(category: Category, _isSelected: Boolean ) {
+            when(_isSelected){
+                true->Log.e(TAG,"$${category.name} id# ${category.categoryId} selected")
+                false->Log.e(TAG,"$${category.name} id# ${category.categoryId} UNselected")
+            }
+            itemView.isActivated = _isSelected
+
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())
 //            itemView.isSelected = category.isChecked
@@ -93,9 +115,10 @@ class CategoriesAdapter(
 //            itemView.edit_icon_image_view.setOnClickListener {
 //                listener.editCurrentItem(category)
 //            }
-//            itemView.setOnClickListener {
+            itemView.setOnClickListener {
 //                checkUncheckItem(itemView,category)
-//            }
+                listener.onItemClick(category.categoryId, category.isChecked)
+            }
 //            itemView.setOnLongClickListener {
 //                listener.onItemLongPressed(category.categoryId)
 //                true

@@ -10,14 +10,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.selection.SelectionPredicates
-import androidx.recyclerview.selection.SelectionTracker
-import androidx.recyclerview.selection.StableIdKeyProvider
-import androidx.recyclerview.selection.StorageStrategy
+import androidx.recyclerview.selection.*
 import kotlinx.android.synthetic.main.categories_fragment.*
 import kotlinx.android.synthetic.main.item_category.*
 import org.koin.android.ext.android.inject
@@ -50,8 +49,25 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.categories_fragment, container, false)
+
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                // in here you can do logic when backPress is clicked
+                categoriesAdapter.clearSelection()
+                Log.e(TAG,"BACK PRESSED")
+
+            }
+        }
+            )
+
+        //        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+//            Log.e(TAG,"back back back")
+//            // Handle the back button event
+//        }
         initAddNewCategoryButton(root)
+        initSaveSelectionButton(root)
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
+
 
 
 
@@ -60,27 +76,90 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         return root
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 
 
         handleRecycler()
-        tracker = SelectionTracker.Builder<Long>(
-            "mySelection",
-            categories_recyclerview,
-            MyItemKeyProvider(categories_recyclerview),
+
+//        Log.e(TAG,"asveeeeeeeeeds ${savedInstanceState?.getBundle("mySelection")}")
+
+
+//        savedInstanceState?.getLongArray("mySelection")
+
+
+
+            tracker = SelectionTracker.Builder<Long>(
+                "mySelection",
+                categories_recyclerview,
+                MyItemKeyProvider(categories_recyclerview),
 //            StableIdKeyProvider(categories_recyclerview),
-            MyItemDetailsLookup(categories_recyclerview),
-            StorageStrategy.createLongStorage()
-        ).withSelectionPredicate(
-            SelectionPredicates.createSelectAnything()
-        ).build()
+                MyItemDetailsLookup(categories_recyclerview),
+                StorageStrategy.createLongStorage()
+            ).withSelectionPredicate(
+                SelectionPredicates.createSelectAnything()
+            )
+                .build()
+
+//        Log.e(TAG,"asveeeeeeeeeds ${g.getLong("mySelection")}")
+
+        if(savedInstanceState != null)
+            tracker?.onRestoreInstanceState(savedInstanceState)
+
+        Log.e(TAG,"asveeeeeeeeeds ${savedInstanceState?.getBundle("mySelection")}")
+
+
+
+        tracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionChanged() {
+                super.onSelectionChanged()
+                val items = tracker?.selection!!
+                if (items.size()>0){
+                    button_save_categories_selection.visibility = View.VISIBLE
+                }else{
+                    button_save_categories_selection.visibility = View.GONE
+                }
+
+
+//как сохранять селекшн в базу чтобы не терять селекшн при выходе из приложения или переворачивании экрана
+//                if (items.size() > 1) {
+//                categoriesViewModel.selectUnselectCategory(arrayOf("150", true.toString()))
+//                    Log.e(TAG,"there are 2 items chosen $items")
+//                }
+            }
+        })
+        tracker?.addObserver(object : SelectionTracker.SelectionObserver<Long>() {
+            override fun onSelectionRefresh() {
+                super.onSelectionRefresh()
+            }
+        })
 
         observeCategoryListChanges()
 
 
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+    }
+
+    private fun initSaveSelectionButton(root: View){
+        val saveSelectionButton: Button =
+            root.findViewById(R.id.button_save_categories_selection)
+        saveSelectionButton.setOnClickListener {
+            categoriesViewModel.unselectAllCategories()
+            val selectedCategories =  tracker?.selection
+            selectedCategories?.forEach {
+                categoriesViewModel.selectUnselectCategory(arrayOf(it.toString(),"true"))
+            }
+        }
+    }
+
 
 
     override fun onResume() {
@@ -93,7 +172,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onItemClick(id: Long, isChecked: Boolean) {
 //        openDialogToEditCurrentCategory(category)
 //        Log.e(TAG, "______________________________________ ${categoriesAdapter.getSelected()}")
-        categoriesViewModel.selectUnselectCategory(arrayOf(id.toString(), isChecked.toString()))
+//        categoriesViewModel.selectUnselectCategory(arrayOf(id.toString(), isChecked.toString()))
+        val action = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment(id)
+        findNavController().navigate(action)
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -108,8 +189,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     }
 
     override fun onItemLongPressed(id: Long) {
-        val action = CategoriesFragmentDirections.actionNavigationCategoriesToWordsListFragment(id)
-        findNavController().navigate(action)
+
     }
 
     override fun editCurrentItem(category: Category) {

@@ -10,6 +10,7 @@ import coil.api.load
 import kotlinx.android.synthetic.main.item_category.view.*
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.data.local.entity.CategoryState
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
 import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperViewHolder
 import java.util.*
@@ -37,17 +38,7 @@ class CategoriesAdapter(
         )
     }
 
-    override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
-        val cat = collection[position]
-        tracker?.let{
-            if (cat.isChecked){
-//                it.select(cat.categoryId)
-                cat.isChecked = false
-            }
-            holder.bind(cat, it.isSelected(cat.categoryId))
-        }
 
-    }
 
     override fun getItemCount() = collection.size
 
@@ -96,17 +87,96 @@ class CategoriesAdapter(
         }
     }
 
+    override fun onBindViewHolder(holder: CategoryHolder, position: Int) {
+        val cat = collection[position]
+        tracker?.let{
+//            if (cat.isChecked){
+////                it.select(cat.categoryId)
+////                cat.isChecked = false
+//                holder.bind(cat, true)
+//            }else {
+
+                holder.bind(cat, it)
+            }
+
+        }
+
+    fun catchUp(){
+        for (item in collection){
+            if (item.isChecked){
+                item.isChecked = false
+                tracker?.select(item.categoryId)
+            }
+        }
+    }
+
+
     class CategoryHolder(private val listener: CategoriesAdapterListener, itemView: View) :
         RecyclerView.ViewHolder(itemView)
                 , ItemTouchHelperViewHolder {
 
         @SuppressLint("SetTextI18n")
-        fun bind(category: Category, _isSelected: Boolean ) {
-            when(_isSelected){
-                true->Log.e(TAG,"$${category.name} id# ${category.categoryId} selected")
-                false->Log.e(TAG,"$${category.name} id# ${category.categoryId} UNselected")
+        fun bind(category: Category, _tracker: SelectionTracker<Long> ) {
+
+//            Log.e(TAG,"$${category.name}  ${category.state}     ____________________")
+            if  ((category.state==CategoryState.ACTIVATED_FROM_THE_BEGINNING)) {
+                itemView.isActivated = true
+                category.changeState()
+                Log.e(TAG,"$${category.name}  ${category.state}")
+            } else if(category.state == CategoryState.SELECTED_AFTER_ACTIVATING){
+                    _tracker.select(category.categoryId)
+                    category.changeState()
+                Log.e(TAG,"$${category.name}  ${category.state}")
+                itemView.isActivated = _tracker.isSelected(category.categoryId)
+
             }
-            itemView.isActivated = _isSelected
+            else if(_tracker.isSelected(category.categoryId)){
+                category.changeState()
+                itemView.isActivated = _tracker.isSelected(category.categoryId)
+                Log.e(TAG,"$${category.name}  ${category.state}")
+            }
+            else if(!_tracker.isSelected(category.categoryId)&&(category.state == CategoryState.CHANGED)){
+                category.changeState()
+                itemView.isActivated = _tracker.isSelected(category.categoryId)
+                Log.e(TAG,"$${category.name}  ${category.state}")
+            }
+//            Log.e(TAG,"$${category.name}  ${category.state}     ____________________")
+
+
+//            else{
+//                if (category.state == CategoryState.SELECTED_AFTER_ACTIVATING){
+//                    category.changeState()
+//                    _tracker.select(category.categoryId)
+//                } else if ((_tracker.isSelected(category.categoryId)!=category.isChecked)){
+//                    category.changeState()
+//                    Log.e(TAG,"$${category.name} changed state to ${category.state}")
+//                }else {
+//                    category.changeState()
+//                    Log.e(TAG,"$${category.name} state is ${category.state}")
+//                }
+//                itemView.isActivated = _tracker.isSelected(category.categoryId)
+//            }
+
+
+//            when(_isSelected){
+//                true->Log.e(TAG,"$${category.name} id# ${category.categoryId} selected")
+//                false->Log.e(TAG,"$${category.name} id# ${category.categoryId} UNselected")
+//            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             itemView.textViewItem.text = category.name
             itemView.category_icon_image_view.load(category.icon.toInt())

@@ -117,11 +117,11 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
             override fun onSelectionChanged() {
                 super.onSelectionChanged()
                 val items = tracker?.selection!!
-                if (items.size()>0){
-                    button_save_categories_selection.visibility = View.VISIBLE
-                }else{
-                    button_save_categories_selection.visibility = View.GONE
+                button_save_categories_selection.visibility = View.VISIBLE
+                if (items.size()==1){
+                    categoriesAdapter.catchUp()
                 }
+
 
 
 //как сохранять селекшн в базу чтобы не терять селекшн при выходе из приложения или переворачивании экрана
@@ -152,11 +152,17 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         val saveSelectionButton: Button =
             root.findViewById(R.id.button_save_categories_selection)
         saveSelectionButton.setOnClickListener {
-            categoriesViewModel.unselectAllCategories()
+            println("====================================================")
+
             val selectedCategories =  tracker?.selection
+
+
             selectedCategories?.forEach {
-                categoriesViewModel.selectUnselectCategory(arrayOf(it.toString(),"true"))
+                categoriesViewModel.selectionList.add(it)
+//                categoriesViewModel.selectUnselectCategory(arrayOf(it.toString(),"true"))
             }
+            categoriesViewModel.unselectAllCategories()
+            println("___________________________________________")
         }
     }
 

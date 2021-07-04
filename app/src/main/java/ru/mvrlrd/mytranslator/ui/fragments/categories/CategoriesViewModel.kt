@@ -36,6 +36,8 @@ class CategoriesViewModel(
     private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
     private val unselecterAllCategories = UpdaterAllCategoriesToUnselect(localIRepository)
 
+    var selectionList = mutableListOf<Long>()
+
 
     private val getterCatsFlow = GetterAllCatsFlow(localIRepository)
 
@@ -129,7 +131,9 @@ class CategoriesViewModel(
     }
 
     private fun handleUnselectionAll(num: Int){
-        Log.e(TAG, "$num item was checked/unchecked")
+       for (item in selectionList){
+           selectUnselectCategory(arrayOf(item.toString(), "true"))
+       }
     }
 
     fun deleteCategory(categoryId: Long) {

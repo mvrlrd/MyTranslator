@@ -103,6 +103,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                 SelectionPredicates.createSelectAnything()
             )
                 .build()
+        savedInstanceState?.let {
+            tracker?.onRestoreInstanceState(it)
+        }
 
 //        Log.e(TAG,"asveeeeeeeeeds ${g.getLong("mySelection")}")
 
@@ -142,10 +145,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        tracker?.onSaveInstanceState(outState)
     }
 
     private fun initSaveSelectionButton(root: View){

@@ -118,63 +118,8 @@ class CategoriesAdapter(
         @SuppressLint("SetTextI18n")
         fun bind(category: Category, _tracker: SelectionTracker<Long> ) {
 
-//            Log.e(TAG,"$${category.name}  ${category.state}     ____________________")
-            if  ((category.state==CategoryState.ACTIVATED_FROM_THE_BEGINNING)) {
-                itemView.isActivated = true
-                category.changeState()
-                Log.e(TAG,"$${category.name}  ${category.state}")
-            } else if(category.state == CategoryState.SELECTED_AFTER_ACTIVATING){
-                    _tracker.select(category.categoryId)
-                    category.changeState()
-                Log.e(TAG,"$${category.name}  ${category.state}")
+
                 itemView.isActivated = _tracker.isSelected(category.categoryId)
-
-            }
-            else if(_tracker.isSelected(category.categoryId)){
-                category.changeState()
-                itemView.isActivated = _tracker.isSelected(category.categoryId)
-                Log.e(TAG,"$${category.name}  ${category.state}")
-            }
-            else if(!_tracker.isSelected(category.categoryId)&&(category.state == CategoryState.CHANGED)){
-                category.changeState()
-                itemView.isActivated = _tracker.isSelected(category.categoryId)
-                Log.e(TAG,"$${category.name}  ${category.state}")
-            }
-//            Log.e(TAG,"$${category.name}  ${category.state}     ____________________")
-
-
-//            else{
-//                if (category.state == CategoryState.SELECTED_AFTER_ACTIVATING){
-//                    category.changeState()
-//                    _tracker.select(category.categoryId)
-//                } else if ((_tracker.isSelected(category.categoryId)!=category.isChecked)){
-//                    category.changeState()
-//                    Log.e(TAG,"$${category.name} changed state to ${category.state}")
-//                }else {
-//                    category.changeState()
-//                    Log.e(TAG,"$${category.name} state is ${category.state}")
-//                }
-//                itemView.isActivated = _tracker.isSelected(category.categoryId)
-//            }
-
-
-//            when(_isSelected){
-//                true->Log.e(TAG,"$${category.name} id# ${category.categoryId} selected")
-//                false->Log.e(TAG,"$${category.name} id# ${category.categoryId} UNselected")
-//            }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

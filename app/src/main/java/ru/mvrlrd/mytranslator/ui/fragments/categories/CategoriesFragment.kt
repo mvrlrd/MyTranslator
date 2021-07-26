@@ -103,16 +103,15 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                 SelectionPredicates.createSelectAnything()
             )
                 .build()
+
+
         savedInstanceState?.let {
+            Log.e(TAG,"myBundle $it")
             tracker?.onRestoreInstanceState(it)
+            Log.e(TAG,"tracker ${tracker?.selection}")
         }
 
-//        Log.e(TAG,"asveeeeeeeeeds ${g.getLong("mySelection")}")
 
-        if(savedInstanceState != null)
-            tracker?.onRestoreInstanceState(savedInstanceState)
-
-        Log.e(TAG,"asveeeeeeeeeds ${savedInstanceState?.getBundle("mySelection")}")
 
 
 
@@ -139,10 +138,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
                 super.onSelectionRefresh()
             }
         })
-
         observeCategoryListChanges()
-
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

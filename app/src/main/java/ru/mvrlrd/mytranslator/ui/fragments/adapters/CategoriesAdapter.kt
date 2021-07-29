@@ -8,6 +8,7 @@ import androidx.recyclerview.selection.SelectionTracker
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.item_category.view.*
+import okhttp3.internal.notify
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.CategoryState
@@ -95,8 +96,9 @@ class CategoriesAdapter(
 ////                cat.isChecked = false
 //                holder.bind(cat, true)
 //            }else {
-
-                holder.bind(cat, it)
+//                it.select(157)
+//            Log.e(TAG, "${it.isSelected(cat.categoryId)}   category ${cat.name}   id ${cat.categoryId} ")
+                holder.bind(cat, it.isSelected(cat.categoryId))
             }
 
         }
@@ -116,15 +118,17 @@ class CategoriesAdapter(
                 , ItemTouchHelperViewHolder {
 
         @SuppressLint("SetTextI18n")
-        fun bind(category: Category, _tracker: SelectionTracker<Long> ) {
-
-
-                itemView.isActivated = _tracker.isSelected(category.categoryId)
+        fun bind(category: Category, isSelectod: Boolean ) {
+                itemView.isActivated = isSelectod
 
 
 
             itemView.textViewItem.text = category.name
-            itemView.category_icon_image_view.load(category.icon.toInt())
+
+//            itemView.category_icon_image_view.load(category.icon.toInt())
+
+
+
 //            itemView.isSelected = category.isChecked
             itemView.percentageTextView.text = "${category.averageProgress.roundToInt()}%"
 //            itemView.edit_icon_image_view.setOnClickListener {

@@ -8,7 +8,7 @@
         android:id="@+id/navigation_categories"
         android:name="ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesFragment"
         android:label="categories_fragment"
-        tools:layout="@layout/categories_fragment" >
+        tools:layout="@layout/fragment_categories" >
         <action
             android:id="@+id/action_translationFragment_to_favoritesFragment"
             app:destination="@id/navigation_favorites" />

@@ -59,10 +59,10 @@ class CardStackAdapter(private val learningProcessHandler: LearningProcess) :
                 circ = position % it
                 currentCardPosition = circ
             }
-            Log.e(
-                TAG,
-                "onCardAppeared      ${collection[circ].word}  circ=$circ   current=$currentCardPosition   pos=$position"
-            )
+//            Log.e(
+//                TAG,
+//                "onCardAppeared      ${collection[circ].word}  circ=$circ   current=$currentCardPosition   pos=$position"
+//            )
         }
     }
 

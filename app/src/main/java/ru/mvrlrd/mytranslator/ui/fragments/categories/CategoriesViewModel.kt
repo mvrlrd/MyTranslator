@@ -3,6 +3,7 @@ package ru.mvrlrd.mytranslator.ui.fragments.categories
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import androidx.recyclerview.selection.SelectionTracker
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
@@ -35,6 +36,9 @@ class CategoriesViewModel(
     private val updaterCategoryNameAndIcon = UpdaterCategoryNameAndIcon(localIRepository)
     private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
     private val unselecterAllCategories = UpdaterAllCategoriesToUnselect(localIRepository)
+
+
+
 
     var selectionList = mutableListOf<Long>()
 

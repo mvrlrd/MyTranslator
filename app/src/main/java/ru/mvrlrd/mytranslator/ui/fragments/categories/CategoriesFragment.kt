@@ -12,10 +12,12 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.selection.*
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_categories.*
 import kotlinx.android.synthetic.main.item_category.*
@@ -55,7 +57,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     ): View {
         Log.e(TAG, "onCreateView")
 
-        _binding = FragmentCategoriesBinding.inflate(inflater, container, false)
+        _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_categories, container, false)
         val view = binding.root
 
         activity?.onBackPressedDispatcher?.addCallback(
@@ -270,6 +272,10 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 //        if (categoriesViewModel.liveAllCategories.value!=null){
 //            categoriesViewModel.getAllCardsOfCategory(categoriesViewModel.liveAllCategories.value!!)
 //        }
+        categoriesRecyclerView.addItemDecoration(
+            DividerItemDecoration(context, DividerItemDecoration.VERTICAL)
+        )
+
     }
 
     private fun openDialogToAddNewCategory() {

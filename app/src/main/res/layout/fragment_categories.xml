@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.fragments.categories.CategoriesFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
 
+    </data>
 
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/categories_recyclerview"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:paddingTop="80dp"
-        android:clipToPadding="false"/>
+        tools:context=".ui.fragments.categories.CategoriesFragment">
 
-    <LinearLayout
-        android:id="@+id/addNewCatLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-            android:id="@+id/go_to_dialog_to_add_new_category_button"
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/categories_recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:text="add new category"
-            />
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:paddingTop="80dp"
+            android:clipToPadding="false" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/addNewCatLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/go_to_dialog_to_add_new_category_button"
+                android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:text="add new category" />
+
+        </LinearLayout>
 
         <Button
             android:id="@+id/button_save_categories_selection"
@@ -43,14 +45,12 @@
             android:text="save"
             android:layout_gravity="bottom|center_horizontal"
             android:layout_marginBottom="30dp"
-            android:visibility="gone"
-            />
+            android:visibility="gone" />
 
 
-
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_container_add_category_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
-</FrameLayout>
+        <androidx.fragment.app.FragmentContainerView
+            android:id="@+id/fragment_container_add_category_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </FrameLayout>
+</layout>

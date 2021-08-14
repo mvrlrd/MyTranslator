@@ -37,8 +37,20 @@ class CategoriesViewModel(
     private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
     private val unselecterAllCategories = UpdaterAllCategoriesToUnselect(localIRepository)
 
+//Warning: Never expose mutable data fields from your ViewModel—make sure this
+// data can't be modified from another class. Mutable data inside the ViewModel should always be private.
 
 
+    //// Declare private mutable variable that can only be modified
+    //// within the class it is declared.
+    //private var _count = 0
+    //
+    //// Declare another public immutable field and override its getter method.
+    //// Return the private property's value in the getter method.
+    //// When count is accessed, the get() function is called and
+    //// the value of _count is returned.
+    //val count: Int
+    //   get() = _count
 
     var selectionList = mutableListOf<Long>()
 

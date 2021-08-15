@@ -24,6 +24,9 @@ import kotlinx.android.synthetic.main.item_category.*
 import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
+import ru.mvrlrd.mytranslator.data.LocalIRepository
+import ru.mvrlrd.mytranslator.data.local.DbHelper
+import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.databinding.FragmentCategoriesBinding
 import ru.mvrlrd.mytranslator.ui.fragments.MyItemKeyProvider
@@ -48,6 +51,9 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     var _binding : FragmentCategoriesBinding? = null
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
+
+    private val localRepo: LocalIRepository by inject()
+//    private val dbHelper: DbHelper by inject()
 
     private var mScrollY = 0F
 
@@ -94,7 +100,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e(TAG, "onViewCreated   $this")
-
+        Log.e(TAG, "localRepo   $localRepo      ,   dbHelper = {dbHelper as LocalDataSource}")
         categoriesRecyclerView = binding.categoriesRecyclerview
 //        categoriesViewModel.refreshCategoriesList()
         handleRecycler(binding)

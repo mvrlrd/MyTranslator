@@ -20,10 +20,10 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 private const val TAG = "LearningViewModel"
 
 class LearningViewModel(
-    dbHelper: DbHelper
+    localIRepository: LocalIRepository
 ) : BaseViewModel() {
 
-    private val localIRepository = LocalIRepository( dbHelper)
+//    private val localIRepository = LocalIRepository( dbHelper)
     private val loaderChosenCategoriesForLearning: LoaderChosenCategoriesForLearning =
         LoaderChosenCategoriesForLearning(localIRepository)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =

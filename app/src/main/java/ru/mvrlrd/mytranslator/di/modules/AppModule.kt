@@ -7,8 +7,10 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.mvrlrd.mytranslator.NetworkAvailabilityHandler
+import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
+import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
@@ -20,7 +22,8 @@ import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 
 val appSources = module {
     single { NetworkAvailabilityHandler(androidContext()) }
-    single { DbHelper(get()) }
+    single <LocalDataSource> { DbHelper(get()) }
+//    single { DbHelper(get()) }
     single {
         Room.databaseBuilder(
             androidContext(),
@@ -29,6 +32,7 @@ val appSources = module {
         ).fallbackToDestructiveMigration().build()
     }
     single { get<AppSearchingHistoryDataBase>().allDatabasesDao() }
+    single { LocalIRepository(get()) }
 }
 
 val appViewModules = module {

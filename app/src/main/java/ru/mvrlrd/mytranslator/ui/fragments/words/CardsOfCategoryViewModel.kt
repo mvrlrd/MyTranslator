@@ -20,10 +20,10 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 private const val TAG = "CardsOfCategoryViewModel"
 
 class CardsOfCategoryViewModel(
-    dbHelper: DbHelper
+    localIRepository: LocalIRepository
 ) : BaseViewModel() {
 
-    private val localIRepository = LocalIRepository( dbHelper)
+//    private val localIRepository = LocalIRepository( dbHelper)
     private val loaderCardsOfCategory: LoaderCardsOfCategory =
         LoaderCardsOfCategory(localIRepository)
     private val binderCardToCategory: BinderCardToCategory =

@@ -20,12 +20,12 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class NewWordViewModel (
     apiHelper: ApiHelper,
-    dbHelper: DbHelper
+    localIRepository: LocalIRepository
 ) : BaseViewModel() {
-    private val localRepository = LocalIRepository( dbHelper)
+//    private val localRepository = LocalIRepository( dbHelper)
     private val remoteIRepository = RemoteIRepository(apiHelper)
     private val getSearchResult: GetSearchResult = GetSearchResult(remoteIRepository)
-    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localRepository)
+    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localIRepository)
     private var _liveTranslations = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslations: LiveData<List<MeaningModelForRecycler>> = _liveTranslations
     private var queryName: String = ""

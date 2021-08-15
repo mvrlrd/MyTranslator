@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
+import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
@@ -23,9 +24,9 @@ import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 private const val TAG = "CatViewModel"
 
 class CategoriesViewModel(
-    dbHelper: DbHelper
+    localIRepository: LocalIRepository
 ) : BaseViewModel() {
-    private val localIRepository = LocalIRepository( dbHelper)
+
 //insert//delete//clear//
     private val inserterCategoryToBd = InserterCategoryToBd(localIRepository)
     private val loaderCardsOfCategory = LoaderCardsOfCategory(localIRepository)

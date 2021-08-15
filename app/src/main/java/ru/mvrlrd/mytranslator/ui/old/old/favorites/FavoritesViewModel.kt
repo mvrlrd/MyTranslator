@@ -14,10 +14,10 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class FavoritesViewModel(
-    dbHelper: DbHelper
+    localIRepository: LocalIRepository
 ) : BaseViewModel() {
 
-    private val localIRepository = LocalIRepository( dbHelper)
+//    private val localIRepository = LocalIRepository( dbHelper)
     private val removerCardFromDb: RemoverCardFromDb =
         RemoverCardFromDb(localIRepository)
     private val loaderCardsOfDb: LoaderCardsOfDb = LoaderCardsOfDb(localIRepository)

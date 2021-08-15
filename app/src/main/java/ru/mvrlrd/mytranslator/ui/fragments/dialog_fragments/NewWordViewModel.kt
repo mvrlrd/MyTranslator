@@ -22,13 +22,14 @@ import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class NewWordViewModel (
-    remoteIRepository: RemoteIRepository,
-    localIRepository: ILocalRepository
+//   val iRepo: IRepository,
+    val getSearchResult: GetSearchResult,
+   val inserterCardToDb: InserterCardToDb
 ) : BaseViewModel() {
 //    private val localRepository = LocalIRepository( dbHelper)
 //    private val remoteIRepository = RemoteIRepository(remoteDataSource)
-    private val getSearchResult: GetSearchResult = GetSearchResult(remoteIRepository)
-    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localIRepository)
+//    private val getSearchResult: GetSearchResult = GetSearchResult(iRepo)
+//    private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localIRepository)
 
 
 

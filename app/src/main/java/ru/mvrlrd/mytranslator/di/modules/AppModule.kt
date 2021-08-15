@@ -20,6 +20,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.GetterAllCatsFlow
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
+import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
@@ -63,9 +64,10 @@ val appSources = module {
     single {BinderCardToCategory(get())}
     single {RemoverCardFromCategory(get())}
 
+    single {GetSearchResult(get())}
 
-single { RemoteIRepository(get()) }
-        single <IRepository>{ get() }
+single <IRepository>{ RemoteIRepository(get()) }
+//        single <IRepository>{ get() }
 }
 
 val appViewModules = module {

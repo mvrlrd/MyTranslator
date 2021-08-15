@@ -10,19 +10,21 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.yuyakaido.android.cardstackview.CardStackLayoutManager
 import com.yuyakaido.android.cardstackview.CardStackListener
-import com.yuyakaido.android.cardstackview.Direction
 import kotlinx.android.synthetic.main.fragment_learning.*
-import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.categories.SharedViewModel
 
 private const val TAG = "LearningFragment"
 
 class LearningFragment : Fragment(), LearningProcess {
     private lateinit var manager: CardStackLayoutManager
     lateinit var csadapter: CardStackAdapter
-    private val learningViewModel: LearningViewModel by inject()
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,24 +55,24 @@ class LearningFragment : Fragment(), LearningProcess {
 
     override fun onResume() {
         super.onResume()
-        learningViewModel.getChosenCategories()
+        sharedViewModel.getChosenCategories()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        learningViewModel.liveCategoriesForLearning.observe(viewLifecycleOwner, Observer { cats ->
-            learningViewModel.getAllWordsOfCategory1(cats)
+        sharedViewModel.liveCategoriesForLearning.observe(viewLifecycleOwner, Observer { cats ->
+            sharedViewModel.getAllWordsOfCategory1(cats)
         })
 
-        learningViewModel.liveCardsOfCategory.observe(
+        sharedViewModel.liveCardsOfCategory.observe(
             viewLifecycleOwner,
             Observer { words ->
                 Log.e(TAG, words.toString())
                 handleCategoryRecycler(words as MutableList<Card>)
             })
         //for the first loading
-        if (learningViewModel.liveCardsOfCategory.value != null) {
-            handleCategoryRecycler(learningViewModel.liveCardsOfCategory.value!!)
+        if (sharedViewModel.liveCardsOfCategory.value != null) {
+            handleCategoryRecycler(sharedViewModel.liveCardsOfCategory.value!!)
         }
     }
 
@@ -88,7 +90,7 @@ class LearningFragment : Fragment(), LearningProcess {
     }
 
     override fun updateCard(cardId: Long, newProgress: Int) {
-        learningViewModel.updateCardProgress(cardId, newProgress)
+        sharedViewModel.updateCardProgress(cardId, newProgress)
     }
 
 

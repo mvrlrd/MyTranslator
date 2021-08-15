@@ -22,11 +22,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_categories.*
 import kotlinx.android.synthetic.main.item_category.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.LocalIRepository
-import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.databinding.FragmentCategoriesBinding
 import ru.mvrlrd.mytranslator.ui.fragments.MyItemKeyProvider
@@ -43,7 +42,7 @@ private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 private const val TAG = "CategoryFragment"
 
 class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListener {
-    private val categoriesViewModel: CategoriesViewModel by inject()
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
     private val newCategoryDialog: NewCategoryDialog by inject()
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
@@ -52,8 +51,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
 
-    private val localRepo: LocalIRepository by inject()
-//    private val dbHelper: DbHelper by inject()
+    private  val local: LocalIRepository by inject()
+
 
     private var mScrollY = 0F
 
@@ -65,6 +64,22 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
         _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_categories, container, false)
         val view = binding.root
+
+//        categoriesViewModel.apply {
+//            localIRepository = local
+//              inserterCategoryToBd= InserterCategoryToBd(localIRepository)
+//              loaderCardsOfCategory= LoaderCardsOfCategory(localIRepository)
+//              loaderChosenCategoriesForLearning= LoaderChosenCategoriesForLearning(localIRepository)
+//              removerCategoriesFromDb= RemoverCategoriesFromDb(localIRepository)
+//              removerCategoryFromDb= RemoverCategoryFromDb(localIRepository)
+//              updaterCategoryProgress= UpdaterCategoryProgress(localIRepository)
+//              updaterCategoryNameAndIcon= UpdaterCategoryNameAndIcon(localIRepository)
+//              updaterCategoryIsChecked= UpdaterCategoryIsChecked(localIRepository)
+//              unselecterAllCategories= UpdaterAllCategoriesToUnselect(localIRepository)
+//            getterCatsFlow = GetterAllCatsFlow(localIRepository)
+//           getAllCatsFlow()
+//        }
+
 
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
@@ -100,7 +115,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         Log.e(TAG, "onViewCreated   $this")
-        Log.e(TAG, "localRepo   $localRepo      ,   dbHelper = {dbHelper as LocalDataSource}")
         categoriesRecyclerView = binding.categoriesRecyclerview
 //        categoriesViewModel.refreshCategoriesList()
         handleRecycler(binding)
@@ -196,10 +210,10 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
 
             selectedCategories?.forEach {
-                categoriesViewModel.selectionList.add(it)
+                sharedViewModel.selectionList.add(it)
 //                categoriesViewModel.selectUnselectCategory(arrayOf(it.toString(),"true"))
             }
-            categoriesViewModel.unselectAllCategories()
+            sharedViewModel.unselectAllCategories()
             println("___________________________________________")
         }
     }
@@ -209,7 +223,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     override fun onResume() {
         super.onResume()
         Log.e(TAG, "onResume   ${selectionTracker?.selection}")
-        categoriesViewModel.refreshCategoriesList()
+        sharedViewModel.refreshCategoriesList()
     }
 
     override fun onPause() {
@@ -229,7 +243,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(categoryId: Long) {
-        categoriesViewModel.deleteCategory(categoryId)
+        sharedViewModel.deleteCategory(categoryId)
         vibrate(vibrator)
         if (mScrollY>=category_icon_image_view.height){
             mScrollY-=category_icon_image_view.height
@@ -257,10 +271,10 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         if (resultCode == Activity.RESULT_OK) {
             when (requestCode) {
                 NEW_CATEGORY_DIALOG_REQUEST_CODE -> {
-                    getStringArrayFromIntent(data)?.let { categoriesViewModel.addCategory(it) }
+                    getStringArrayFromIntent(data)?.let { sharedViewModel.addCategory(it) }
                 }
                 EDIT_CATEGORY_DIALOG_REQUEST_CODE -> {
-                    getStringArrayFromIntent(data)?.let { categoriesViewModel.updateCategorysNameAndIcon(it) }
+                    getStringArrayFromIntent(data)?.let { sharedViewModel.updateCategorysNameAndIcon(it) }
                 }
             }
         } else {
@@ -307,7 +321,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     private fun observeCategoryListChanges() {
         Log.e(TAG, "observeCategoryListChanges START  ${Date().time}")
-        categoriesViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
+        sharedViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
 
             categoriesAdapter.updateCollection(categoryList)
 

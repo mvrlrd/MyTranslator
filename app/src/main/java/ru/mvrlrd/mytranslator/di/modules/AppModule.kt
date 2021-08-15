@@ -11,12 +11,21 @@ import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.AppSearchingHistoryDataBase
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
-import ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesViewModel
+import ru.mvrlrd.mytranslator.domain.ILocalRepository
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.GetterAllCatsFlow
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
+import ru.mvrlrd.mytranslator.domain.use_cases.update.*
+import ru.mvrlrd.mytranslator.ui.fragments.categories.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordViewModel
-import ru.mvrlrd.mytranslator.ui.fragments.learning.LearningViewModel
+
 import ru.mvrlrd.mytranslator.ui.fragments.words.CardsOfCategoryViewModel
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 
@@ -32,13 +41,30 @@ val appSources = module {
         ).fallbackToDestructiveMigration().build()
     }
     single { get<AppSearchingHistoryDataBase>().allDatabasesDao() }
-    single { LocalIRepository(get()) }
+    single <ILocalRepository>{ LocalIRepository(get()) }
+
+
+
+    single {InserterCategoryToBd (get())}
+        single {LoaderCardsOfCategory(get())}
+            single {LoaderChosenCategoriesForLearning(get())}
+                single {RemoverCategoriesFromDb(get())}
+                    single {RemoverCategoryFromDb(get())}
+                        single {UpdaterCategoryProgress(get())}
+                            single {UpdaterCategoryNameAndIcon(get())}
+                                single {UpdaterCategoryIsChecked(get())}
+                                    single {UpdaterAllCategoriesToUnselect(get())}
+                                        single {GetterAllCatsFlow(get())}
+    single {InserterCardToDb(get())}
+    single {UpdaterCardProgress(get())}
+
+
 }
 
 val appViewModules = module {
     viewModel { FavoritesViewModel(get()) }
-    viewModel { CategoriesViewModel(get()) }
-    viewModel { LearningViewModel(get()) }
+    viewModel { parameters -> SharedViewModel(get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get() ) }
+
     viewModel { CardsOfCategoryViewModel(get()) }
     viewModel { NewWordViewModel(get(),get()) }
 }

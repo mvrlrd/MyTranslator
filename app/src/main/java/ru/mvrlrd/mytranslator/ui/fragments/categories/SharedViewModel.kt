@@ -1,6 +1,7 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.selection.SelectionTracker
@@ -9,34 +10,39 @@ import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.LocalDataSource
+import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
+import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
-import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterAllCategoriesToUnselect
-import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryIsChecked
-import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryNameAndIcon
-import ru.mvrlrd.mytranslator.domain.use_cases.update.UpdaterCategoryProgress
+import ru.mvrlrd.mytranslator.domain.use_cases.update.*
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
-private const val TAG = "CatViewModel"
+private const val TAG = "SharedViewModel"
 
-class CategoriesViewModel(
-    localIRepository: LocalIRepository
+class SharedViewModel(
+    private val inserterCategoryToBd: InserterCategoryToBd,
+    private val loaderCardsOfCategory: LoaderCardsOfCategory,
+    private val loaderChosenCategoriesForLearning:
+    LoaderChosenCategoriesForLearning,
+    private val removerCategoriesFromDb: RemoverCategoriesFromDb,
+    private val removerCategoryFromDb: RemoverCategoryFromDb,
+    private val updaterCategoryProgress: UpdaterCategoryProgress,
+    private val updaterCategoryNameAndIcon: UpdaterCategoryNameAndIcon,
+    private val updaterCategoryIsChecked: UpdaterCategoryIsChecked,
+    private val unselecterAllCategories: UpdaterAllCategoriesToUnselect,
+    private val getterCatsFlow: GetterAllCatsFlow,
+    private val inserterCardToDb: InserterCardToDb,
+    private val updaterCardProgress: UpdaterCardProgress
+
 ) : BaseViewModel() {
 
-//insert//delete//clear//
-    private val inserterCategoryToBd = InserterCategoryToBd(localIRepository)
-    private val loaderCardsOfCategory = LoaderCardsOfCategory(localIRepository)
-    private val loaderChosenCategoriesForLearning = LoaderChosenCategoriesForLearning(localIRepository)
-    private val removerCategoriesFromDb = RemoverCategoriesFromDb(localIRepository)
-    private val removerCategoryFromDb = RemoverCategoryFromDb(localIRepository)
-    private val updaterCategoryProgress = UpdaterCategoryProgress(localIRepository)
-    private val updaterCategoryNameAndIcon = UpdaterCategoryNameAndIcon(localIRepository)
-    private val updaterCategoryIsChecked = UpdaterCategoryIsChecked(localIRepository)
-    private val unselecterAllCategories = UpdaterAllCategoriesToUnselect(localIRepository)
+
+
+
 
 //Warning: Never expose mutable data fields from your ViewModel—make sure this
 // data can't be modified from another class. Mutable data inside the ViewModel should always be private.
@@ -55,9 +61,6 @@ class CategoriesViewModel(
 
     var selectionList = mutableListOf<Long>()
 
-
-    private val getterCatsFlow = GetterAllCatsFlow(localIRepository)
-
     private var _mutableLiveDataCats = MutableLiveData<List<Category>>()
     val catsLive = _mutableLiveDataCats
 
@@ -65,12 +68,14 @@ class CategoriesViewModel(
         getAllCatsFlow()
     }
 
-    private fun getAllCatsFlow() {
-        viewModelScope.launch {
-            getterCatsFlow.getAllCatsFlow().collect { categories ->
-                _mutableLiveDataCats.postValue(categories)
+     private fun getAllCatsFlow() {
+
+            viewModelScope.launch {
+                getterCatsFlow.getAllCatsFlow().collect { categories ->
+                    _mutableLiveDataCats.postValue(categories)
+                }
             }
-        }
+
     }
 
     private fun insertCategory(newCategory: Category) {
@@ -242,8 +247,93 @@ class CategoriesViewModel(
         }
     }
 
+
     private fun handleUpdateCategoryProgress(num: Int){
         Log.e(TAG,"handleUpdateCategoryProgress")
+    }
+
+
+    private var _categoriesForLearning = MutableLiveData<List<Category>>()
+    val liveCategoriesForLearning: LiveData<List<Category>> = _categoriesForLearning
+
+    private var _cardsOfCategory = MutableLiveData<List<Card>>()
+    val liveCardsOfCategory: LiveData<List<Card>> = _cardsOfCategory
+
+
+    var allCards: MutableList<Card> = mutableListOf()
+
+    fun getChosenCategories() {
+        viewModelScope.launch {
+            loaderChosenCategoriesForLearning(Unit) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleGetChosenCategories
+                )
+            }
+        }
+    }
+
+
+
+    private fun handleGetChosenCategories(categoryList: List<Category>) {
+        _categoriesForLearning.value = categoryList
+//        for (i in categoryList){
+//            getAllWordsOfCategory(i.categoryId)
+//        }
+//        _wordsList.value = allWordsList
+    }
+
+    fun updateCardProgress(cardId: Long, newProgress: Int){
+        viewModelScope.launch {
+            updaterCardProgress(arrayOf(cardId, newProgress.toLong())){
+                it.fold(
+                    ::handleFailure,
+                    ::handleUpdateCardProgress
+                )
+            }
+        }
+    }
+    private fun handleUpdateCardProgress(num : Int){
+        Log.e(TAG, "$num card's progress was updated")
+    }
+
+
+
+
+    fun getAllWordsOfCategory1(cats: List<Category>) {
+        viewModelScope.launch {
+            for (i in cats) {
+                loaderCardsOfCategory(i.categoryId) {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleGettingAllWords2
+                    )
+                }
+            }
+
+        }
+    }
+
+    private fun handleGettingAllWords2(categoryWithCards: CategoryWithCards) {
+        for(i in categoryWithCards.cards){
+            i.categoryId = categoryWithCards.category.categoryId
+        }
+        allCards.addAll(categoryWithCards.cards)
+        _cardsOfCategory.value = allCards
+        Log.e(TAG, allCards.toString())
+    }
+
+    fun updateCardInDb(card: Card){
+        viewModelScope.launch { inserterCardToDb(card){
+            it.fold(
+                ::handleFailure,
+                ::handleUpdateCardInDb
+            )
+        } }
+    }
+
+    private fun handleUpdateCardInDb(cardId: Long){
+
     }
 }
 

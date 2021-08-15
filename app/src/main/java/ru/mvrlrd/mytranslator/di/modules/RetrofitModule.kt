@@ -9,6 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.mvrlrd.mytranslator.BuildConfig
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
 import ru.mvrlrd.mytranslator.data.network.ISkyengApiService
+import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import java.util.concurrent.TimeUnit
 
 internal const val BASE_URL = "https://dictionary.skyeng.ru/api/public/v1/"
@@ -57,5 +58,5 @@ val retrofitModule = module {
     single { provideOkHTTPClient() }
     single { provideRetrofit(get(), BASE_URL) }
     single { provideApiService(get()) }
-    single { ApiHelper(get(), get()) }
+    single <RemoteDataSource>{ ApiHelper(get(), get()) }
 }

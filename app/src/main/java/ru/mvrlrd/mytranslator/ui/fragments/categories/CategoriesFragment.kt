@@ -28,12 +28,9 @@ import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.databinding.FragmentCategoriesBinding
-import ru.mvrlrd.mytranslator.ui.fragments.MyItemKeyProvider
+import ru.mvrlrd.mytranslator.ui.fragments.*
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.attachCallbackToRecycler
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
-import ru.mvrlrd.mytranslator.ui.fragments.initRecycler
-import ru.mvrlrd.mytranslator.ui.fragments.keepDistanceBtwHeaderAndRecyclerItemsWhileScrolling
 import java.util.*
 
 private const val NEW_CATEGORY_DIALOG_REQUEST_CODE = 1

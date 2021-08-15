@@ -1,10 +1,12 @@
-package ru.mvrlrd.mytranslator.ui.fragments.categories
+package ru.mvrlrd.mytranslator.ui.fragments
 
+import android.annotation.SuppressLint
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.selection.SelectionTracker
+import com.google.gson.Gson
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
@@ -13,9 +15,11 @@ import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
+import ru.mvrlrd.mytranslator.domain.use_cases.binders.BinderCardToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
+import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.update.*
@@ -36,10 +40,20 @@ class SharedViewModel(
     private val unselecterAllCategories: UpdaterAllCategoriesToUnselect,
     private val getterCatsFlow: GetterAllCatsFlow,
     private val inserterCardToDb: InserterCardToDb,
-    private val updaterCardProgress: UpdaterCardProgress
+    private val updaterCardProgress: UpdaterCardProgress,
+    private val binderCardToCategory: BinderCardToCategory,
+    private val removerCardFromCategory: RemoverCardFromCategory
 
 ) : BaseViewModel() {
 
+//    private val loaderCardsOfCategory: LoaderCardsOfCategory =
+//        LoaderCardsOfCategory(localIRepository)
+//    private val binderCardToCategory: BinderCardToCategory =
+//        BinderCardToCategory(localIRepository)
+////    private val inserterCardToDb: InserterCardToDb =
+////        InserterCardToDb(localIRepository)
+//    private val removerCardFromCategory: RemoverCardFromCategory =
+//        RemoverCardFromCategory(localIRepository)
 
 
 
@@ -63,6 +77,10 @@ class SharedViewModel(
 
     private var _mutableLiveDataCats = MutableLiveData<List<Category>>()
     val catsLive = _mutableLiveDataCats
+
+    private var _cards = MutableLiveData<List<Card>>()
+    val liveCards: LiveData<List<Card>> = _cards
+    var categoryId: Long = 0L
 
     init {
         getAllCatsFlow()
@@ -335,6 +353,88 @@ class SharedViewModel(
     private fun handleUpdateCardInDb(cardId: Long){
 
     }
+
+
+
+
+    //CARDS OF CATEGORIES
+
+    fun saveCardToDb(jsonString: String) {
+        val card = mapJsonToCard(jsonString)
+        if(!checkIfWordIsInCategory(card)!!) {
+            viewModelScope.launch {
+                inserterCardToDb(card) {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleSaveCardToDb
+                    )
+                }
+            }
+        }
+    }
+    private fun handleSaveCardToDb(wordId: Long) {
+//        Log.e(TAG, "new word #$wordId has been added to the database")
+        bindCardToCategory(categoryId, wordId)
+    }
+
+    private fun mapJsonToCard(jsonString: String): Card {
+        return Gson().fromJson(jsonString, Card::class.java)
+    }
+
+    private fun bindCardToCategory(categoryId: Long, cardId: Long) {
+        viewModelScope.launch {
+            binderCardToCategory(arrayOf(cardId, categoryId)) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleBindCardToCategory
+                )
+            }
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+    private fun handleBindCardToCategory(wordId: Long) {
+        Log.e(TAG, "word #$wordId has been assigned with the category #$categoryId")
+        getAllWordsOfCategory(categoryId)
+    }
+
+    fun getAllWordsOfCategory(categoryId: Long) {
+        viewModelScope.launch {
+            loaderCardsOfCategory(categoryId) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleGetAllWordsOfCategory
+                )
+            }
+        }
+    }
+
+    private fun handleGetAllWordsOfCategory(categoryWithCards: CategoryWithCards) {
+        _cards.value = categoryWithCards.cards
+    }
+
+    fun deleteWordFromCategory(cardId: Long) {
+        viewModelScope.launch {
+            removerCardFromCategory(arrayOf(cardId, categoryId)) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleDeleteWordFromCategory
+                )
+            }
+        }
+    }
+
+    @SuppressLint("LongLogTag")
+    private fun handleDeleteWordFromCategory(numOfDeletedWord: Int) {
+        Log.e(TAG, "#$numOfDeletedWord was deleted from $categoryId")
+    }
+
+    @SuppressLint("LongLogTag")
+    private fun checkIfWordIsInCategory(card: Card): Boolean? {
+        Log.e(TAG, "i am in checkIfWordIsInCategorycheckIfWordIsInCategory ${liveCards.value?.contains(card)}")
+        return liveCards.value?.contains(card)
+    }
+
 }
 
 

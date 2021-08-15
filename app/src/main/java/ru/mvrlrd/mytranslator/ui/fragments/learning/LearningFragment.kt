@@ -14,8 +14,8 @@ import kotlinx.android.synthetic.main.fragment_learning.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.data.local.entity.Card
+import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardStackAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.categories.SharedViewModel
 
 private const val TAG = "LearningFragment"
 

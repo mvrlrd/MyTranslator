@@ -10,8 +10,11 @@ import ru.mvrlrd.mytranslator.data.RemoteIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.network.ApiHelper
+import ru.mvrlrd.mytranslator.data.network.RemoteDataSource
 import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
 import ru.mvrlrd.mytranslator.data.network.response.SearchResultResponse
+import ru.mvrlrd.mytranslator.domain.ILocalRepository
+import ru.mvrlrd.mytranslator.domain.IRepository
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
@@ -19,13 +22,16 @@ import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class NewWordViewModel (
-    apiHelper: ApiHelper,
-    localIRepository: LocalIRepository
+    remoteDataSource: RemoteDataSource,
+    localIRepository: ILocalRepository
 ) : BaseViewModel() {
 //    private val localRepository = LocalIRepository( dbHelper)
-    private val remoteIRepository = RemoteIRepository(apiHelper)
+    private val remoteIRepository = RemoteIRepository(remoteDataSource)
     private val getSearchResult: GetSearchResult = GetSearchResult(remoteIRepository)
     private val inserterCardToDb: InserterCardToDb = InserterCardToDb(localIRepository)
+
+
+
     private var _liveTranslations = MutableLiveData<List<MeaningModelForRecycler>>()
     val liveTranslations: LiveData<List<MeaningModelForRecycler>> = _liveTranslations
     private var queryName: String = ""

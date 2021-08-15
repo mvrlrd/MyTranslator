@@ -13,21 +13,20 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.words_in_category_fragment.*
 import org.koin.android.ext.android.inject
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.ui.fragments.OnItemClickListener
+import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CardsOfCategoryAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.attachCallbackToRecycler
-import ru.mvrlrd.mytranslator.ui.old.old.ItemTouchHelperAdapter
-import ru.mvrlrd.mytranslator.ui.old.old.SimpleItemTouchHelperCallback
 
 private const val NEW_WORD_DIALOG_REQUEST_CODE = 1
 private const val EXTRA_GREETING_MESSAGE = "message"
@@ -38,15 +37,15 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
 
     private lateinit var cardsOfCategoryAdapter: CardsOfCategoryAdapter
     private val newWordDialog: NewWordDialog by inject()
-    private val cardsOfCategoryViewModel: CardsOfCategoryViewModel by inject()
+    private val sharedViewModel: SharedViewModel by sharedViewModel()
     private val vibrator: Vibrator by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val id = arguments?.get("categoryId")
         id?.let {
-            cardsOfCategoryViewModel.getAllWordsOfCategory(it as Long)
-            cardsOfCategoryViewModel.categoryId = id as Long
+            sharedViewModel.getAllWordsOfCategory(it as Long)
+            sharedViewModel.categoryId = id as Long
         }
     }
 
@@ -59,7 +58,7 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
             this,
             NEW_WORD_DIALOG_REQUEST_CODE
         )
-        cardsOfCategoryViewModel.liveCards.observe(viewLifecycleOwner, Observer { cards ->
+        sharedViewModel.liveCards.observe(viewLifecycleOwner, Observer { cards ->
             handleRecycler(cards)
         })
         val root = inflater.inflate(R.layout.words_in_category_fragment, container, false)
@@ -82,7 +81,7 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
             when (requestCode) {
                 NEW_WORD_DIALOG_REQUEST_CODE -> {
                     data?.getStringExtra(EXTRA_GREETING_MESSAGE)?.let {
-                        cardsOfCategoryViewModel.saveCardToDb(it)
+                        sharedViewModel.saveCardToDb(it)
                     }
                 }
                 CHOOSE_FILE_REQUEST_CODE -> {
@@ -113,7 +112,7 @@ class CardsOfCategoryFragment : Fragment(), OnItemClickListener {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onItemSwiped(cardId: Long) {
-        cardsOfCategoryViewModel.deleteWordFromCategory(cardId)
+        sharedViewModel.deleteWordFromCategory(cardId)
         vibrate(vibrator)
     }
 

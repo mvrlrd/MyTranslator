@@ -7,6 +7,7 @@ import kotlinx.coroutines.launch
 import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.DbHelper
 import ru.mvrlrd.mytranslator.data.local.entity.Card
+import ru.mvrlrd.mytranslator.domain.ILocalRepository
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardsFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfDb
@@ -14,7 +15,7 @@ import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 class FavoritesViewModel(
-    localIRepository: LocalIRepository
+    localIRepository: ILocalRepository
 ) : BaseViewModel() {
 
 //    private val localIRepository = LocalIRepository( dbHelper)

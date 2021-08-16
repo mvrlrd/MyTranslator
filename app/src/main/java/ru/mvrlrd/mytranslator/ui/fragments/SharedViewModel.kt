@@ -5,24 +5,25 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import androidx.recyclerview.selection.SelectionTracker
 import com.google.gson.Gson
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import ru.mvrlrd.mytranslator.data.LocalIRepository
-import ru.mvrlrd.mytranslator.data.local.DbHelper
-import ru.mvrlrd.mytranslator.data.local.LocalDataSource
 import ru.mvrlrd.mytranslator.data.local.entity.Card
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.data.local.entity.relations.CategoryWithCards
+import ru.mvrlrd.mytranslator.data.network.response.ListSearchResult
+import ru.mvrlrd.mytranslator.data.network.response.SearchResultResponse
 import ru.mvrlrd.mytranslator.domain.use_cases.binders.BinderCardToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.*
+import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCardFromCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoriesFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.removers.RemoverCategoryFromDb
 import ru.mvrlrd.mytranslator.domain.use_cases.update.*
+import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
 
 private const val TAG = "SharedViewModel"
@@ -42,19 +43,10 @@ class SharedViewModel(
     private val inserterCardToDb: InserterCardToDb,
     private val updaterCardProgress: UpdaterCardProgress,
     private val binderCardToCategory: BinderCardToCategory,
-    private val removerCardFromCategory: RemoverCardFromCategory
+    private val removerCardFromCategory: RemoverCardFromCategory,
+    private val getSearchResult: GetSearchResult
 
 ) : BaseViewModel() {
-
-//    private val loaderCardsOfCategory: LoaderCardsOfCategory =
-//        LoaderCardsOfCategory(localIRepository)
-//    private val binderCardToCategory: BinderCardToCategory =
-//        BinderCardToCategory(localIRepository)
-////    private val inserterCardToDb: InserterCardToDb =
-////        InserterCardToDb(localIRepository)
-//    private val removerCardFromCategory: RemoverCardFromCategory =
-//        RemoverCardFromCategory(localIRepository)
-
 
 
 
@@ -82,6 +74,12 @@ class SharedViewModel(
     val liveCards: LiveData<List<Card>> = _cards
     var categoryId: Long = 0L
 
+    //add new word
+    private var _liveTranslations = MutableLiveData<List<MeaningModelForRecycler>>()
+    val liveTranslations: LiveData<List<MeaningModelForRecycler>> = _liveTranslations
+    private var queryName: String = ""
+
+
     init {
         getAllCatsFlow()
     }
@@ -96,7 +94,7 @@ class SharedViewModel(
 
     }
 
-    private fun insertCategory(newCategory: Category) {
+     fun insertCategory(newCategory: Category) {
         viewModelScope.launch {
             inserterCategoryToBd(newCategory) {
                 it.fold(
@@ -211,7 +209,7 @@ class SharedViewModel(
     private fun parseCategory(string: Array<String>) = Category(
         categoryId = string[0].toLong(),
         name = string[1],
-        icon = string[2]
+        icon = string[2].toInt()
     )
 
     fun refreshCategoriesList() {
@@ -433,6 +431,83 @@ class SharedViewModel(
     private fun checkIfWordIsInCategory(card: Card): Boolean? {
         Log.e(TAG, "i am in checkIfWordIsInCategorycheckIfWordIsInCategory ${liveCards.value?.contains(card)}")
         return liveCards.value?.contains(card)
+    }
+
+
+
+
+
+
+    //add new word
+    fun loadDataFromWeb(word: String) {
+        queryName = word
+        viewModelScope.launch {
+            getSearchResult(word) {
+                it.fold(
+                    ::handleFailure,
+                    ::handleLoadDataFromWeb
+                )
+            }
+        }
+    }
+
+    private fun handleLoadDataFromWeb(response: ListSearchResult?) {
+        val filteredResponseList: List<SearchResultResponse>? =
+            response?.filter { it.text == queryName }
+//        Log.e(TAG, "${filteredResponseList?.size}   sizeeeeeeee")
+        _liveTranslations.value = filteredResponseList?.map { resp ->
+            resp.meanings?.map { meaningsResponse ->
+                MeaningModelForRecycler(
+                    0,
+                    resp.text,
+                    meaningsResponse.translationResponse?.translation,
+                    meaningsResponse.imageUrl,
+                    meaningsResponse.transcription,
+                    meaningsResponse.partOfSpeech,
+                    meaningsResponse.prefix
+                )
+            }?.let {
+                WordModelForRecycler(
+                    it
+                )
+            }
+        }?.flatMap { it!!.meanings }
+    }
+
+    fun saveCardToDb(meaningModelForRecycler: MeaningModelForRecycler) {
+        viewModelScope.launch {
+            meaningModelForRecycler.let { item ->
+                inserterCardToDb(
+                    Card(
+                        item.id,
+                        item.text,
+                        item.translation,
+                        item.image_url,
+                        item.transcription,
+                        item.partOfSpeech,
+                        item.prefix,
+                        0,
+                        0
+                    )
+                )
+                {
+                    it.fold(
+                        ::handleFailure,
+                        ::handleSaveCardToDb
+                    )
+                }
+            }
+        }
+    }
+
+
+
+    companion object {
+        const val TAG = "TranslationViewModel"
+    }
+
+    fun clearLiveTranslationList() {
+        _liveTranslations.value = emptyList()
     }
 
 }

@@ -14,8 +14,8 @@ data class Category(
     @SerializedName("id")
     val categoryId: Long = 0,
     @SerializedName("name")
-    val name: String,
-    val icon: String,
+    var name: String,
+    var icon: Int,
     var isChecked: Boolean = false,
     var averageProgress: Double = 0.0
 ) : Parcelable {

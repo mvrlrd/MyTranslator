@@ -125,7 +125,7 @@ class CategoriesAdapter(
 
             itemView.textViewItem.text = category.name
 
-//            itemView.category_icon_image_view.load(category.icon.toInt())
+            itemView.category_icon_image_view.load(category.icon.toInt())
 
 
 

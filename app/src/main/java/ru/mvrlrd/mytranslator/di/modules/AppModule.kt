@@ -29,7 +29,6 @@ import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
-import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordViewModel
 
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 
@@ -66,15 +65,16 @@ val appSources = module {
 
     single {GetSearchResult(get())}
 
+
+
 single <IRepository>{ RemoteIRepository(get()) }
 //        single <IRepository>{ get() }
 }
 
 val appViewModules = module {
     viewModel { FavoritesViewModel(get()) }
-    viewModel { parameters -> SharedViewModel(get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get() ) }
+    viewModel { parameters -> SharedViewModel(get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get() ) }
 
-    viewModel { NewWordViewModel(get(),get()) }
 }
 
 val appFragments = module {

@@ -14,7 +14,7 @@ private const val TAG = "IconsAdapter"
 
 class IconsAdapter(private val listener: IconAdapterListener) :
     RecyclerView.Adapter<IconsAdapter.IconHolder>() {
-    private var icons = listOf(
+     var icons = listOf(
         CategoryIconItem(R.drawable.addressbook_96),
         CategoryIconItem(R.drawable.airport_96),
         CategoryIconItem(R.drawable.alligator_96),
@@ -65,7 +65,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     )
 
     // This keeps track of the currently selected position
-     var selectedPosition by Delegates.observable(-1) { property, oldPos, newPos ->
+     var selectedPosition by Delegates.observable(0) { property, oldPos, newPos ->
         if (newPos in icons.indices) {
             notifyItemChanged(oldPos)
             notifyItemChanged(newPos)
@@ -82,7 +82,7 @@ class IconsAdapter(private val listener: IconAdapterListener) :
         if (position in icons.indices){
             holder.bind(icons[position], position == selectedPosition)
             holder.itemView.setOnClickListener {
-                listener.onIconSelected(holder.itemView,icons[position].drawableId.toString())
+                listener.onIconSelected(holder.itemView,icons[position].drawableId)
                 selectedPosition = position }
         }
     }
@@ -101,6 +101,6 @@ class IconsAdapter(private val listener: IconAdapterListener) :
     }
 
     interface IconAdapterListener {
-        fun onIconSelected(view: View, iconId: String)
+        fun onIconSelected(view: View, iconId: Int)
     }
 }

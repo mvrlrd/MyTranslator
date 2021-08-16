@@ -12,14 +12,15 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.adding_word_fragment.*
-import org.koin.android.ext.android.inject
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
+import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.TranslationAdapter
 import kotlin.text.StringBuilder
 
@@ -27,7 +28,7 @@ private const val TAG = "NewWordDialog"
 
 class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationListener {
     private lateinit var translationAdapter: TranslationAdapter
-    private val newWordViewModel: NewWordViewModel by inject()
+    private val sharedViewModel: SharedViewModel by activityViewModels()
     private var imageUrl: String? = "_"
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,11 +51,11 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
             }
         val text: EditText = root.findViewById(R.id.newWordEditText)
         text.addTextChangedListener {
-            if (!it.isNullOrEmpty()) newWordViewModel.loadDataFromWeb(it.toString())
+            if (!it.isNullOrEmpty()) sharedViewModel.loadDataFromWeb(it.toString())
             else {
                 newWordsTranslationEditText.setText("")
                 newWordsTranscriptionEditText.setText("")
-                newWordViewModel.clearLiveTranslationList()
+                sharedViewModel.clearLiveTranslationList()
             }
         }
         translationAdapter =
@@ -70,7 +71,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
 
     @SuppressLint("SetTextI18n")
     private fun observeForChangesInLiveData() {
-        newWordViewModel.liveTranslations.observe(
+        sharedViewModel.liveTranslations.observe(
             viewLifecycleOwner,
             Observer { listOfMeaning ->
                 val listOfTranslations: List<String> = when (listOfMeaning.isNullOrEmpty()) {
@@ -150,7 +151,7 @@ class NewWordDialog : DialogFragment(), TranslationAdapter.OnClickTranslationLis
 
     override fun onPause() {
         super.onPause()
-        newWordViewModel.clearLiveTranslationList()
+        sharedViewModel.clearLiveTranslationList()
         newWordsTranscriptionEditText.text?.clear()
         newWordsTranslationEditText.text?.clear()
         newWordEditText.text?.clear()

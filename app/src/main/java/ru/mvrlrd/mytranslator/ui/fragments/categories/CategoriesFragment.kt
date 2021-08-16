@@ -35,7 +35,7 @@ import java.util.*
 
 private const val NEW_CATEGORY_DIALOG_REQUEST_CODE = 1
 private const val EDIT_CATEGORY_DIALOG_REQUEST_CODE = 111
-private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
+//private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 private const val TAG = "CategoryFragment"
 
 class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListener {
@@ -48,9 +48,6 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     private val binding get() = _binding!!
     private lateinit var categoriesRecyclerView: RecyclerView
 
-    private  val local: LocalIRepository by inject()
-
-
     private var mScrollY = 0F
 
     override fun onCreateView(
@@ -62,39 +59,16 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         _binding = DataBindingUtil.inflate(inflater,R.layout.fragment_categories, container, false)
         val view = binding.root
 
-//        categoriesViewModel.apply {
-//            localIRepository = local
-//              inserterCategoryToBd= InserterCategoryToBd(localIRepository)
-//              loaderCardsOfCategory= LoaderCardsOfCategory(localIRepository)
-//              loaderChosenCategoriesForLearning= LoaderChosenCategoriesForLearning(localIRepository)
-//              removerCategoriesFromDb= RemoverCategoriesFromDb(localIRepository)
-//              removerCategoryFromDb= RemoverCategoryFromDb(localIRepository)
-//              updaterCategoryProgress= UpdaterCategoryProgress(localIRepository)
-//              updaterCategoryNameAndIcon= UpdaterCategoryNameAndIcon(localIRepository)
-//              updaterCategoryIsChecked= UpdaterCategoryIsChecked(localIRepository)
-//              unselecterAllCategories= UpdaterAllCategoriesToUnselect(localIRepository)
-//            getterCatsFlow = GetterAllCatsFlow(localIRepository)
-//           getAllCatsFlow()
-//        }
-
-
         activity?.onBackPressedDispatcher?.addCallback(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    // in here you can do logic when backPress is clicked
                     categoriesAdapter.clearSelection()
                     Log.e(TAG, "BACK PRESSED")
-
                 }
             }
         )
 
-
-        //        val callback = requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-//            Log.e(TAG,"back back back")
-//            // Handle the back button event
-//        }
         initAddNewCategoryButton(binding)
         initSaveSelectionButton(binding)
         categoriesAdapter = CategoriesAdapter(this as CategoriesAdapter.CategoriesAdapterListener)
@@ -263,24 +237,8 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
         openDialogToEditCurrentCategory(category)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                NEW_CATEGORY_DIALOG_REQUEST_CODE -> {
-                    getStringArrayFromIntent(data)?.let { sharedViewModel.addCategory(it) }
-                }
-                EDIT_CATEGORY_DIALOG_REQUEST_CODE -> {
-                    getStringArrayFromIntent(data)?.let { sharedViewModel.updateCategorysNameAndIcon(it) }
-                }
-            }
-        } else {
-            Log.e(TAG, "resultCode = $requestCode doesn't equal to Activity.Result_OK")
-            return
-        }
-    }
 
-    private fun getStringArrayFromIntent(data: Intent?) = data?.getStringArrayExtra(JSON_STRING_CATEGORY_FROM_DIALOG)
+
 
     private fun handleRecycler(binding: FragmentCategoriesBinding) {
         this.context?.let { initRecycler(categoriesRecyclerView, it,categoriesAdapter) }

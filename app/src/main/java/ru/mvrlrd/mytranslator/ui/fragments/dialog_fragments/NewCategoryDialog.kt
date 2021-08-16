@@ -1,7 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -16,35 +15,23 @@ import kotlinx.android.synthetic.main.adding_category_fragment.*
 import org.koin.android.ext.android.inject
 import org.koin.core.parameter.parametersOf
 import ru.mvrlrd.mytranslator.R
+import ru.mvrlrd.mytranslator.data.local.entity.Category
+import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
 
 private const val TAG = "NewCategoryDialog"
-private const val JSON_STRING_CATEGORY_FROM_DIALOG = "stringArray"
 
 class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
     private val iconsAdapter : IconsAdapter  by inject { parametersOf(this)}
     private var lastRequest: ()-> Unit = {}
-    private var currentId = "0"
-    private var currentTitle = ""
-    private var iconId: String = ""
+    private val sharedViewModel: SharedViewModel by activityViewModels()
+    private lateinit var nameTextField: TextInputEditText
 
-
+private var newCategory: Category = Category(name = "",icon = iconsAdapter.icons[iconsAdapter.selectedPosition].drawableId)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setStyle(STYLE_NO_FRAME, android.R.style.Theme_Holo_Light)
-        if (arguments != null) {
-            val mArgs = arguments
-            val myDay= mArgs?.getString("current state")
-            if (myDay != null) {
-                Log.e(TAG, myDay)
-                val arr = myDay.split(",")
-                currentId = arr[0]
-                currentTitle = arr[1]
-                iconId = arr[2]
-            }
-            arguments?.clear()
-        }
     }
 
     override fun onCreateView(
@@ -52,26 +39,19 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         savedInstanceState: Bundle?
     ): View? {
         val root = inflater.inflate(R.layout.adding_category_fragment, container, false)
-        val nameTextField: TextInputEditText = root.findViewById(R.id.newCategoryEditText)
+         nameTextField = root.findViewById(R.id.newCategoryEditText)
         val commitAddingButton = root.findViewById<Button>(R.id.commitAddingNewCategoryButton)
 
         commitAddingButton.setOnClickListener {
-            val name = nameTextField.text.toString()
-            var message = ""
-            when {
-                name.isBlank() -> {
-                    message = emptyName()
+            newCategory.name = nameTextField.text.toString()
+            if (newCategory.name.isBlank()){
+                    showSnackBar(emptyName(), lastRequest)
                 }
-                iconId.isEmpty() -> {
-                    message = emptyIcon()
-                }
+            else if(newCategory.icon == 0){
+                showSnackBar(emptyIcon(),lastRequest)
             }
-            if (message.isNotBlank()) {
-                showSnackBar(message, lastRequest)
-            } else {
-                nameTextField.text?.clear()
-                sendResult(currentId, name, iconId)
-                currentId="0"
+            else{
+                sharedViewModel.insertCategory(newCategory)
                 dismiss()
             }
         }
@@ -80,8 +60,7 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
 
     override fun onStop() {
         super.onStop()
-        iconsAdapter.selectedPosition=-1
-        iconId=""
+//        iconsAdapter.selectedPosition=-1
         //on start надо запихнуть номер позиции иконки которую открыли редактировать/ тогда при редактировании категории сразу будет выбрана старая иконка
     }
 
@@ -111,13 +90,6 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         return "icon shouldn't be empty"
     }
 
-    override fun onResume() {
-        super.onResume()
-        if (targetRequestCode == 111) {
-            newCategoryEditText.setText(currentTitle)
-            Log.e(TAG,"on resume $iconId")
-        }
-    }
 
     private fun showSnackBar(message: String, action: () -> Unit){
         Snackbar.make(
@@ -127,17 +99,13 @@ class NewCategoryDialog : DialogFragment(), IconsAdapter.IconAdapterListener {
         ).setAction("Reload") { action() }.show()
     }
 
-    private fun sendResult(catId: String, name: String, iconId: String) {
-        targetFragment ?: return
-        val intent = Intent().putExtra(JSON_STRING_CATEGORY_FROM_DIALOG, arrayOf(catId, name,iconId))
-        targetFragment!!.onActivityResult(targetRequestCode, Activity.RESULT_OK, intent)
+    override fun onIconSelected(view: View, _iconId: Int) {
+        newCategory.icon = _iconId
     }
 
-    override fun onIconSelected(view: View, id: String) {
-        iconId = if (iconId == id){
-            ""
-        }else{
-            id
-        }
+    override fun dismiss() {
+        super.dismiss()
+        nameTextField.text?.clear()
+//        newCategory.icon = iconsAdapter.icons[iconsAdapter.selectedPosition].drawableId
     }
 }

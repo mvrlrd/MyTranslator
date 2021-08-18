@@ -80,7 +80,7 @@ val appViewModules = module {
 val appFragments = module {
     single { NewCategoryDialog() }
     single { NewWordDialog() }
-    factory { (listener: IconsAdapter.IconAdapterListener) -> IconsAdapter(listener) }
+    single { IconsAdapter() }
 }
 
 val appToolModule = module {

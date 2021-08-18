@@ -12,7 +12,7 @@ import kotlin.properties.Delegates
 
 private const val TAG = "IconsAdapter"
 
-class IconsAdapter(private val listener: IconAdapterListener) :
+class IconsAdapter() :
     RecyclerView.Adapter<IconsAdapter.IconHolder>() {
      var icons = listOf(
         CategoryIconItem(R.drawable.addressbook_96),
@@ -82,7 +82,6 @@ class IconsAdapter(private val listener: IconAdapterListener) :
         if (position in icons.indices){
             holder.bind(icons[position], position == selectedPosition)
             holder.itemView.setOnClickListener {
-                listener.onIconSelected(holder.itemView,icons[position].drawableId)
                 selectedPosition = position }
         }
     }
@@ -100,7 +99,4 @@ class IconsAdapter(private val listener: IconAdapterListener) :
         }
     }
 
-    interface IconAdapterListener {
-        fun onIconSelected(view: View, iconId: Int)
-    }
 }

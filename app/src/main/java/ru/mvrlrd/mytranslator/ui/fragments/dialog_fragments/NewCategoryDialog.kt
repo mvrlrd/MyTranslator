@@ -18,7 +18,7 @@ private const val TAG = "NewCategoryDialog"
 
 class NewCategoryDialog : DialogFragment() {
     private val iconsAdapter: IconsAdapter by inject()
-    private var someAction: () -> Unit = {}
+    private var setRandomName: () -> Unit = {}
     private val viewModel: SharedViewModel by activityViewModels()
     private var _binding: FragmentNewCategoryBinding? = null
     private val binding get() = _binding!!
@@ -31,7 +31,7 @@ class NewCategoryDialog : DialogFragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         val fragmentBinding = FragmentNewCategoryBinding.inflate(inflater, container, false)
         _binding = fragmentBinding
         return fragmentBinding.root
@@ -42,7 +42,8 @@ class NewCategoryDialog : DialogFragment() {
         binding.sharedViewModel = viewModel
         initRecycler()
         binding.commitAddingNewCategoryButton.setOnClickListener {
-           commitNewCategory()
+            confirmNewCategory()
+
         }
     }
 
@@ -59,7 +60,7 @@ class NewCategoryDialog : DialogFragment() {
     }
 
     private fun errorEmptyName(): String{
-        someAction = {setRandomName()}
+        setRandomName = {setRandomName()}
         return "title shouldn't be empty"
     }
 
@@ -75,10 +76,10 @@ class NewCategoryDialog : DialogFragment() {
         ).setAction("RandomTitle") { action() }.show()
     }
 
-    private fun commitNewCategory(){
+    private fun confirmNewCategory(){
         val name = binding.newCategoryEditText.text.toString()
         if (name.isBlank()) {
-            showSnackBar(errorEmptyName(), someAction)
+            showSnackBar(errorEmptyName(), setRandomName)
         } else {
             viewModel.insertCategory(
                 Category(

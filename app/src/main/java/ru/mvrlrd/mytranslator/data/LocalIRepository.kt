@@ -70,7 +70,7 @@ class LocalIRepository (private val localDataSource: LocalDataSource
     override suspend fun updateCategory(
         categoryId: Long,
         newName: String,
-        newIcon: String
+        newIcon: Int
     ): Either<Failure, Int> {
         return localDataSource.updateCategory(categoryId, newName, newIcon)
     }
@@ -88,6 +88,12 @@ class LocalIRepository (private val localDataSource: LocalDataSource
     ): Either<Failure, Int> {
         return localDataSource.unselectAllCategories(unselected, selected)
     }
+
+    override  fun getCategory(id:Long):Flow<Category> {
+        return localDataSource.getCategory(id)
+    }
+
+
 
     //crossref
     override suspend fun assignCardToCategory(cardId: Long, tagId: Long): Either<Failure, Long> {

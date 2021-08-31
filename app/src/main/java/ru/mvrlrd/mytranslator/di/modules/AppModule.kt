@@ -18,6 +18,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.binders.BinderCardToCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCardToDb
 import ru.mvrlrd.mytranslator.domain.use_cases.inserters.InserterCategoryToBd
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.GetterAllCatsFlow
+import ru.mvrlrd.mytranslator.domain.use_cases.loaders.GetterCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderCardsOfCategory
 import ru.mvrlrd.mytranslator.domain.use_cases.loaders.LoaderChosenCategoriesForLearning
 import ru.mvrlrd.mytranslator.domain.use_cases.network.GetSearchResult
@@ -28,6 +29,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.update.*
 import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
+import ru.mvrlrd.mytranslator.ui.fragments.categories.AddCategoryViewModel
 
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 
@@ -61,7 +63,7 @@ val appSources = module {
     single {UpdaterCardProgress(get())}
     single {BinderCardToCategory(get())}
     single {RemoverCardFromCategory(get())}
-
+    single { GetterCategory(get()) }
     single {GetSearchResult(get())}
 
 
@@ -72,7 +74,8 @@ single <IRepository>{ RemoteIRepository(get()) }
 
 val appViewModules = module {
     viewModel { FavoritesViewModel(get()) }
-    viewModel { parameters -> SharedViewModel(get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get() ) }
+    viewModel { AddCategoryViewModel(get(),get(),get()) }
+    viewModel { parameters -> SharedViewModel(get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(),get(), get() ) }
 
 }
 

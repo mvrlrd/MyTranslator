@@ -5,8 +5,8 @@
 
     <data>
         <variable
-            name="sharedViewModel"
-            type="ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel" />
+            name="viewModel"
+            type="ru.mvrlrd.mytranslator.ui.fragments.categories.AddCategoryViewModel" />
 
     </data>
 

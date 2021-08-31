@@ -42,6 +42,8 @@ interface AllDatabasesDao {
     @Query("SELECT * FROM categories_db")
     suspend fun getAllCategories(): List<Category>
 
+    @Query("SELECT * FROM categories_db WHERE categoryId=:id")
+     fun getCategory(id:Long): Flow<Category>
 
     @Query("SELECT * FROM categories_db WHERE isChecked")
     suspend fun getCategoriesForLearning(): List<Category>
@@ -53,7 +55,7 @@ interface AllDatabasesDao {
     suspend fun updateCategoryProgress(catId: Long, newProgress: Double): Int
 
     @Query("UPDATE categories_db SET name=:newName, icon=:newIcon  WHERE categoryId =:catId")
-    suspend fun updateCategory(catId: Long, newName: String, newIcon: String): Int
+    suspend fun updateCategory(catId: Long, newName: String, newIcon: Int): Int
 
     @Query("UPDATE categories_db SET isChecked=:isChecked WHERE categoryId =:catId")
     suspend fun updateCategoryIsChecked(catId: Long, isChecked: Boolean): Int

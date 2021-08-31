@@ -56,7 +56,7 @@
         android:label="AddCategoryFragment"
         tools:layout="@layout/fragment_add_category" >
         <argument
-            android:name="id"
+            android:name="categoryId"
             android:defaultValue="-1L"
             app:argType="long" />
     </fragment>

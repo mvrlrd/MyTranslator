@@ -57,6 +57,11 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
     override suspend fun getAllCategoriesOfDb(): Either<Failure, List<Category>> {
         return Either.Right(allDatabasesDao.getAllCategories())
     }
+    override  fun getCategory(id: Long):Flow<Category> {
+        return allDatabasesDao.getCategory(id)
+    }
+
+
 
     override suspend fun updateCategoryProgress(
         categoryId: Long,
@@ -68,7 +73,7 @@ class DbHelper(private val allDatabasesDao: AllDatabasesDao) : LocalDataSource {
     override suspend fun updateCategory(
         categoryId: Long,
         newName: String,
-        newIcon: String
+        newIcon: Int
     ): Either<Failure, Int> {
         return Either.Right(allDatabasesDao.updateCategory(categoryId, newName, newIcon))
     }

@@ -25,6 +25,7 @@ import ru.mvrlrd.mytranslator.domain.use_cases.update.*
 import ru.mvrlrd.mytranslator.presentation.MeaningModelForRecycler
 import ru.mvrlrd.mytranslator.presentation.WordModelForRecycler
 import ru.mvrlrd.mytranslator.presenter.BaseViewModel
+import androidx.lifecycle.asLiveData
 
 private const val TAG = "SharedViewModel"
 
@@ -44,7 +45,8 @@ class SharedViewModel(
     private val updaterCardProgress: UpdaterCardProgress,
     private val binderCardToCategory: BinderCardToCategory,
     private val removerCardFromCategory: RemoverCardFromCategory,
-    private val getSearchResult: GetSearchResult
+    private val getSearchResult: GetSearchResult,
+    private val getterCategory: GetterCategory
 
 ) : BaseViewModel() {
 
@@ -79,9 +81,15 @@ class SharedViewModel(
     private var queryName: String = ""
 
 
+
     init {
         getAllCatsFlow()
     }
+
+    fun retrieveCategory(id: Long):LiveData<Category> {
+return getterCategory.run(id).asLiveData()
+    }
+
 
      private fun getAllCatsFlow() {
 
@@ -108,11 +116,10 @@ class SharedViewModel(
         Log.e(TAG, "$id item added to Db")
     }
 
-    fun updateCategorysNameAndIcon(str: Array<String>){
-        val editedCategory = parseCategory(str)
-        if(!checkIfCategoryAlreadyExists(editedCategory)){
+    fun updateCategorysNameAndIcon(category: Category){
+        if(!checkIfCategoryAlreadyExists(category)){
             viewModelScope.launch {
-                updaterCategoryNameAndIcon(str){
+                updaterCategoryNameAndIcon(category){
                     it.fold(
                         ::handleFailure,
                         ::handleUpdateCategorysNameAndIcon
@@ -188,12 +195,6 @@ class SharedViewModel(
         Log.e(TAG, "$oneItem item was deleted from db")
     }
 
-    fun addCategory(string: Array<String>) {
-        val newCategory = parseCategory(string)
-        if (!checkIfCategoryAlreadyExists(newCategory)) {
-            insertCategory(newCategory)
-        }
-    }
 
     private fun checkIfCategoryAlreadyExists(addingCategory: Category): Boolean{
         return if (catsLive.value.isNullOrEmpty()
@@ -204,12 +205,6 @@ class SharedViewModel(
             true
         }
     }
-
-    private fun parseCategory(string: Array<String>) = Category(
-        categoryId = string[0].toLong(),
-        name = string[1],
-        icon = string[2].toInt()
-    )
 
     fun refreshCategoriesList() {
         viewModelScope.launch {

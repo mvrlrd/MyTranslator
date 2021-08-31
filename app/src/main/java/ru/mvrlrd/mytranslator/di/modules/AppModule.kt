@@ -28,7 +28,6 @@ import ru.mvrlrd.mytranslator.domain.use_cases.update.*
 import ru.mvrlrd.mytranslator.ui.fragments.SharedViewModel
 import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewWordDialog
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.IconsAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 
 import ru.mvrlrd.mytranslator.ui.old.old.favorites.FavoritesViewModel
 
@@ -78,7 +77,7 @@ val appViewModules = module {
 }
 
 val appFragments = module {
-    single { NewCategoryDialog() }
+
     single { NewWordDialog() }
     single { IconsAdapter() }
 }

@@ -1,7 +1,5 @@
 package ru.mvrlrd.mytranslator.ui.fragments.categories
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.Vibrator
@@ -25,12 +23,10 @@ import org.koin.android.ext.android.inject
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import ru.mvrlrd.mytranslator.R
 import ru.mvrlrd.mytranslator.androidtools.vibrate
-import ru.mvrlrd.mytranslator.data.LocalIRepository
 import ru.mvrlrd.mytranslator.data.local.entity.Category
 import ru.mvrlrd.mytranslator.databinding.FragmentCategoriesBinding
 import ru.mvrlrd.mytranslator.ui.fragments.*
 import ru.mvrlrd.mytranslator.ui.fragments.adapters.CategoriesAdapter
-import ru.mvrlrd.mytranslator.ui.fragments.dialog_fragments.NewCategoryDialog
 import java.util.*
 
 private const val NEW_CATEGORY_DIALOG_REQUEST_CODE = 1
@@ -40,7 +36,7 @@ private const val TAG = "CategoryFragment"
 
 class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListener {
     private val sharedViewModel: SharedViewModel by sharedViewModel()
-    private val newCategoryDialog: NewCategoryDialog by inject()
+
     private lateinit var categoriesAdapter: CategoriesAdapter
     private val vibrator: Vibrator by inject()
     var selectionTracker: SelectionTracker<Long>? = null
@@ -234,7 +230,7 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
     }
 
     override fun editCurrentItem(category: Category) {
-        openDialogToEditCurrentCategory(category)
+        editCurrentCategory(category)
     }
 
 
@@ -253,34 +249,29 @@ class CategoriesFragment : Fragment(), CategoriesAdapter.CategoriesAdapterListen
 
     }
 
-    private fun openDialogToAddNewCategory() {
-        newCategoryDialog.setTargetFragment(this, NEW_CATEGORY_DIALOG_REQUEST_CODE)
-        newCategoryDialog.show(parentFragmentManager, "tagDialog")
+    private fun addNewCategory() {
+        val action = CategoriesFragmentDirections.actionNavigationCategoriesToAddCategoryFragment()
+        findNavController().navigate(action)
     }
 
-    private fun openDialogToEditCurrentCategory(currentCategory: Category) {
-        val bundle = Bundle()
-        bundle.putString("current state", currentCategory.toString())
-        newCategoryDialog.arguments = bundle
-        newCategoryDialog.setTargetFragment(this, EDIT_CATEGORY_DIALOG_REQUEST_CODE)
-        newCategoryDialog.show(parentFragmentManager, "tagDialog")
+    private fun editCurrentCategory(currentCategory: Category) {
+        val action = CategoriesFragmentDirections.actionNavigationCategoriesToAddCategoryFragment(currentCategory.categoryId)
+
+        findNavController().navigate(action)
     }
 
     private fun initAddNewCategoryButton(binding: FragmentCategoriesBinding){
         val goToDialogToAddNewCategoryButton: Button =
             binding.goToDialogToAddNewCategoryButton
         goToDialogToAddNewCategoryButton.setOnClickListener {
-            openDialogToAddNewCategory()
+            addNewCategory()
         }
     }
 
     private fun observeCategoryListChanges() {
         Log.e(TAG, "observeCategoryListChanges START  ${Date().time}")
         sharedViewModel.catsLive.observe(viewLifecycleOwner, Observer { categoryList ->
-
             categoriesAdapter.updateCollection(categoryList)
-
-
             Log.e(TAG,"LIST DOWNLOADED ${selectionTracker?.selection}  $selectionTracker ")
 //            Log.e(TAG,"observeCategoryListChanges DONE")
         })

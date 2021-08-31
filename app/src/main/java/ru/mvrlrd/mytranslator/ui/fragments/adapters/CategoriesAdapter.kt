@@ -131,9 +131,9 @@ class CategoriesAdapter(
 
 //            itemView.isSelected = category.isChecked
             itemView.percentageTextView.text = "${category.averageProgress.roundToInt()}%"
-//            itemView.edit_icon_image_view.setOnClickListener {
-//                listener.editCurrentItem(category)
-//            }
+            itemView.edit_icon_image_view.setOnClickListener {
+                listener.editCurrentItem(category)
+            }
             itemView.setOnClickListener {
 //                checkUncheckItem(itemView,category)
                 listener.onItemClick(category.categoryId, category.isChecked)

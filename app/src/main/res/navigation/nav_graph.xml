@@ -9,6 +9,7 @@
         android:name="ru.mvrlrd.mytranslator.ui.fragments.categories.CategoriesFragment"
         android:label="categories_fragment"
         tools:layout="@layout/fragment_categories" >
+
         <action
             android:id="@+id/action_translationFragment_to_favoritesFragment"
             app:destination="@id/navigation_favorites" />
@@ -18,6 +19,9 @@
         <action
             android:id="@+id/action_navigation_categories_to_navigation_learning"
             app:destination="@id/navigation_learning" />
+        <action
+            android:id="@+id/action_navigation_categories_to_addCategoryFragment"
+            app:destination="@id/addCategoryFragment" />
     </fragment>
 
     <fragment
@@ -45,6 +49,16 @@
             android:name="categoryId"
             app:argType="long"
              />
+    </fragment>
+    <fragment
+        android:id="@+id/addCategoryFragment"
+        android:name="ru.mvrlrd.mytranslator.ui.fragments.categories.AddCategoryFragment"
+        android:label="AddCategoryFragment"
+        tools:layout="@layout/fragment_add_category" >
+        <argument
+            android:name="id"
+            android:defaultValue="-1L"
+            app:argType="long" />
     </fragment>
 
 
